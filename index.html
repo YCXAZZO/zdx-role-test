@@ -1187,7 +1187,25 @@
                     });
                 }
             }
-
+            // -------- 重置测试 --------
+            function resetTest() {
+                currentIndex = 0;
+                selectedOptionIndex = null;
+                history = new Array(totalQ).fill(-1);
+                resetScores();
+                pageResult.classList.add('hidden');
+                pageStart.classList.remove('hidden');
+                pageStart.classList.add('fade-in');
+                pageQuiz.classList.add('hidden');
+                progressFill.style.width = '0%';
+                progressText.textContent = `1 / ${totalQ}`;
+                btnNext.classList.remove('active');
+                btnNext.textContent = '下一题 →';
+                if (window.myRadarChart) {
+                    window.myRadarChart.destroy();
+                    window.myRadarChart = null;
+                }
+            }
             // -------- 事件绑定 --------
             btnStart.addEventListener('click', function() {
                 pageStart.classList.add('hidden');
