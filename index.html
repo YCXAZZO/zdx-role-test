@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>🎉黛溪宇宙🎉</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        /* ===== 原有样式保持不变 ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'PingFang SC', Roboto, system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(145deg, #fce4ec 0%, #f3e5f5 40%, #e8eaf6 100%);
+            padding: 20px;
+            margin: 0;
+        }
+
+        .app {
+            width: 100%;
+            max-width: 520px;
+            background: rgba(255, 255, 255, 0.70);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-radius: 40px;
+            padding: 32px 28px 36px;
+            box-shadow: 0 30px 60px rgba(120, 80, 150, 0.18), 0 10px 30px rgba(120, 80, 150, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.50);
+            transition: all .25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app::before,
+        .app::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .app::before {
+            top: -60px;
+            right: -60px;
+            width: 220px;
+            height: 220px;
+            background: radial-gradient(circle, rgba(206, 147, 216, 0.25) 0%, transparent 70%);
+        }
+
+        .app::after {
+            bottom: -80px;
+            left: -80px;
+            width: 280px;
+            height: 280px;
+            background: radial-gradient(circle, rgba(244, 143, 177, 0.20) 0%, transparent 70%);
+        }
+
+        .app>* {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.45s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(18px)
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        .btn-primary {
+            display: inline-block;
+            background: linear-gradient(135deg, #b388c9, #9c6fb0);
+            color: #fff;
+            border: none;
+            padding: 14px 48px;
+            border-radius: 60px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .25s ease;
+            box-shadow: 0 8px 24px rgba(156, 111, 176, 0.35);
+            letter-spacing: .5px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(156, 111, 176, 0.45);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.96);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.70);
+            backdrop-filter: blur(4px);
+            border: 1.5px solid #b388c9;
+            color: #4a2c5e;
+            padding: 12px 36px;
+            border-radius: 60px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .25s ease;
+            box-shadow: 0 4px 12px rgba(156, 111, 176, 0.10);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.90);
+            transform: translateY(-2px);
+        }
+
+        .btn-action {
+            min-width: 120px;
+            padding: 12px 20px;
+            border-radius: 60px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .25s ease;
+            border: none;
+            text-align: center;
+        }
+
+        .btn-action.primary {
+            background: linear-gradient(135deg, #b388c9, #9c6fb0);
+            color: #fff;
+            box-shadow: 0 6px 20px rgba(156, 111, 176, 0.30);
+        }
+
+        .btn-action.primary.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .btn-action.primary.active:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(156, 111, 176, 0.40);
+        }
+
+        .btn-action.primary:active {
+            transform: scale(0.96);
+        }
+
+        .btn-action.secondary {
+            background: rgba(255, 255, 255, 0.70);
+            backdrop-filter: blur(4px);
+            border: 1.5px solid #b388c9;
+            color: #4a2c5e;
+            box-shadow: 0 4px 12px rgba(156, 111, 176, 0.10);
+        }
+
+        .btn-action.secondary:hover {
+            background: rgba(255, 255, 255, 0.90);
+            transform: translateY(-2px);
+        }
+
+        /* 开始页 */
+        #page-start {
+            text-align: center;
+            padding: 12px 0 6px;
+        }
+
+        .hero-icon {
+            font-size: 68px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .test-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: #4a2c5e;
+            text-align: center;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .test-subtitle {
+            text-align: center;
+            font-size: 15px;
+            color: #7a5a8a;
+            opacity: 0.80;
+            margin-bottom: 16px;
+            font-weight: 400;
+        }
+
+        .intro-desc {
+            color: #4a2c5e;
+            font-size: 16px;
+            line-height: 1.7;
+            margin: 8px 0 28px;
+            padding: 0 6px;
+            opacity: 0.85;
+        }
+
+        /* 答题页 */
+        #page-quiz {
+            padding: 4px 0;
+        }
+
+        .progress-wrap {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 26px;
+        }
+
+        .progress-track {
+            flex: 1;
+            height: 6px;
+            background: rgba(156, 111, 176, 0.20);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #b388c9, #d896b8);
+            border-radius: 12px;
+            transition: width .35s ease;
+        }
+
+        .progress-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: #4a2c5e;
+            min-width: 50px;
+            text-align: right;
+            opacity: 0.80;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .question-number {
+            font-size: 14px;
+            font-weight: 600;
+            color: #9c6fb0;
+            letter-spacing: .5px;
+        }
+
+        .question-text {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2d1a3a;
+            line-height: 1.5;
+            margin-bottom: 24px;
+            min-height: 56px;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .option-item {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(4px);
+            border: 2px solid rgba(179, 136, 201, 0.20);
+            border-radius: 18px;
+            padding: 16px 20px;
+            font-size: 16px;
+            color: #2d1a3a;
+            cursor: pointer;
+            transition: all .20s ease;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        .option-item:hover {
+            background: rgba(255, 255, 255, 0.85);
+            border-color: #b388c9;
+            transform: translateX(4px);
+        }
+
+        .option-item .letter {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(179, 136, 201, 0.15);
+            color: #7a5a8a;
+            font-weight: 700;
+            font-size: 15px;
+            flex-shrink: 0;
+            transition: .20s;
+        }
+
+        .option-item.selected {
+            border-color: #9c6fb0;
+            background: rgba(179, 136, 201, 0.18);
+            box-shadow: 0 4px 16px rgba(156, 111, 176, 0.15);
+        }
+
+        .option-item.selected .letter {
+            background: #9c6fb0;
+            color: #fff;
+        }
+
+        .option-item:active {
+            transform: scale(0.97);
+        }
+
+        .quiz-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-action {
+            flex: 1;
+        }
+
+        .btn-action.primary {
+            flex: 2;
+        }
+
+        /* 结果页 */
+        #page-result {
+            text-align: center;
+            padding: 8px 0 4px;
+        }
+
+        .result-badge {
+            font-size: 14px;
+            font-weight: 600;
+            color: #9c6fb0;
+            letter-spacing: 2px;
+            margin-bottom: 4px;
+        }
+
+        .result-name-wrapper {
+            display: inline-block;
+            position: relative;
+            margin-bottom: 2px;
+        }
+
+        .result-name {
+            font-size: 30px;
+            font-weight: 700;
+            color: #2d1a3a;
+            cursor: pointer;
+            display: inline-block;
+            border-bottom: 2px dashed rgba(156, 111, 176, 0.3);
+            padding-bottom: 2px;
+            transition: border-color .2s;
+        }
+
+        .result-name:hover {
+            border-color: #9c6fb0;
+        }
+
+        .result-hint {
+            font-size: 13px;
+            color: #9c6fb0;
+            opacity: 0.75;
+            margin-top: 2px;
+            letter-spacing: .3px;
+        }
+
+        .result-drama {
+            font-size: 16px;
+            color: #7a5a8a;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .result-image {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 12px auto 16px;
+            display: block;
+            box-shadow: 0 12px 40px rgba(156, 111, 176, 0.25);
+            border: 4px solid rgba(255, 255, 255, 0.70);
+            background: #f3e5f5;
+        }
+
+        .result-tags {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px 12px;
+            margin-bottom: 14px;
+        }
+
+        .result-tags span {
+            background: rgba(179, 136, 201, 0.20);
+            padding: 4px 16px;
+            border-radius: 40px;
+            font-size: 13px;
+            color: #6a4a7a;
+            font-weight: 500;
+        }
+
+        .result-bg {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #3d2a4a;
+            background: rgba(255, 255, 255, 0.50);
+            border-radius: 20px;
+            padding: 16px 18px;
+            margin: 12px 0 10px;
+            text-align: left;
+            backdrop-filter: blur(4px);
+            font-weight: 500;
+        }
+
+        .result-bg strong {
+            color: #6a4a7a;
+        }
+
+        .result-signature {
+            font-size: 17px;
+            font-style: italic;
+            color: #6a4a7a;
+            background: rgba(179, 136, 201, 0.15);
+            border-radius: 20px;
+            padding: 12px 18px;
+            margin: 10px 0 12px;
+            text-align: center;
+            backdrop-filter: blur(4px);
+            border-left: 3px solid #b388c9;
+            border-right: 3px solid #b388c9;
+        }
+
+        .result-story {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #3d2a4a;
+            background: rgba(255, 255, 255, 0.30);
+            border-radius: 20px;
+            padding: 16px 18px;
+            margin: 0 0 20px;
+            text-align: left;
+            backdrop-filter: blur(4px);
+        }
+
+        .radar-container {
+            width: 100%;
+            max-width: 320px;
+            margin: 16px auto 20px;
+            background: rgba(255, 255, 255, 0.30);
+            border-radius: 20px;
+            padding: 12px;
+        }
+
+        .radar-container canvas {
+            width: 100% !important;
+            height: auto !important;
+        }
+
+        /* ===== 新增：双栏鸣谢 ===== */
+        .result-credits {
+            margin: 18px 0 16px;
+            padding: 10px 14px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(4px);
+            font-size: 18px;
+            color: #7a5a8a;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.20);
+        }
+
+        .credits-left,
+        .credits-right {
+            flex: 1 1 40%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+        }
+
+        .credits-left span,
+        .credits-right span {
+            display: inline-block;
+        }
+
+        /* 响应式：移动端上下排列，且先显示社交账号 */
+        @media (max-width: 480px) {
+
+            .credits-left,
+            .credits-right {
+                flex: 1 1 100%;
+            }
+
+            .credits-right {
+                order: -1;
+            }
+        }
+
+        .result-actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 14px;
+            margin-top: 10px;
+        }
+
+        /* 模态框 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.60);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            padding: 20px;
+            animation: fadeIn .3s ease;
+        }
+
+        .modal-content {
+            background: transparent;
+            max-width: 90%;
+            max-height: 90vh;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.40);
+            position: relative;
+        }
+
+        .modal-content img {
+            display: block;
+            width: 100%;
+            height: auto;
+            max-height: 85vh;
+            object-fit: contain;
+            border-radius: 24px;
+            background: #fff;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 12px;
+            right: 20px;
+            font-size: 32px;
+            font-weight: 300;
+            cursor: pointer;
+            color: #fff;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+            transition: transform .2s;
+            z-index: 10;
+        }
+
+        .modal-close:hover {
+            transform: rotate(90deg);
+        }
+
+        /* ===== 临时测试按钮样式 ===== */
+        #devSkipBtn {
+            position: fixed;
+            top: 12px;
+            right: 12px;
+            z-index: 9999;
+            background: #ff6b6b;
+            color: #fff;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: opacity 0.2s;
+            font-family: inherit;
+        }
+
+        #devSkipBtn:hover {
+            opacity: 1;
+        }
+
+        /* 响应式调整（移动端按钮更小） */
+        @media (max-width:480px) {
+            #devSkipBtn {
+                top: 8px;
+                right: 8px;
+                padding: 4px 10px;
+                font-size: 10px;
+            }
+        }
+
+        /* 原有响应式 */
+        @media (max-width:480px) {
+            .app {
+                padding: 24px 18px 28px;
+                border-radius: 28px;
+            }
+
+            .test-title {
+                font-size: 22px;
+            }
+
+            .question-text {
+                font-size: 18px;
+                min-height: 48px;
+            }
+
+            .option-item {
+                padding: 14px 16px;
+                font-size: 15px;
+            }
+
+            .result-name {
+                font-size: 26px;
+            }
+
+            .result-image {
+                width: 130px;
+                height: 130px;
+            }
+
+            .btn-action {
+                min-width: 80px;
+                padding: 10px 16px;
+                font-size: 14px;
+            }
+
+            .modal-content {
+                max-width: 95%;
+            }
+        }
+
+        @media (max-width:380px) {
+            .app {
+                padding: 18px 12px 22px;
+            }
+
+            .question-text {
+                font-size: 16px;
+            }
+
+            .option-item {
+                padding: 12px 14px;
+                font-size: 14px;
+            }
+
+            .result-story {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 临时测试按钮（浮动） -->
+    <button id="devSkipBtn">🚀 跳转结果</button>
+
+    <div class="app" id="app">
+
+        <div id="page-start" class="fade-in">
+            <span class="hero-icon">🥰</span>
+            <h1 class="test-title">欢迎加入黛溪宇宙</h1>
+            <p class="test-subtitle">—— 你是平行时空的哪个角色？</p>
+            <p class="intro-desc" id="introText"></p>
+            <button class="btn-primary" id="btnStart">开始测试 →</button>
+        </div>
+
+        <div id="page-quiz" class="hidden">
+            <div class="progress-wrap">
+                <div class="progress-track">
+                    <div class="progress-fill" id="progressFill" style="width:0%;"></div>
+                </div>
+                <span class="progress-text" id="progressText">1 / 12</span>
+            </div>
+            <div class="question-header">
+                <span class="question-number" id="questionNumber">第 1 题</span>
+            </div>
+            <div class="question-text" id="questionText">题目加载中…</div>
+            <div class="options-list" id="optionsList"></div>
+            <div class="quiz-actions">
+                <button class="btn-action secondary" id="btnBack">‹ 返回</button>
+                <button class="btn-action primary" id="btnNext">下一题 →</button>
+            </div>
+        </div>
+
+        <div id="page-result" class="hidden">
+            <div class="result-badge">✨ 你的黛溪分身</div>
+            <div class="result-name-wrapper">
+                <div class="result-name" id="resultName">角色名</div>
+                <div class="result-hint">👆 点击角色名查看剧照</div>
+            </div>
+            <div class="result-drama" id="resultDrama">（剧名）</div>
+            <img class="result-image" id="resultImage" src="" alt="角色插画" />
+            <div class="result-tags" id="resultTags"></div>
+            <div class="result-signature" id="resultSignature"></div>
+            <div class="result-bg" id="resultBg"></div>
+            <div class="result-story" id="resultStory"></div>
+            <div class="radar-container">
+                <canvas id="radarChart"></canvas>
+            </div>
+            <div class="result-credits">
+                <div class="credits-left">
+                    <span>🎨 插画来源：@OsAtNb</span>
+                    <span>📝 内容提供：@Flipped</span>
+                    <span>💻 前端开发：@杨伽桉</span>
+                </div>
+                <div class="credits-right">
+                    <span>📱 赵黛溪全平台社媒：<br><b>@赵黛溪Daisy</b></span>
+                </div>
+            </div>
+            <div class="result-actions">
+                <button class="btn-secondary" id="btnRetry">🔄 重新测试</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalOverlay" class="modal-overlay hidden" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="modal-close" onclick="closeModal()">×</span>
+            <img id="modalCardImage" src="" alt="角色详情卡片" />
+        </div>
+    </div>
+
+    <script>
+        // =============================================================
+        // 数据（完整更新，含12题和 signatureLine）
+        // =============================================================
+        const DATA = {
+            introText: "12道选择题，凭第一直觉选择，<br>测测你潜意识的黛溪分身～",
+            shareSlogan: "我测出自己和赵黛溪饰演的【{{roleName}}】高度契合！快来测测你的本命角色是谁",
+            rolePriority: ["hujuaner", "wushuang", "wangruolan", "zhangyuanman", "meiqing", "xiaoyun"],
+            roleData: {
+                "wangruolan": {
+                    roleName: "王若兰",
+                    dramaName: "烽火塘田",
+                    tags: "冷静隐忍、信仰坚定、外冷内热、果敢坚毅、温柔有风骨、牺牲型人格",
+                    personalityBg: "情绪稳定的隐忍强者，外表克制疏离，心底藏着柔软与坚定信仰。",
+                    resultText: "你匹配的角色是《烽火塘田》中的王若兰。<br>作为潜伏在学院的革命内线，她习惯独自扛下所有危险与压力，面对敌人盘问始终冷静自持，从不外露脆弱。明明心怀悲悯、心疼受苦的学生与百姓，却只能把温柔藏在冷静外壳之下，以一己之力守护身边同志，甘愿为心中大义牺牲自我。<br>你和她一样，越是身处高压黑暗环境，越能守住底线与初心，习惯默默付出、暗中兜底，是外冷内热、以温柔赴大义的人。",
+                    signatureLine: "<b>聚是一团火，散是满天星，<br>我信这份信仰，终能照亮前路。</b>",
+                    image: "./images/wangruolan_avatar.jpg",
+                    still: "./images/wangruolan_still.jpg",
+                    card: "./images/wangruolan_card.jpg"
+                },
+                "zhangyuanman": {
+                    roleName: "张元满",
+                    dramaName: "庚伢子",
+                    tags: "温柔悲悯、质朴善良、包容治愈、柔软有底线、人间善意型、隐忍向阳",
+                    personalityBg: "历经苦难仍选择向善的治愈者，性格柔软包容，自带极强生命韧性。",
+                    resultText: "你匹配的角色是《庚伢子》里的张元满。<br>她是旧社会底层农家妇女，一生饱经贫苦与风霜，却从未丢掉悲悯之心，主动照料无依无靠的孤儿庚伢子，默默接济身边苦难之人。看似温和忍让、从不与人争执，可看见弱小受欺负时，也会鼓起勇气挺身而出。<br>如同她一般，你见过世间诸多不易，却依旧愿意释放善意包容他人，苦难磨不平你的温柔，是能治愈身边所有人的存在。",
+                    signatureLine: "<b>日子再苦，心里也要留一份温柔，<br>能帮旁人一把，便是福气。</b>",
+                    image: "./images/zhangyuanman_avatar.jpg",
+                    still: "./images/zhangyuanman_still.jpg",
+                    card: "./images/zhangyuanman_card.jpg"
+                },
+                "hujuaner": {
+                    roleName: "胡娟儿",
+                    dramaName: "胡李镇传说",
+                    tags: "灵动鲜活、外柔内刚、清醒傲骨、重情专一、敏感坚韧、绝境成长型",
+                    personalityBg: "向阳生长的成长型人格，鲜活热烈有傲骨，绝境之中愈发生出力量。",
+                    resultText: "你匹配的角色是《胡李镇传说》女主胡娟儿。<br>原本是小镇纯粹明媚的普通少女，深陷连环命案与两大家族的流言漩涡，被全镇人猜忌排挤，还要承受权贵子弟的骚扰打压。但她从未低头妥协，一边坚守对男主的真心，一边独自暗中追查真相，在层层阴谋里褪去天真、快速蜕变。<br>你和她一样，待人真诚坦荡、重情专一，面对偏见与恶意自带不屈棱角，哪怕孤身陷入绝境，也不会放弃寻找真相与公道。",
+                    signatureLine: "<b>流言再多我也不怕，真相总会大白，<br>我信你，也信公道。</b>",
+                    image: "./images/hujuaner_avatar.jpg",
+                    still: "./images/hujuaner_still.jpg",
+                    card: "./images/hujuaner_card.jpg"
+                },
+                "wushuang": {
+                    roleName: "吴双",
+                    dramaName: "判妖邪",
+                    tags: "纯粹赤诚、温柔易碎、倔强刚烈、悲情清醒、执念深重、清白坚守型",
+                    personalityBg: "干净纯粹的悲情倔强者，珍视至亲羁绊，蒙受冤屈也绝不妥协认命。",
+                    resultText: "你匹配的角色是古装悬疑电影《判妖邪》的吴双。<br>她本是只求与兄长安稳度日的普通少女，却遭权贵觊觎陷害，被扣上祸乱世间的妖女污名，受尽全镇百姓唾骂，孤立无援无处自证清白。可即便走到绝境，她也不肯屈从强权，宁愿独自承受所有罪责，也要护住唯一的亲人。<br>你骨子里和她高度相似，内心赤诚柔软、极度看重亲情羁绊，一旦遭遇不公与污蔑，便会生出宁折不弯的刚烈，纵使被全世界误解，也不肯违背本心认输。",
+                    signatureLine: "<b>别动我哥，千错万错都冲我来，<br>我只求世间还我一份清白。</b>",
+                    image: "./images/wushuang_avatar.jpg",
+                    still: "./images/wushuang_still.jpg",
+                    card: "./images/wushuang_card.jpg"
+                },
+                "meiqing": {
+                    roleName: "美清",
+                    dramaName: "The Adventures",
+                    tags: "热烈鲜活、自由烂漫、纯粹通透、山野灵气、开朗热忱、无拘无束",
+                    personalityBg: "松弛自由的山野灵魂，不喜世俗束缚，心思简单通透、自带灵气。",
+                    resultText: "你匹配的角色是《The Adventures》的苗族少女美清。<br>生长在无拘无束的山野之间，能歌善舞、心性烂漫，没有世俗算计与城府，厌恶条条框框的束缚，永远向往山野与远方，待人坦荡热忱，活得随性自在。<br>你和她一样，讨厌复杂的人情世故，对世界始终保有好奇与温柔，不被他人眼光绑架，偏爱随心而行的生活，像山间清风一般自由治愈，自带干净鲜活的独特灵气。",
+                    signatureLine: "<b>山野风无拘无束，人也不必困在条条框框里，<br>随心走便是自在。</b>",
+                    image: "./images/meiqing_avatar.jpg",
+                    still: "./images/meiqing_still.jpg",
+                    card: "./images/meiqing_card.jpg"
+                },
+                "xiaoyun": {
+                    roleName: "小云",
+                    dramaName: "雨霖铃",
+                    tags: "温婉细腻、敏感温柔、内敛深情、隐忍克制、重情念旧、温柔易碎",
+                    personalityBg: "内敛深情的温柔旁观者，心思细腻敏感，习惯将爱意与委屈独自消化。",
+                    resultText: "你匹配的角色是古风故事《雨霖铃》中的小云。<br>她性情温婉雅致，心思细腻共情力极强，身处身不由己的乱世，始终克制自己的情绪与爱意，从不直白表露心事，所有思念与委屈都独自默默承受。明明满心牵挂在意之人，却愿意为对方的安稳选择隐忍退让，把深情藏在岁月里，安静成全他人。<br>你与她特质高度契合，不擅长直白倾诉情绪，极度念旧重情，即便世事身不由己，也始终守住温润柔软的本心。",
+                    signatureLine: "<b>如果你过得好，那我的离开就有意义，<br>请务必要好好的。</b>",
+                    image: "./images/xiaoyun_avatar.jpg",
+                    still: "./images/xiaoyun_still.jpg",
+                    card: "./images/xiaoyun_card.jpg"
+                }
+            },
+            questionList: [
+                { question: "生活遇到棘手难题，你更偏向怎么做？", options: [{ text: "稳住情绪梳理思路，独立把问题妥善解决", scoreRole: "wangruolan" }, { text: "主动寻找突破口，不服输想要扭转局面", scoreRole: "hujuaner" }, { text: "心里憋着一股劲，硬扛到底不愿低头妥协", scoreRole: "wushuang" }, { text: "不对外倾诉，独自消化情绪慢慢熬过去", scoreRole: "xiaoyun" }] },
+                { question: "和身边人相处时，你的常态是？", options: [{ text: "懂得换位思考，习惯性包容体谅他人难处", scoreRole: "zhangyuanman" }, { text: "待人坦率直白，喜怒哀乐都不会刻意隐藏", scoreRole: "hujuaner" }, { text: "待人毫无防备，愿意拿出全部真心对待别人", scoreRole: "wushuang" }, { text: "相处轻松自在，不喜欢拘束和复杂算计", scoreRole: "meiqing" }] },
+                { question: "被他人无端误会、随意抹黑时，你会？", options: [{ text: "冷静简单解释，不纠缠，守住自身底线即可", scoreRole: "wangruolan" }, { text: "主动表明立场，不会默默忍受无端非议", scoreRole: "hujuaner" }, { text: "内心委屈但绝不认输，坚持自己没有做错", scoreRole: "wushuang" }, { text: "选择宽容释怀，不会记恨对方的恶意", scoreRole: "zhangyuanman" }] },
+                { question: "你内心最向往什么样的生活节奏？", options: [{ text: "拥有自己的坚持与目标，清醒独立有担当", scoreRole: "wangruolan" }, { text: "热烈鲜活，经历风雨也依旧对生活热忱", scoreRole: "hujuaner" }, { text: "不受条条框框束缚，随心自在奔赴远方", scoreRole: "meiqing" }, { text: "平淡安静，岁月舒缓，守住自己的小天地", scoreRole: "xiaoyun" }] },
+                { question: "面对十分在意的人，你的相处方式是？", options: [{ text: "不善言辞，习惯用行动默默守护对方", scoreRole: "wangruolan" }, { text: "真诚专一，愿意和对方双向奔赴彼此", scoreRole: "hujuaner" }, { text: "愿意倾尽所有，拼尽全力守护在意的人", scoreRole: "wushuang" }, { text: "细心照料，包容对方所有小缺点", scoreRole: "zhangyuanman" }] },
+                { question: "你认为自己身上最亮眼的特质是？", options: [{ text: "外表柔和内心有棱角，困境中不断成长蜕变", scoreRole: "hujuaner" }, { text: "内心纯粹善良，即便身处低谷也保有温柔", scoreRole: "wushuang" }, { text: "心态松弛鲜活，自带治愈他人的灵气", scoreRole: "meiqing" }, { text: "心思细腻念旧，温柔长久且内敛深情", scoreRole: "xiaoyun" }] },
+                { question: "努力过后遭遇沉重打击，你会如何调整？", options: [{ text: "快速平复心情，沉淀自己重新出发", scoreRole: "wangruolan" }, { text: "越挫越勇，把挫折当作成长的契机", scoreRole: "hujuaner" }, { text: "心里不甘，默默蓄力等待证明自己的机会", scoreRole: "wushuang" }, { text: "慢慢自愈，依旧愿意善待这个世界", scoreRole: "zhangyuanman" }] },
+                { question: "面对世俗固有偏见与不合理规矩，你会？", options: [{ text: "敢于表达不同想法，不盲从大众的看法", scoreRole: "hujuaner" }, { text: "坚守自身清白，不公之事绝不轻易退让", scoreRole: "wushuang" }, { text: "不在意他人眼光，按自己的心意生活", scoreRole: "meiqing" }, { text: "不与外界争辩，守好自己内心的温柔", scoreRole: "xiaoyun" }] },
+                { question: "身边朋友对你的普遍评价更接近？", options: [{ text: "沉稳可靠，遇到难事都会想来依靠你", scoreRole: "wangruolan" }, { text: "温和心软，总能包容身边所有人", scoreRole: "zhangyuanman" }, { text: "明媚有主见，温柔同时自带锋芒", scoreRole: "hujuaner" }, { text: "心思干净纯粹，倔强的样子让人忍不住心疼", scoreRole: "wushuang" }] },
+                { question: "下面哪一种人生心境最能让你共情？", options: [{ text: "历经世间疾苦，心底依旧保留一份赤诚善意", scoreRole: "zhangyuanman" }, { text: "不受世俗拘束，自由洒脱走完这一生", scoreRole: "meiqing" }, { text: "纵使被世人误解，也始终坚守本心清白", scoreRole: "wushuang" }, { text: "爱意藏于心底，安静温柔走过岁岁年年", scoreRole: "xiaoyun" }] },
+                { question: "团队出现分歧争执时，你会如何处理？", options: [{ text: "稳住整体节奏，理性梳理各方矛盾", scoreRole: "wangruolan" }, { text: "温和劝解调和，体谅每个人的难处", scoreRole: "zhangyuanman" }, { text: "坚守心中公道，主动站出来发声", scoreRole: "hujuaner" }, { text: "不愿卷入争吵，独自消化内心情绪", scoreRole: "xiaoyun" }] },
+                { question: "如果可以自主选择属于自己的人生底色，你偏爱？", options: [{ text: "心怀信仰，以长久坚守跨越风雨", scoreRole: "wangruolan" }, { text: "平凡温暖，善意常伴身边朝夕", scoreRole: "zhangyuanman" }, { text: "纯粹热忱，这一生只求问心无愧", scoreRole: "wushuang" }, { text: "肆意洒脱，奔赴山野自在无拘", scoreRole: "meiqing" }] }
+            ],
+            rule: { singleScore: 10, fullScore: 120 }
+        };
+
+        // =============================================================
+        //  核心逻辑
+        // =============================================================
+        (function () {
+            'use strict';
+
+            const $ = (s) => document.querySelector(s);
+            const pageStart = $('#page-start');
+            const pageQuiz = $('#page-quiz');
+            const pageResult = $('#page-result');
+            const btnStart = $('#btnStart');
+            const btnNext = $('#btnNext');
+            const btnBack = $('#btnBack');
+            const btnRetry = $('#btnRetry');
+            const progressFill = $('#progressFill');
+            const progressText = $('#progressText');
+            const questionNumber = $('#questionNumber');
+            const questionText = $('#questionText');
+            const optionsList = $('#optionsList');
+            const resultName = $('#resultName');
+            const resultDrama = $('#resultDrama');
+            const resultImage = $('#resultImage');
+            const resultTags = $('#resultTags');
+            const resultBg = $('#resultBg');
+            const resultStory = $('#resultStory');
+            const resultSignature = $('#resultSignature');
+            const introText = $('#introText');
+            const modalOverlay = $('#modalOverlay');
+            const modalCardImage = $('#modalCardImage');
+
+            const rolePriority = DATA.rolePriority;
+            const roleData = DATA.roleData;
+            const questions = DATA.questionList;
+            const totalQ = questions.length;
+            const singleScore = DATA.rule.singleScore;
+
+            function extractTraits() {
+                const freq = {};
+                rolePriority.forEach(id => {
+                    const tags = roleData[id].tags.split(/[、，,\s]+/).filter(t => t.trim());
+                    tags.forEach(t => { const key = t.trim(); freq[key] = (freq[key] || 0) + 1; });
+                });
+                return Object.keys(freq).sort((a, b) => freq[b] - freq[a]).slice(0, 6);
+            }
+            const traitDimensions = extractTraits();
+            const roleTraits = {};
+            rolePriority.forEach(id => {
+                const tags = roleData[id].tags.split(/[、，,\s]+/).filter(t => t.trim());
+                roleTraits[id] = tags.map(t => t.trim());
+            });
+
+            let currentIndex = 0, scores = {}, selectedOptionIndex = null, history = [], isAutoJumping = false;
+
+            function resetScores() { scores = {}; rolePriority.forEach(id => { scores[id] = 0; }); }
+            introText.innerHTML = DATA.introText;
+
+            function recalcScores() {
+                resetScores();
+                for (let i = 0; i < history.length; i++) {
+                    const optIdx = history[i];
+                    if (optIdx === -1) continue;
+                    const opt = questions[i].options[optIdx];
+                    if (opt && opt.scoreRole) scores[opt.scoreRole] = (scores[opt.scoreRole] || 0) + singleScore;
+                }
+            }
+
+            function getTraitScores() {
+                const traitScores = {};
+                traitDimensions.forEach(t => traitScores[t] = 0);
+                rolePriority.forEach(id => {
+                    const roleScore = scores[id] || 0;
+                    (roleTraits[id] || []).forEach(t => { if (traitScores[t] !== undefined) traitScores[t] += roleScore; });
+                });
+                return traitScores;
+            }
+
+            function renderQuestion() {
+                const q = questions[currentIndex];
+                if (!q) return;
+                const progress = (currentIndex / totalQ) * 100;
+                progressFill.style.width = progress + '%';
+                progressText.textContent = `${currentIndex + 1} / ${totalQ}`;
+                questionNumber.textContent = `第 ${currentIndex + 1} 题`;
+                btnBack.style.visibility = currentIndex === 0 ? 'hidden' : 'visible';
+                questionText.textContent = q.question;
+                optionsList.innerHTML = '';
+                const letters = ['A', 'B', 'C', 'D'];
+                q.options.forEach((opt, idx) => {
+                    const div = document.createElement('div');
+                    div.className = 'option-item';
+                    div.dataset.index = idx;
+                    div.dataset.scoreRole = opt.scoreRole;
+                    const letterSpan = document.createElement('span');
+                    letterSpan.className = 'letter';
+                    letterSpan.textContent = letters[idx] || '•';
+                    const textSpan = document.createElement('span');
+                    textSpan.textContent = opt.text;
+                    div.appendChild(letterSpan);
+                    div.appendChild(textSpan);
+                    div.addEventListener('click', function () { selectOption(this); });
+                    optionsList.appendChild(div);
+                });
+                const savedIdx = history[currentIndex];
+                if (savedIdx !== undefined && savedIdx !== -1) {
+                    const items = optionsList.querySelectorAll('.option-item');
+                    if (items[savedIdx]) {
+                        items[savedIdx].classList.add('selected');
+                        selectedOptionIndex = savedIdx;
+                        btnNext.classList.add('active');
+                    } else { selectedOptionIndex = null; btnNext.classList.remove('active'); }
+                } else { selectedOptionIndex = null; btnNext.classList.remove('active'); }
+                btnNext.textContent = (currentIndex === totalQ - 1 && selectedOptionIndex !== null) ? '查看结果' : '下一题 →';
+            }
+
+            function selectOption(el) {
+                if (isAutoJumping) return;
+                optionsList.querySelectorAll('.option-item').forEach(item => item.classList.remove('selected'));
+                el.classList.add('selected');
+                const allItems = optionsList.querySelectorAll('.option-item');
+                const idx = Array.from(allItems).indexOf(el);
+                selectedOptionIndex = idx;
+                history[currentIndex] = idx;
+                recalcScores();
+                btnNext.classList.add('active');
+                if (currentIndex === totalQ - 1) btnNext.textContent = '查看结果';
+                isAutoJumping = true;
+                setTimeout(() => {
+                    isAutoJumping = false;
+                    if (currentIndex < totalQ - 1) goToNext();
+                }, 500);
+            }
+
+            function goToNext() {
+                if (selectedOptionIndex === null) return;
+                if (currentIndex === totalQ - 1) { showResult(); return; }
+                currentIndex++;
+                renderQuestion();
+                document.querySelector('.app').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            function goBack() {
+                if (currentIndex === 0) return;
+                currentIndex--;
+                renderQuestion();
+                document.querySelector('.app').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            function getTopRole() {
+                let max = -1, top = rolePriority[0];
+                for (const id of rolePriority) { if (scores[id] > max) { max = scores[id]; top = id; } }
+                return top;
+            }
+
+            // -------- 显示结果（核心） --------
+            function showResult() {
+                if (selectedOptionIndex !== null && history[currentIndex] === undefined) {
+                    history[currentIndex] = selectedOptionIndex;
+                    recalcScores();
+                }
+                const topId = getTopRole();
+                const role = roleData[topId];
+                if (!role) return;
+                pageQuiz.classList.add('hidden');
+                pageResult.classList.remove('hidden');
+                pageResult.classList.add('fade-in');
+                resultName.textContent = role.roleName;
+                resultDrama.textContent = `「${role.dramaName}」`;
+                resultImage.src = role.image || `https://picsum.photos/seed/${topId}/400/400`;
+                resultImage.alt = role.roleName;
+                resultTags.innerHTML = role.tags.split('、').map(t => `<span># ${t}</span>`).join('');
+                resultBg.innerHTML = `<strong>🧠 人格底色</strong><br>${role.personalityBg}`;
+                resultSignature.innerHTML = role.signatureLine || '';
+                resultStory.innerHTML = `<strong>📖 角色故事</strong><br>${role.resultText}`;
+                drawRadarChart();
+                resultName.onclick = function () { openCardModal(topId); };
+            }
+
+            // -------- 雷达图绘制 --------
+            function drawRadarChart() {
+                const canvas = document.getElementById('radarChart');
+                if (!canvas) return;
+                if (window.myRadarChart) { window.myRadarChart.destroy(); }
+                const traitScores = getTraitScores();
+                const values = traitDimensions.map(t => traitScores[t] || 0);
+                const maxVal = Math.max(...values, 10);
+                const axisMax = Math.ceil(maxVal / 10) * 10;
+                const ctx = canvas.getContext('2d');
+                window.myRadarChart = new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: traitDimensions,
+                        datasets: [{
+                            label: '性格特质契合度',
+                            data: values,
+                            backgroundColor: 'rgba(179,136,201,0.25)',
+                            borderColor: '#9c6fb0',
+                            borderWidth: 2,
+                            pointBackgroundColor: '#9c6fb0',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 1,
+                            pointRadius: 4,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                max: Math.max(axisMax, 50),
+                                ticks: { display: false, stepSize: Math.ceil(axisMax / 5), backdropColor: 'transparent', font: { size: 10 } },
+                                grid: { color: 'rgba(156,111,176,0.2)' },
+                                pointLabels: { font: { size: 12, weight: '500' }, color: '#4a2c5e' }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // -------- 暴露雷达图绘制函数，供外部调用 --------
+            window.drawRadarChart = drawRadarChart;
+
+            // -------- 卡片弹窗 --------
+            function openCardModal(roleId) {
+                const role = roleData[roleId];
+                if (!role) return;
+                const cardUrl = role.card || role.still || `https://picsum.photos/seed/${roleId}_card/800/600`;
+                modalCardImage.src = cardUrl;
+                modalCardImage.alt = `${role.roleName} 详情卡片`;
+                modalOverlay.classList.remove('hidden');
+            }
+
+            window.closeModal = function (e) {
+                if (e && e.target !== e.currentTarget) return;
+                modalOverlay.classList.add('hidden');
+            };
+
+            // -------- 重置测试 --------
+            function resetTest() {
+                currentIndex = 0;
+                selectedOptionIndex = null;
+                history = new Array(totalQ).fill(-1);
+                resetScores();
+                pageResult.classList.add('hidden');
+                pageStart.classList.remove('hidden');
+                pageStart.classList.add('fade-in');
+                pageQuiz.classList.add('hidden');
+                progressFill.style.width = '0%';
+                progressText.textContent = `1 / ${totalQ}`;
+                btnNext.classList.remove('active');
+                btnNext.textContent = '下一题 →';
+                if (window.myRadarChart) { window.myRadarChart.destroy(); window.myRadarChart = null; }
+            }
+
+            // -------- 事件绑定 --------
+            btnStart.addEventListener('click', function () {
+                pageStart.classList.add('hidden');
+                pageQuiz.classList.remove('hidden');
+                pageQuiz.classList.add('fade-in');
+                resetScores();
+                history = new Array(totalQ).fill(-1);
+                currentIndex = 0;
+                renderQuestion();
+            });
+            btnNext.addEventListener('click', function () { if (btnNext.classList.contains('active')) goToNext(); });
+            btnBack.addEventListener('click', goBack);
+            btnRetry.addEventListener('click', resetTest);
+
+            // -------- 键盘事件 --------
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'ArrowLeft' && !pageQuiz.classList.contains('hidden') && currentIndex > 0) goBack();
+                if (e.key === 'ArrowRight' && !pageQuiz.classList.contains('hidden') && btnNext.classList.contains('active')) goToNext();
+                if (e.key === 'Enter' && !pageQuiz.classList.contains('hidden') && btnNext.classList.contains('active')) goToNext();
+                if (e.key === 'Escape' && !modalOverlay.classList.contains('hidden')) closeModal();
+            });
+
+            // -------- 临时测试按钮（跳转到结果页，显示胡娟儿） --------
+            document.getElementById('devSkipBtn').addEventListener('click', function () {
+                // 隐藏开始页和答题页，显示结果页
+                pageStart.classList.add('hidden');
+                pageQuiz.classList.add('hidden');
+                pageResult.classList.remove('hidden');
+                pageResult.classList.add('fade-in');
+
+                // 指定要展示的角色（胡娟儿）
+                const demoRoleId = 'hujuaner';
+                const role = DATA.roleData[demoRoleId];
+                if (!role) return;
+
+                // 填充数据
+                resultName.textContent = role.roleName;
+                resultDrama.textContent = `「${role.dramaName}」`;
+                resultImage.src = role.image || `https://picsum.photos/seed/${demoRoleId}/400/400`;
+                resultImage.alt = role.roleName;
+                resultTags.innerHTML = role.tags.split('、').map(t => `<span># ${t}</span>`).join('');
+                resultBg.innerHTML = `<strong>🧠 人格底色</strong><br>${role.personalityBg}`;
+                resultSignature.innerHTML = role.signatureLine || '';
+                resultStory.innerHTML = `<strong>📖 角色故事</strong><br>${role.resultText}`;
+                // 绑定角色名点击事件
+                resultName.onclick = function () { openCardModal(demoRoleId); };
+
+                // 需要模拟 scores 数据用于雷达图
+                // 将所有分数清零，只给 demoRoleId 加高分（模拟最高分）
+                resetScores(); // 重置分数
+                scores[demoRoleId] = 999; // 确保它最高
+                // 调用全局雷达图绘制函数（它内部会读取 scores）
+                if (typeof window.drawRadarChart === 'function') {
+                    window.drawRadarChart();
+                } else {
+                    console.warn('雷达图绘制函数未找到');
+                }
+            });
+
+            // -------- 初始化 --------
+            resetScores();
+            rolePriority.forEach(id => {
+                if (!roleData[id].image) roleData[id].image = `https://picsum.photos/seed/${id}/400/400`;
+                if (!roleData[id].card) roleData[id].card = roleData[id].still || `https://picsum.photos/seed/${id}_card/800/600`;
+            });
+            if (totalQ === 0) document.querySelector('.intro-desc').innerHTML = '⚠️ 题目数据为空。';
+        })();
+    </script>
+
+</body>
+
+</html>
