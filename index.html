@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
-    <title>🥰黛溪宇宙🎉</title>
+    <title>🎉黛溪宇宙🎉</title>
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <!-- html2canvas -->
@@ -1128,19 +1128,14 @@
                         maintainAspectRatio: true,
                         plugins: {
                             legend: { display: false },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        return `${context.raw} 分`;
-                                    }
-                                }
-                            }
+                            tooltip: { enabled: false }   // 直接关闭 tooltip
                         },
                         scales: {
                             r: {
                                 beginAtZero: true,
                                 max: Math.max(axisMax, 50),
                                 ticks: {
+                                    display: false,   // 隐藏刻度数字
                                     stepSize: Math.ceil(axisMax / 5),
                                     backdropColor: 'transparent',
                                     font: { size: 10 }
