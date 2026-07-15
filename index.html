@@ -1168,132 +1168,7 @@
             };
 
             // -------- 生成海报（优化清晰度） --------
-            async function generatePoster() {
-                btnPoster.textContent = '生成中…';
-                btnPoster.disabled = true;
-
-                try {
-                    // 1. 获取需要截图的主体元素
-                    const resultPage = document.getElementById('page-result');
-                    const appEl = document.querySelector('.app');
-
-                    // 2. 临时移除毛玻璃效果（解决截图发雾问题）
-                    // 保存原来的样式
-                    const originalAppBg = appEl.style.background;
-                    const originalAppFilter = appEl.style.backdropFilter;
-                    const originalAppWebkit = appEl.style.webkitBackdropFilter;
-
-                    // 设为纯色背景，去掉模糊
-                    appEl.style.background = '#f8f4fa';
-                    appEl.style.backdropFilter = 'none';
-                    appEl.style.webkitBackdropFilter = 'none';
-
-                    // 处理内部毛玻璃卡片（人格底色、故事、雷达图、鸣谢）
-                    const cards = document.querySelectorAll('.result-bg, .result-story, .result-credits, .radar-container');
-                    const cardStyles = [];
-                    cards.forEach(el => {
-                        cardStyles.push({
-                            el: el,
-                            bg: el.style.background,
-                            filter: el.style.backdropFilter,
-                            webkit: el.style.webkitBackdropFilter
-                        });
-                        el.style.background = 'rgba(255, 255, 255, 0.95)'; // 接近纯白
-                        el.style.backdropFilter = 'none';
-                        el.style.webkitBackdropFilter = 'none';
-                    });
-
-                    // 3. 生成二维码
-                    let qrContainer = document.getElementById('qrContainer');
-                    if (!qrContainer) {
-                        qrContainer = document.createElement('div');
-                        qrContainer.id = 'qrContainer';
-                        qrContainer.style.position = 'absolute';
-                        qrContainer.style.bottom = '20px';
-                        qrContainer.style.right = '20px';
-                        qrContainer.style.width = '80px';
-                        qrContainer.style.height = '80px';
-                        qrContainer.style.background = '#fff';
-                        qrContainer.style.borderRadius = '12px';
-                        qrContainer.style.padding = '4px';
-                        qrContainer.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
-                        qrContainer.style.zIndex = '10';
-                    }
-                    qrContainer.innerHTML = '';
-                    new QRCode(qrContainer, {
-                        text: window.location.href,
-                        width: 72,
-                        height: 72,
-                        colorDark: '#2d1a3a',
-                        colorLight: '#ffffff',
-                        correctLevel: QRCode.CorrectLevel.H
-                    });
-                    if (!document.getElementById('qrContainer')) {
-                        resultPage.appendChild(qrContainer);
-                    }
-
-                    // 4. 截图（提高 scale 到 3，更清晰）
-                    const canvas = await html2canvas(resultPage, {
-                        scale: 3,              // 从 2 提高到 3，清晰度大幅提升
-                        useCORS: true,
-                        logging: false,
-                        backgroundColor: '#f8f4fa',
-                        allowTaint: true,
-                        // 针对滚动截图的优化
-                        windowWidth: resultPage.scrollWidth,
-                        windowHeight: resultPage.scrollHeight,
-                    });
-
-                    const dataUrl = canvas.toDataURL('image/png');
-
-                    // 5. 恢复毛玻璃样式
-                    appEl.style.background = originalAppBg || '';
-                    appEl.style.backdropFilter = originalAppFilter || '';
-                    appEl.style.webkitBackdropFilter = originalAppWebkit || '';
-                    cardStyles.forEach(s => {
-                        s.el.style.background = s.bg || '';
-                        s.el.style.backdropFilter = s.filter || '';
-                        s.el.style.webkitBackdropFilter = s.webkit || '';
-                    });
-
-                    // 移除临时二维码
-                    if (qrContainer.parentNode) {
-                        qrContainer.parentNode.removeChild(qrContainer);
-                    }
-
-                    // 6. 显示预览
-                    posterImage.src = dataUrl;
-                    posterPreview.classList.remove('hidden');
-
-                } catch (err) {
-                    alert('生成海报失败，请重试。');
-                    console.error(err);
-                    // 发生错误时也要恢复样式（避免页面变丑）
-                    // 这里简单起见，刷新页面即可恢复，但为了体验，可以加一个重置逻辑
-                } finally {
-                    btnPoster.textContent = '🖼️ 生成海报';
-                    btnPoster.disabled = false;
-                }
-            }
-            // -------- 重置测试 --------
-            function resetTest() {
-                currentIndex = 0;
-                selectedOptionIndex = null;
-                history = new Array(totalQ).fill(-1);
-                resetScores();
-                pageResult.classList.add('hidden');
-                pageStart.classList.remove('hidden');
-                pageStart.classList.add('fade-in');
-                pageQuiz.classList.add('hidden');
-                progressFill.style.width = '0%';
-                progressText.textContent = `1 / ${totalQ}`;
-                btnNext.classList.remove('active');
-                btnNext.textContent = '下一题 →';
-                if (window.myRadarChart) {
-                    window.myRadarChart.destroy();
-                    window.myRadarChart = null;
-                }
-            }
+            
 
             // -------- 分享 --------
             function shareResult() {
@@ -1349,34 +1224,41 @@
                 try {
                     const resultPage = document.getElementById('page-result');
 
-                    // 1. 克隆结果页节点（深克隆）
+                    // 克隆
                     const clone = resultPage.cloneNode(true);
                     clone.id = 'clone-for-poster';
                     clone.style.position = 'fixed';
                     clone.style.left = '-9999px';
                     clone.style.top = '0';
                     clone.style.width = resultPage.scrollWidth + 'px';
-                    clone.style.background = '#f8f4fa';
+                    clone.style.background = '#ffffff';  // 纯白
                     clone.style.backdropFilter = 'none';
                     clone.style.webkitBackdropFilter = 'none';
                     clone.style.padding = '20px';
                     clone.style.borderRadius = '0';
                     clone.style.boxShadow = 'none';
 
-                    // 2. 移除克隆体内所有毛玻璃效果
+                    // 强制所有元素背景纯白，移除透明
                     clone.querySelectorAll('*').forEach(el => {
-                        const style = window.getComputedStyle(el);
-                        if (style.backdropFilter && style.backdropFilter !== 'none') {
-                            el.style.backdropFilter = 'none';
-                            el.style.webkitBackdropFilter = 'none';
+                        // 移除 backdrop-filter
+                        el.style.backdropFilter = 'none';
+                        el.style.webkitBackdropFilter = 'none';
+                        // 如果是卡片类，设置纯白背景
+                        if (el.classList && (
+                            el.classList.contains('result-bg') ||
+                            el.classList.contains('result-story') ||
+                            el.classList.contains('result-credits') ||
+                            el.classList.contains('radar-container')
+                        )) {
+                            el.style.background = '#ffffff';
                         }
-                        // 强行将半透明背景改为实色，避免扫描线
-                        if (el.style.background && el.style.background.includes('rgba')) {
-                            el.style.background = 'rgba(255,255,255,0.95)';
+                        // 如果是整个容器，也设置纯白
+                        if (el.id === 'page-result') {
+                            el.style.background = '#ffffff';
                         }
                     });
 
-                    // 3. 生成二维码并插入克隆体
+                    // 二维码（同上）
                     const qrContainer = document.createElement('div');
                     qrContainer.style.position = 'absolute';
                     qrContainer.style.bottom = '20px';
@@ -1399,28 +1281,25 @@
                         correctLevel: QRCode.CorrectLevel.H
                     });
 
-                    // 4. 将克隆体添加到页面（隐藏）
                     document.body.appendChild(clone);
 
-                    // 5. 截图克隆体
+                    // 截图，scale 提高到 5
                     const canvas = await html2canvas(clone, {
-                        scale: 3,
+                        scale: 5,
                         useCORS: true,
                         logging: false,
-                        backgroundColor: '#f8f4fa',
+                        backgroundColor: '#ffffff', // 纯白背景
                         allowTaint: true,
                         width: clone.scrollWidth,
                         height: clone.scrollHeight,
                     });
 
-                    // 6. 移除克隆体
                     document.body.removeChild(clone);
 
-                    // 7. 生成图片并显示预览
                     const dataUrl = canvas.toDataURL('image/png');
                     const posterImage = document.getElementById('posterImage');
                     posterImage.src = dataUrl;
-                    posterImage.dataset.src = dataUrl;   // 保存数据供下载使用
+                    posterImage.dataset.src = dataUrl;
                     document.getElementById('posterPreview').classList.remove('hidden');
 
                 } catch (err) {
