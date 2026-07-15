@@ -1167,7 +1167,11 @@
                 modalOverlay.classList.add('hidden');
             };
 
-    
+            // -------- 关闭海报预览 --------
+            window.closePoster = function() {
+                document.getElementById('posterPreview').classList.add('hidden');
+            };
+
             // -------- 分享 --------
             function shareResult() {
                 const roleName = btnShare.dataset.roleName || '某个角色';
@@ -1229,10 +1233,7 @@
 
             btnShare.addEventListener('click', shareResult);
 
-            btnPoster.addEventListener('click', generatePoster);
-            // -------- 生成海报（克隆截图法，彻底解决模糊） --------
-            btnPoster.addEventListener('click', generatePoster);
-
+            // -------- 生成海报（克隆截图法） --------
             async function generatePoster() {
                 btnPoster.textContent = '生成中…';
                 btnPoster.disabled = true;
@@ -1247,19 +1248,18 @@
                     clone.style.left = '-9999px';
                     clone.style.top = '0';
                     clone.style.width = resultPage.scrollWidth + 'px';
-                    clone.style.background = '#ffffff';  // 纯白
+                    // 背景改为与页面一致的渐变，避免纯白
+                    clone.style.background = 'linear-gradient(145deg, #fce4ec 0%, #f3e5f5 40%, #e8eaf6 100%)';
                     clone.style.backdropFilter = 'none';
                     clone.style.webkitBackdropFilter = 'none';
                     clone.style.padding = '20px';
                     clone.style.borderRadius = '0';
                     clone.style.boxShadow = 'none';
 
-                    // 强制所有元素背景纯白，移除透明
+                    // 强制卡片背景为白色以保证清晰，其他元素保持透明或继承
                     clone.querySelectorAll('*').forEach(el => {
-                        // 移除 backdrop-filter
                         el.style.backdropFilter = 'none';
                         el.style.webkitBackdropFilter = 'none';
-                        // 如果是卡片类，设置纯白背景
                         if (el.classList && (
                             el.classList.contains('result-bg') ||
                             el.classList.contains('result-story') ||
@@ -1268,13 +1268,13 @@
                         )) {
                             el.style.background = '#ffffff';
                         }
-                        // 如果是整个容器，也设置纯白
+                        // 确保整个结果页背景为白色（覆盖内部背景）
                         if (el.id === 'page-result') {
-                            el.style.background = '#ffffff';
+                            el.style.background = 'transparent'; // 让渐变露出来
                         }
                     });
 
-                    // 二维码（同上）
+                    // 二维码
                     const qrContainer = document.createElement('div');
                     qrContainer.style.position = 'absolute';
                     qrContainer.style.bottom = '20px';
@@ -1304,7 +1304,7 @@
                         scale: 5,
                         useCORS: true,
                         logging: false,
-                        backgroundColor: '#ffffff', // 纯白背景
+                        backgroundColor: null, // 使用透明背景，让渐变显示
                         allowTaint: true,
                         width: clone.scrollWidth,
                         height: clone.scrollHeight,
@@ -1327,7 +1327,9 @@
                 }
             }
 
-            // -------- 下载海报（修复无反应问题） --------
+            btnPoster.addEventListener('click', generatePoster);
+
+            // -------- 下载海报 --------
             document.getElementById('btnDownloadPoster').addEventListener('click', function () {
                 const posterImage = document.getElementById('posterImage');
                 const dataUrl = posterImage.dataset.src || posterImage.src;
@@ -1343,12 +1345,7 @@
                 document.body.removeChild(link);
             });
 
-            // -------- 键盘快捷键（继续保留你的键盘事件） --------
-            // 注意：下面这部分是你原有的键盘事件，我已经保留，但为了不重复，你可以保留你的原有键盘代码。
-            // 如果你已经有一个键盘事件，请不要重复添加。
-            // 这里只是提醒你，下面的键盘事件依然有效，不需要修改。
-            // 如果你的键盘事件在别处，确保这部分不被覆盖。
-            // 键盘
+            // -------- 键盘快捷键 --------
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'ArrowLeft' && !pageQuiz.classList.contains('hidden')) {
                     if (currentIndex > 0) goBack();
@@ -1372,7 +1369,6 @@
                     roleData[id].image = `https://picsum.photos/seed/${id}/400/400`;
                 }
                 if (!roleData[id].card) {
-                    // 若未提供卡片图，使用 still 作为 fallback
                     roleData[id].card = roleData[id].still || `https://picsum.photos/seed/${id}_card/800/600`;
                 }
             });
