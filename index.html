@@ -1167,7 +1167,6 @@
                 modalOverlay.classList.add('hidden');
             };
 
-            // -------- 生成海报 --------
             // -------- 生成海报（优化清晰度） --------
             async function generatePoster() {
                 btnPoster.textContent = '生成中…';
@@ -1340,7 +1339,120 @@
             btnShare.addEventListener('click', shareResult);
 
             btnPoster.addEventListener('click', generatePoster);
+            // -------- 生成海报（克隆截图法，彻底解决模糊） --------
+            btnPoster.addEventListener('click', generatePoster);
 
+            async function generatePoster() {
+                btnPoster.textContent = '生成中…';
+                btnPoster.disabled = true;
+
+                try {
+                    const resultPage = document.getElementById('page-result');
+
+                    // 1. 克隆结果页节点（深克隆）
+                    const clone = resultPage.cloneNode(true);
+                    clone.id = 'clone-for-poster';
+                    clone.style.position = 'fixed';
+                    clone.style.left = '-9999px';
+                    clone.style.top = '0';
+                    clone.style.width = resultPage.scrollWidth + 'px';
+                    clone.style.background = '#f8f4fa';
+                    clone.style.backdropFilter = 'none';
+                    clone.style.webkitBackdropFilter = 'none';
+                    clone.style.padding = '20px';
+                    clone.style.borderRadius = '0';
+                    clone.style.boxShadow = 'none';
+
+                    // 2. 移除克隆体内所有毛玻璃效果
+                    clone.querySelectorAll('*').forEach(el => {
+                        const style = window.getComputedStyle(el);
+                        if (style.backdropFilter && style.backdropFilter !== 'none') {
+                            el.style.backdropFilter = 'none';
+                            el.style.webkitBackdropFilter = 'none';
+                        }
+                        // 强行将半透明背景改为实色，避免扫描线
+                        if (el.style.background && el.style.background.includes('rgba')) {
+                            el.style.background = 'rgba(255,255,255,0.95)';
+                        }
+                    });
+
+                    // 3. 生成二维码并插入克隆体
+                    const qrContainer = document.createElement('div');
+                    qrContainer.style.position = 'absolute';
+                    qrContainer.style.bottom = '20px';
+                    qrContainer.style.right = '20px';
+                    qrContainer.style.width = '80px';
+                    qrContainer.style.height = '80px';
+                    qrContainer.style.background = '#fff';
+                    qrContainer.style.borderRadius = '12px';
+                    qrContainer.style.padding = '4px';
+                    qrContainer.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+                    qrContainer.style.zIndex = '10';
+                    clone.appendChild(qrContainer);
+
+                    new QRCode(qrContainer, {
+                        text: window.location.href,
+                        width: 72,
+                        height: 72,
+                        colorDark: '#2d1a3a',
+                        colorLight: '#ffffff',
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+
+                    // 4. 将克隆体添加到页面（隐藏）
+                    document.body.appendChild(clone);
+
+                    // 5. 截图克隆体
+                    const canvas = await html2canvas(clone, {
+                        scale: 3,
+                        useCORS: true,
+                        logging: false,
+                        backgroundColor: '#f8f4fa',
+                        allowTaint: true,
+                        width: clone.scrollWidth,
+                        height: clone.scrollHeight,
+                    });
+
+                    // 6. 移除克隆体
+                    document.body.removeChild(clone);
+
+                    // 7. 生成图片并显示预览
+                    const dataUrl = canvas.toDataURL('image/png');
+                    const posterImage = document.getElementById('posterImage');
+                    posterImage.src = dataUrl;
+                    posterImage.dataset.src = dataUrl;   // 保存数据供下载使用
+                    document.getElementById('posterPreview').classList.remove('hidden');
+
+                } catch (err) {
+                    alert('生成海报失败，请重试。');
+                    console.error(err);
+                } finally {
+                    btnPoster.textContent = '🖼️ 生成海报';
+                    btnPoster.disabled = false;
+                }
+            }
+
+            // -------- 下载海报（修复无反应问题） --------
+            document.getElementById('btnDownloadPoster').addEventListener('click', function () {
+                const posterImage = document.getElementById('posterImage');
+                const dataUrl = posterImage.dataset.src || posterImage.src;
+                if (!dataUrl || dataUrl === '' || dataUrl === window.location.href) {
+                    alert('请先生成海报！');
+                    return;
+                }
+                const link = document.createElement('a');
+                link.download = '角色人格测试海报.png';
+                link.href = dataUrl;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+
+            // -------- 键盘快捷键（继续保留你的键盘事件） --------
+            // 注意：下面这部分是你原有的键盘事件，我已经保留，但为了不重复，你可以保留你的原有键盘代码。
+            // 如果你已经有一个键盘事件，请不要重复添加。
+            // 这里只是提醒你，下面的键盘事件依然有效，不需要修改。
+            // 如果你的键盘事件在别处，确保这部分不被覆盖。
             // 键盘
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'ArrowLeft' && !pageQuiz.classList.contains('hidden')) {
