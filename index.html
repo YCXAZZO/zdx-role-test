@@ -5,7 +5,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
     <title>🎉黛溪宇宙🎉</title>
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- Swiper CSS & JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <style>
         /* ===== 原有样式保持不变 ===== */
         * {
@@ -488,7 +492,7 @@
             height: auto !important;
         }
 
-        /* ===== 新增：双栏鸣谢 ===== */
+        /* ===== 双栏鸣谢 ===== */
         .result-credits {
             margin: 18px 0 16px;
             padding: 10px 14px;
@@ -517,7 +521,6 @@
             display: inline-block;
         }
 
-        /* 响应式：移动端上下排列，且先显示社交账号 */
         @media (max-width: 480px) {
 
             .credits-left,
@@ -538,37 +541,37 @@
             margin-top: 10px;
         }
 
-        /* 模态框 */
+        /* ===== 模态框（Swiper 容器） ===== */
         .modal-overlay {
             position: fixed;
             top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.60);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 999;
-        padding: 20px;
-        /* 新增动画相关 */
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
-        transform: scale(0.95);
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent(0, 0, 0, 0.70);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+            transform: scale(0.95);
         }
 
         .modal-overlay.active {
-        opacity: 1;
-        visibility: visible;
-        transform: scale(1);
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
         }
 
         .modal-content {
             background: transparent;
-            max-width: 90%;
+            width: 100%;
+            max-width: 560px;
             max-height: 90vh;
             border-radius: 24px;
             overflow: hidden;
@@ -576,19 +579,55 @@
             position: relative;
         }
 
-        .modal-content img {
-            display: block;
-            width: 100%;
+        /* Swiper 容器覆盖 */
+        .modal-content .swiper-container {
+            width: auto;
             height: auto;
-            max-height: 85vh;
-            object-fit: contain;
+            max-height: 80vh;
+            aspect-ratio: 4 / 3;
+            /* 保持比例，也可取消 */
+            background: transparent;
             border-radius: 24px;
-            background: #fff;
         }
 
+        .modal-content .swiper-slide {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: transparent;
+        }
+
+        .modal-content .swiper-slide img {
+            width: auto;
+            height: auto;
+            max-height: 80vh;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* Swiper 分页指示点（底部） */
+        .modal-content .swiper-pagination {
+            position: absolute;
+            bottom: 16px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+        }
+
+        .modal-content .swiper-pagination-bullet {
+            background: rgba(255, 255, 255, 0.6);
+            opacity: 0.8;
+        }
+
+        .modal-content .swiper-pagination-bullet-active {
+            background: #fff;
+            opacity: 1;
+        }
+
+        /* 关闭按钮（绝对定位） */
         .modal-close {
             position: absolute;
-            top: 12px;
+            top: 16px;
             right: 20px;
             font-size: 32px;
             font-weight: 300;
@@ -596,14 +635,23 @@
             color: #fff;
             text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
             transition: transform .2s;
-            z-index: 10;
+            z-index: 20;
+            background: rgba(0, 0, 0, 0.3);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
         }
 
         .modal-close:hover {
             transform: rotate(90deg);
+            background: rgba(0, 0, 0, 0.5);
         }
 
-        /* ===== 临时测试按钮样式 ===== */
+        /* ===== 临时测试按钮 ===== */
         #devSkipBtn {
             position: fixed;
             top: 12px;
@@ -625,7 +673,6 @@
             opacity: 1;
         }
 
-        /* 响应式调整（移动端按钮更小） */
         @media (max-width:480px) {
             #devSkipBtn {
                 top: 8px;
@@ -671,8 +718,9 @@
                 font-size: 14px;
             }
 
-            .modal-content {
-                max-width: 95%;
+            .modal-content .swiper-container {
+                aspect-ratio: 3 / 4;
+                /* 移动端可调整为竖屏比例 */
             }
         }
 
@@ -699,7 +747,7 @@
 
 <body>
 
-    <!-- 临时测试按钮（浮动） -->
+    <!-- 临时测试按钮 -->
     <button id="devSkipBtn">🚀 跳转结果</button>
 
     <div class="app" id="app">
@@ -761,16 +809,22 @@
         </div>
     </div>
 
+    <!-- ===== 模态框（Swiper 容器） ===== -->
     <div id="modalOverlay" class="modal-overlay hidden" onclick="closeModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="modal-close" onclick="closeModal()">×</span>
-            <img id="modalCardImage" src="" alt="角色详情卡片" />
+            <div class="swiper-container" id="swiperContainer">
+                <div class="swiper-wrapper" id="swiperWrapper">
+                    <!-- slides 由 JS 动态生成 -->
+                </div>
+                <div class="swiper-pagination" id="swiperPagination"></div>
+            </div>
         </div>
     </div>
 
     <script>
         // =============================================================
-        // 数据（完整更新，含12题和 signatureLine）
+        // 数据（新增 cards 数组，支持多张剧照）
         // =============================================================
         const DATA = {
             introText: "12道选择题，凭第一直觉选择，<br>测测你潜意识的黛溪分身～",
@@ -785,8 +839,14 @@
                     resultText: "你匹配的角色是《烽火塘田》中的王若兰。<br>作为潜伏在学院的革命内线，她习惯独自扛下所有危险与压力，面对敌人盘问始终冷静自持，从不外露脆弱。明明心怀悲悯、心疼受苦的学生与百姓，却只能把温柔藏在冷静外壳之下，以一己之力守护身边同志，甘愿为心中大义牺牲自我。<br><b>你和她一样，越是身处高压黑暗环境，越能守住底线与初心，习惯默默付出、暗中兜底，是外冷内热、以温柔赴大义的人。</b>",
                     signatureLine: "<b>聚是一团火，散是满天星，<br>我信这份信仰，终能照亮前路。</b>",
                     image: "./images/wangruolan_avatar.jpg",
-                    still: "./images/wangruolan_still.jpg",
-                    card: "./images/wangruolan_card.jpg"
+                    // 多张剧照（示例使用占位图，实际替换为你的图片）
+                    cards: [
+                        "https://picsum.photos/seed/wangruolan_1/800/600",
+                        "https://picsum.photos/seed/wangruolan_2/800/600",
+                        "https://picsum.photos/seed/wangruolan_3/800/600"
+                    ],
+                    // 保留单张作为后备
+                    card: "https://picsum.photos/seed/wangruolan_card/800/600"
                 },
                 "zhangyuanman": {
                     roleName: "张元满",
@@ -796,8 +856,11 @@
                     resultText: "你匹配的角色是《庚伢子》里的张元满。<br>她是旧社会底层农家妇女，一生饱经贫苦与风霜，却从未丢掉悲悯之心，主动照料无依无靠的孤儿庚伢子，默默接济身边苦难之人。看似温和忍让、从不与人争执，可看见弱小受欺负时，也会鼓起勇气挺身而出。<br><b>如同她一般，你见过世间诸多不易，却依旧愿意释放善意包容他人，苦难磨不平你的温柔，是能治愈身边所有人的存在。</b>",
                     signatureLine: "<b>日子再苦，心里也要留一份温柔，<br>能帮旁人一把，便是福气。</b>",
                     image: "./images/zhangyuanman_avatar.jpg",
-                    still: "./images/zhangyuanman_still.jpg",
-                    card: "./images/zhangyuanman_card.jpg"
+                    cards: [
+                        "https://picsum.photos/seed/zhangyuanman_1/800/600",
+                        "https://picsum.photos/seed/zhangyuanman_2/800/600"
+                    ],
+                    card: "https://picsum.photos/seed/zhangyuanman_card/800/600"
                 },
                 "hujuaner": {
                     roleName: "胡娟儿",
@@ -807,8 +870,13 @@
                     resultText: "你匹配的角色是《胡李镇传说》女主胡娟儿。<br>原本是小镇纯粹明媚的普通少女，深陷连环命案与两大家族的流言漩涡，被全镇人猜忌排挤，还要承受权贵子弟的骚扰打压。但她从未低头妥协，一边坚守对男主的真心，一边独自暗中追查真相，在层层阴谋里褪去天真、快速蜕变。<br><b>你和她一样，待人真诚坦荡、重情专一，面对偏见与恶意自带不屈棱角，哪怕孤身陷入绝境，也不会放弃寻找真相与公道。</b>",
                     signatureLine: "<b>流言再多我也不怕，真相总会大白，<br>我信你，也信公道。</b>",
                     image: "./images/hujuaner_avatar.jpg",
-                    still: "./images/hujuaner_still.jpg",
-                    card: "./images/hujuaner_card.jpg"
+                    cards: [
+                        "./images/hujuaner_1.jpg",
+                        "./images/hujuaner_2.png",
+                        "./images/hujuaner_3.png",
+                        "./images/hujuaner_4.jpg"
+                    ],
+                    card: "https://picsum.photos/seed/hujuaner_card/800/600"
                 },
                 "wushuang": {
                     roleName: "吴双",
@@ -818,8 +886,11 @@
                     resultText: "你匹配的角色是古装悬疑电影《判妖邪》的吴双。<br>她本是只求与兄长安稳度日的普通少女，却遭权贵觊觎陷害，被扣上祸乱世间的妖女污名，受尽全镇百姓唾骂，孤立无援无处自证清白。可即便走到绝境，她也不肯屈从强权，宁愿独自承受所有罪责，也要护住唯一的亲人。<br><b>你骨子里和她高度相似，内心赤诚柔软、极度看重亲情羁绊，一旦遭遇不公与污蔑，便会生出宁折不弯的刚烈，纵使被全世界误解，也不肯违背本心认输。</b>",
                     signatureLine: "<b>别动我哥，千错万错都冲我来，<br>我只求世间还我一份清白。</b>",
                     image: "./images/wushuang_avatar.jpg",
-                    still: "./images/wushuang_still.jpg",
-                    card: "./images/wushuang_card.jpg"
+                    cards: [
+                        "https://picsum.photos/seed/wushuang_1/800/600",
+                        "https://picsum.photos/seed/wushuang_2/800/600"
+                    ],
+                    card: "https://picsum.photos/seed/wushuang_card/800/600"
                 },
                 "meiqing": {
                     roleName: "美清",
@@ -829,8 +900,11 @@
                     resultText: "你匹配的角色是《The Adventures》的苗族少女美清。<br>生长在无拘无束的山野之间，能歌善舞、心性烂漫，没有世俗算计与城府，厌恶条条框框的束缚，永远向往山野与远方，待人坦荡热忱，活得随性自在。<br><b>你和她一样，讨厌复杂的人情世故，对世界始终保有好奇与温柔，不被他人眼光绑架，偏爱随心而行的生活，像山间清风一般自由治愈，自带干净鲜活的独特灵气。</b>",
                     signatureLine: "<b>山野风无拘无束，人也不必困在条条框框里，<br>随心走便是自在。</b>",
                     image: "./images/meiqing_avatar.jpg",
-                    still: "./images/meiqing_still.jpg",
-                    card: "./images/meiqing_card.jpg"
+                    cards: [
+                        "https://picsum.photos/seed/meiqing_1/800/600",
+                        "https://picsum.photos/seed/meiqing_2/800/600"
+                    ],
+                    card: "https://picsum.photos/seed/meiqing_card/800/600"
                 },
                 "xiaoyun": {
                     roleName: "小云",
@@ -840,8 +914,11 @@
                     resultText: "你匹配的角色是古风故事《雨霖铃》中的小云。<br>她性情温婉雅致，心思细腻共情力极强，身处身不由己的乱世，始终克制自己的情绪与爱意，从不直白表露心事，所有思念与委屈都独自默默承受。明明满心牵挂在意之人，却愿意为对方的安稳选择隐忍退让，把深情藏在岁月里，安静成全他人。<br><b>你与她特质高度契合，不擅长直白倾诉情绪，极度念旧重情，即便世事身不由己，也始终守住温润柔软的本心。</b>",
                     signatureLine: "<b>如果你过得好，那我的离开就有意义，<br>请务必要好好的。</b>",
                     image: "./images/xiaoyun_avatar.jpg",
-                    still: "./images/xiaoyun_still.jpg",
-                    card: "./images/xiaoyun_card.jpg"
+                    cards: [
+                        "https://picsum.photos/seed/xiaoyun_1/800/600",
+                        "https://picsum.photos/seed/xiaoyun_2/800/600"
+                    ],
+                    card: "https://picsum.photos/seed/xiaoyun_card/800/600"
                 }
             },
             questionList: [
@@ -889,7 +966,8 @@
             const resultSignature = $('#resultSignature');
             const introText = $('#introText');
             const modalOverlay = $('#modalOverlay');
-            const modalCardImage = $('#modalCardImage');
+            const swiperContainer = $('#swiperContainer');
+            const swiperWrapper = $('#swiperWrapper');
 
             const rolePriority = DATA.rolePriority;
             const roleData = DATA.roleData;
@@ -897,6 +975,10 @@
             const totalQ = questions.length;
             const singleScore = DATA.rule.singleScore;
 
+            // ---------- Swiper 实例引用 ----------
+            let swiperInstance = null;
+
+            // ---------- 提取特质维度 ----------
             function extractTraits() {
                 const freq = {};
                 rolePriority.forEach(id => {
@@ -912,7 +994,11 @@
                 roleTraits[id] = tags.map(t => t.trim());
             });
 
-            let currentIndex = 0, scores = {}, selectedOptionIndex = null, history = [], isAutoJumping = false;
+            let currentIndex = 0,
+                scores = {},
+                selectedOptionIndex = null,
+                history = [],
+                isAutoJumping = false;
 
             function resetScores() { scores = {}; rolePriority.forEach(id => { scores[id] = 0; }); }
             introText.innerHTML = DATA.introText;
@@ -1009,12 +1095,18 @@
             }
 
             function getTopRole() {
-                let max = -1, top = rolePriority[0];
-                for (const id of rolePriority) { if (scores[id] > max) { max = scores[id]; top = id; } }
+                let max = -1,
+                    top = rolePriority[0];
+                for (const id of rolePriority) {
+                    if (scores[id] > max) {
+                        max = scores[id];
+                        top = id;
+                    }
+                }
                 return top;
             }
 
-            // -------- 显示结果（核心） --------
+            // -------- 显示结果 --------
             function showResult() {
                 if (selectedOptionIndex !== null && history[currentIndex] === undefined) {
                     history[currentIndex] = selectedOptionIndex;
@@ -1035,10 +1127,11 @@
                 resultSignature.innerHTML = role.signatureLine || '';
                 resultStory.innerHTML = `<strong>📖 角色故事</strong><br>${role.resultText}`;
                 drawRadarChart();
+                // 点击角色名打开剧照弹窗
                 resultName.onclick = function () { openCardModal(topId); };
             }
 
-            // -------- 雷达图绘制 --------
+            // -------- 雷达图 --------
             function drawRadarChart() {
                 const canvas = document.getElementById('radarChart');
                 if (!canvas) return;
@@ -1072,7 +1165,10 @@
                             r: {
                                 beginAtZero: true,
                                 max: Math.max(axisMax, 50),
-                                ticks: { display: false, stepSize: Math.ceil(axisMax / 5), backdropColor: 'transparent', font: { size: 10 } },
+                                ticks: {
+                                    display: false, stepSize: Math.ceil(axisMax / 5), backdropColor: 'transparent',
+                                    font: { size: 10 }
+                                },
                                 grid: { color: 'rgba(156,111,176,0.2)' },
                                 pointLabels: { font: { size: 12, weight: '500' }, color: '#4a2c5e' }
                             }
@@ -1081,27 +1177,81 @@
                 });
             }
 
-            // -------- 暴露雷达图绘制函数，供外部调用 --------
+            // -------- 暴露雷达图绘制函数（供临时按钮使用） --------
             window.drawRadarChart = drawRadarChart;
 
-            // -------- 卡片弹窗 --------
+            // -------- 剧照弹窗（Swiper Flip 效果） --------
             function openCardModal(roleId) {
                 const role = roleData[roleId];
                 if (!role) return;
-                const cardUrl = role.card || role.still || `https://picsum.photos/seed/${roleId}_card/800/600`;
-                modalCardImage.src = cardUrl;
-                modalCardImage.alt = `${role.roleName} 详情卡片`;
+
+                // 获取图片列表：优先使用 cards 数组，否则使用 card 单张
+                let imageList = [];
+                if (role.cards && Array.isArray(role.cards) && role.cards.length > 0) {
+                    imageList = role.cards;
+                } else if (role.card) {
+                    imageList = [role.card];
+                } else {
+                    // 完全回退
+                    imageList = [`https://picsum.photos/seed/${roleId}_card/800/600`];
+                }
+
+                // 清空 wrapper
+                swiperWrapper.innerHTML = '';
+                imageList.forEach((url, idx) => {
+                    const slide = document.createElement('div');
+                    slide.className = 'swiper-slide';
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.alt = `${role.roleName} 剧照 ${idx + 1}`;
+                    slide.appendChild(img);
+                    swiperWrapper.appendChild(slide);
+                });
+
+                // 显示模态框
                 modalOverlay.classList.remove('hidden');
-                // 强制重排确保动画触发
-                void modalOverlay.offsetWidth;
+                void modalOverlay.offsetWidth; // 强制重排
                 modalOverlay.classList.add('active');
+
+                // 如果已有 Swiper 实例则销毁
+                if (swiperInstance) {
+                    swiperInstance.destroy(true, true);
+                    swiperInstance = null;
+                }
+
+                // 初始化 Swiper (Flip 效果)
+                swiperInstance = new Swiper(swiperContainer, {
+                    effect: 'flip',
+                    flipEffect: {
+                        slideShadows: false,
+                        limitRotation: true,
+                    },
+                    pagination: {
+                        el: '#swiperPagination',
+                        clickable: true,
+                    },
+                    grabCursor: true,
+                    touchEventsTarget: 'container',
+                    // 如果只有一张图，禁用滑动
+                    allowTouchMove: imageList.length > 1,
+                    // 自动高度（让图片自适应）
+                    autoHeight: false,
+                });
             }
 
+            // -------- 关闭弹窗 --------
             window.closeModal = function (e) {
                 if (e && e.target !== e.currentTarget) return;
                 modalOverlay.classList.remove('active');
+                // 等待淡出动画结束后隐藏并销毁 Swiper
                 setTimeout(() => {
                     modalOverlay.classList.add('hidden');
+                    if (swiperInstance) {
+                        swiperInstance.destroy(true, true);
+                        swiperInstance = null;
+                    }
+                    // 清空 slides 防止内存占用
+                    swiperWrapper.innerHTML = '';
                 }, 300);
             };
 
@@ -1119,7 +1269,14 @@
                 progressText.textContent = `1 / ${totalQ}`;
                 btnNext.classList.remove('active');
                 btnNext.textContent = '下一题 →';
-                if (window.myRadarChart) { window.myRadarChart.destroy(); window.myRadarChart = null; }
+                if (window.myRadarChart) {
+                    window.myRadarChart.destroy();
+                    window.myRadarChart = null;
+                }
+                // 关闭可能打开的弹窗
+                if (modalOverlay.classList.contains('active')) {
+                    closeModal();
+                }
             }
 
             // -------- 事件绑定 --------
@@ -1139,25 +1296,24 @@
             // -------- 键盘事件 --------
             document.addEventListener('keydown', function (e) {
                 if (e.key === 'ArrowLeft' && !pageQuiz.classList.contains('hidden') && currentIndex > 0) goBack();
-                if (e.key === 'ArrowRight' && !pageQuiz.classList.contains('hidden') && btnNext.classList.contains('active')) goToNext();
-                if (e.key === 'Enter' && !pageQuiz.classList.contains('hidden') && btnNext.classList.contains('active')) goToNext();
-                if (e.key === 'Escape' && !modalOverlay.classList.contains('hidden')) closeModal();
+                if (e.key === 'ArrowRight' && !pageQuiz.classList.contains('hidden') && btnNext.classList.contains('active'))
+                    goToNext();
+                if (e.key === 'Enter' && !pageQuiz.classList.contains('hidden') && btnNext.classList.contains('active'))
+                    goToNext();
+                if (e.key === 'Escape' && modalOverlay.classList.contains('active')) closeModal();
             });
 
-            // -------- 临时测试按钮（跳转到结果页，显示胡娟儿） --------
+            // -------- 临时测试按钮 --------
             document.getElementById('devSkipBtn').addEventListener('click', function () {
-                // 隐藏开始页和答题页，显示结果页
                 pageStart.classList.add('hidden');
                 pageQuiz.classList.add('hidden');
                 pageResult.classList.remove('hidden');
                 pageResult.classList.add('fade-in');
 
-                // 指定要展示的角色（胡娟儿）
                 const demoRoleId = 'hujuaner';
                 const role = DATA.roleData[demoRoleId];
                 if (!role) return;
 
-                // 填充数据
                 resultName.textContent = role.roleName;
                 resultDrama.textContent = `「${role.dramaName}」`;
                 resultImage.src = role.image || `https://picsum.photos/seed/${demoRoleId}/400/400`;
@@ -1166,14 +1322,10 @@
                 resultBg.innerHTML = `<strong>🧠 人格底色</strong><br>${role.personalityBg}`;
                 resultSignature.innerHTML = role.signatureLine || '';
                 resultStory.innerHTML = `<strong>📖 角色故事</strong><br>${role.resultText}`;
-                // 绑定角色名点击事件
                 resultName.onclick = function () { openCardModal(demoRoleId); };
 
-                // 需要模拟 scores 数据用于雷达图
-                // 将所有分数清零，只给 demoRoleId 加高分（模拟最高分）
-                resetScores(); // 重置分数
-                scores[demoRoleId] = 999; // 确保它最高
-                // 调用全局雷达图绘制函数（它内部会读取 scores）
+                resetScores();
+                scores[demoRoleId] = 999;
                 if (typeof window.drawRadarChart === 'function') {
                     window.drawRadarChart();
                 } else {
@@ -1185,7 +1337,11 @@
             resetScores();
             rolePriority.forEach(id => {
                 if (!roleData[id].image) roleData[id].image = `https://picsum.photos/seed/${id}/400/400`;
-                if (!roleData[id].card) roleData[id].card = roleData[id].still || `https://picsum.photos/seed/${id}_card/800/600`;
+                if (!roleData[id].card) roleData[id].card = `https://picsum.photos/seed/${id}_card/800/600`;
+                if (!roleData[id].cards || roleData[id].cards.length === 0) {
+                    // 如果没有 cards，用 card 填充
+                    roleData[id].cards = [roleData[id].card];
+                }
             });
             if (totalQ === 0) document.querySelector('.intro-desc').innerHTML = '⚠️ 题目数据为空。';
         })();
