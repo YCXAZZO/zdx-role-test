@@ -542,18 +542,28 @@
         .modal-overlay {
             position: fixed;
             top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.60);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 999;
-            padding: 20px;
-            animation: fadeIn .3s ease;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.60);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 999;
+        padding: 20px;
+        /* 新增动画相关 */
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+        transform: scale(0.95);
+        }
+
+        .modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+        transform: scale(1);
         }
 
         .modal-content {
@@ -1082,11 +1092,17 @@
                 modalCardImage.src = cardUrl;
                 modalCardImage.alt = `${role.roleName} 详情卡片`;
                 modalOverlay.classList.remove('hidden');
+                // 强制重排确保动画触发
+                void modalOverlay.offsetWidth;
+                modalOverlay.classList.add('active');
             }
 
             window.closeModal = function (e) {
                 if (e && e.target !== e.currentTarget) return;
-                modalOverlay.classList.add('hidden');
+                modalOverlay.classList.remove('active');
+                setTimeout(() => {
+                    modalOverlay.classList.add('hidden');
+                }, 300);
             };
 
             // -------- 重置测试 --------
