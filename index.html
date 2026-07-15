@@ -4,526 +4,253 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
     <title>🎉黛溪宇宙🎉</title>
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
-        /* ---------- 全局重置 ---------- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        /* 同上，略 —— 保持原有样式 */
+        * { margin:0; padding:0; box-sizing:border-box; }
         body {
-            font-family: 'Segoe UI', 'PingFang SC', Roboto, system-ui, -apple-system, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(145deg, #fce4ec 0%, #f3e5f5 40%, #e8eaf6 100%);
-            padding: 20px;
-            margin: 0;
+            font-family:'Segoe UI','PingFang SC',Roboto,system-ui,-apple-system,sans-serif;
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background:linear-gradient(145deg,#fce4ec 0%,#f3e5f5 40%,#e8eaf6 100%);
+            padding:20px;
+            margin:0;
         }
-
         .app {
-            width: 100%;
-            max-width: 520px;
-            background: rgba(255, 255, 255, 0.70);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            border-radius: 40px;
-            padding: 32px 28px 36px;
-            box-shadow: 0 30px 60px rgba(120, 80, 150, 0.18), 0 10px 30px rgba(120, 80, 150, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.50);
-            transition: all 0.25s ease;
-            position: relative;
-            overflow: hidden;
+            width:100%;
+            max-width:520px;
+            background:rgba(255,255,255,0.70);
+            backdrop-filter:blur(18px);
+            -webkit-backdrop-filter:blur(18px);
+            border-radius:40px;
+            padding:32px 28px 36px;
+            box-shadow:0 30px 60px rgba(120,80,150,0.18),0 10px 30px rgba(120,80,150,0.08);
+            border:1px solid rgba(255,255,255,0.50);
+            transition:all .25s ease;
+            position:relative;
+            overflow:hidden;
         }
-        .app::before,
-        .app::after {
-            content: '';
-            position: absolute;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 0;
+        .app::before,.app::after {
+            content:'';
+            position:absolute;
+            border-radius:50%;
+            pointer-events:none;
+            z-index:0;
         }
-        .app::before {
-            top: -60px;
-            right: -60px;
-            width: 220px;
-            height: 220px;
-            background: radial-gradient(circle, rgba(206, 147, 216, 0.25) 0%, transparent 70%);
-        }
-        .app::after {
-            bottom: -80px;
-            left: -80px;
-            width: 280px;
-            height: 280px;
-            background: radial-gradient(circle, rgba(244, 143, 177, 0.20) 0%, transparent 70%);
-        }
-        .app>* {
-            position: relative;
-            z-index: 1;
-        }
+        .app::before { top:-60px; right:-60px; width:220px; height:220px; background:radial-gradient(circle,rgba(206,147,216,0.25) 0%,transparent 70%); }
+        .app::after { bottom:-80px; left:-80px; width:280px; height:280px; background:radial-gradient(circle,rgba(244,143,177,0.20) 0%,transparent 70%); }
+        .app>* { position:relative; z-index:1; }
 
-        .hidden {
-            display: none !important;
-        }
-        .fade-in {
-            animation: fadeIn 0.45s ease forwards;
-        }
-        @keyframes fadeIn {
-            0% { opacity: 0; transform: translateY(18px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
+        .hidden { display:none !important; }
+        .fade-in { animation:fadeIn 0.45s ease forwards; }
+        @keyframes fadeIn { 0%{opacity:0;transform:translateY(18px)} 100%{opacity:1;transform:translateY(0)} }
 
         .btn-primary {
-            display: inline-block;
-            background: linear-gradient(135deg, #b388c9, #9c6fb0);
-            color: #fff;
-            border: none;
-            padding: 14px 48px;
-            border-radius: 60px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            box-shadow: 0 8px 24px rgba(156, 111, 176, 0.35);
-            letter-spacing: 0.5px;
-            border: 1px solid rgba(255, 255, 255, 0.25);
+            display:inline-block;
+            background:linear-gradient(135deg,#b388c9,#9c6fb0);
+            color:#fff;
+            border:none;
+            padding:14px 48px;
+            border-radius:60px;
+            font-size:18px;
+            font-weight:600;
+            cursor:pointer;
+            transition:all .25s ease;
+            box-shadow:0 8px 24px rgba(156,111,176,0.35);
+            letter-spacing:.5px;
+            border:1px solid rgba(255,255,255,0.25);
         }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 32px rgba(156, 111, 176, 0.45);
-        }
-        .btn-primary:active {
-            transform: scale(0.96);
-        }
+        .btn-primary:hover { transform:translateY(-2px); box-shadow:0 12px 32px rgba(156,111,176,0.45); }
+        .btn-primary:active { transform:scale(0.96); }
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.70);
-            backdrop-filter: blur(4px);
-            border: 1.5px solid #b388c9;
-            color: #4a2c5e;
-            padding: 12px 36px;
-            border-radius: 60px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            box-shadow: 0 4px 12px rgba(156, 111, 176, 0.10);
+            background:rgba(255,255,255,0.70);
+            backdrop-filter:blur(4px);
+            border:1.5px solid #b388c9;
+            color:#4a2c5e;
+            padding:12px 36px;
+            border-radius:60px;
+            font-size:16px;
+            font-weight:600;
+            cursor:pointer;
+            transition:all .25s ease;
+            box-shadow:0 4px 12px rgba(156,111,176,0.10);
         }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.90);
-            transform: translateY(-2px);
-        }
-        /* 统一按钮尺寸 */
+        .btn-secondary:hover { background:rgba(255,255,255,0.90); transform:translateY(-2px); }
         .btn-action {
-            min-width: 120px;
-            padding: 12px 20px;
-            border-radius: 60px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            border: none;
-            text-align: center;
+            min-width:120px;
+            padding:12px 20px;
+            border-radius:60px;
+            font-size:16px;
+            font-weight:600;
+            cursor:pointer;
+            transition:all .25s ease;
+            border:none;
+            text-align:center;
         }
         .btn-action.primary {
-            background: linear-gradient(135deg, #b388c9, #9c6fb0);
-            color: #fff;
-            box-shadow: 0 6px 20px rgba(156, 111, 176, 0.30);
+            background:linear-gradient(135deg,#b388c9,#9c6fb0);
+            color:#fff;
+            box-shadow:0 6px 20px rgba(156,111,176,0.30);
         }
-        .btn-action.primary.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .btn-action.primary.active:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 28px rgba(156, 111, 176, 0.40);
-        }
-        .btn-action.primary:active {
-            transform: scale(0.96);
-        }
+        .btn-action.primary.active { opacity:1; pointer-events:auto; }
+        .btn-action.primary.active:hover { transform:translateY(-2px); box-shadow:0 10px 28px rgba(156,111,176,0.40); }
+        .btn-action.primary:active { transform:scale(0.96); }
         .btn-action.secondary {
-            background: rgba(255, 255, 255, 0.70);
-            backdrop-filter: blur(4px);
-            border: 1.5px solid #b388c9;
-            color: #4a2c5e;
-            box-shadow: 0 4px 12px rgba(156, 111, 176, 0.10);
+            background:rgba(255,255,255,0.70);
+            backdrop-filter:blur(4px);
+            border:1.5px solid #b388c9;
+            color:#4a2c5e;
+            box-shadow:0 4px 12px rgba(156,111,176,0.10);
         }
-        .btn-action.secondary:hover {
-            background: rgba(255, 255, 255, 0.90);
-            transform: translateY(-2px);
-        }
+        .btn-action.secondary:hover { background:rgba(255,255,255,0.90); transform:translateY(-2px); }
 
-        /* ---------- 开始页 ---------- */
-        #page-start {
-            text-align: center;
-            padding: 12px 0 6px;
-        }
-        .hero-icon {
-            font-size: 68px;
-            margin-bottom: 10px;
-            display: block;
-        }
-        .test-title {
-            font-size: 26px;
-            font-weight: 700;
-            color: #4a2c5e;
-            text-align: center;
-            letter-spacing: 1px;
-            margin-bottom: 4px;
-        }
-        .test-subtitle {
-            text-align: center;
-            font-size: 15px;
-            color: #7a5a8a;
-            opacity: 0.80;
-            margin-bottom: 16px;
-            font-weight: 400;
-        }
-        .intro-desc {
-            color: #4a2c5e;
-            font-size: 16px;
-            line-height: 1.7;
-            margin: 8px 0 28px;
-            padding: 0 6px;
-            opacity: 0.85;
-        }
+        /* 开始页 */
+        #page-start { text-align:center; padding:12px 0 6px; }
+        .hero-icon { font-size:68px; margin-bottom:10px; display:block; }
+        .test-title { font-size:26px; font-weight:700; color:#4a2c5e; text-align:center; letter-spacing:1px; margin-bottom:4px; }
+        .test-subtitle { text-align:center; font-size:15px; color:#7a5a8a; opacity:0.80; margin-bottom:16px; font-weight:400; }
+        .intro-desc { color:#4a2c5e; font-size:16px; line-height:1.7; margin:8px 0 28px; padding:0 6px; opacity:0.85; }
 
-        /* ---------- 答题页 ---------- */
-        #page-quiz {
-            padding: 4px 0;
-        }
-        .progress-wrap {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 26px;
-        }
-        .progress-track {
-            flex: 1;
-            height: 6px;
-            background: rgba(156, 111, 176, 0.20);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-        .progress-fill {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, #b388c9, #d896b8);
-            border-radius: 12px;
-            transition: width 0.35s ease;
-        }
-        .progress-text {
-            font-size: 14px;
-            font-weight: 600;
-            color: #4a2c5e;
-            min-width: 50px;
-            text-align: right;
-            opacity: 0.80;
-        }
-        .question-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 4px;
-        }
-        .question-number {
-            font-size: 14px;
-            font-weight: 600;
-            color: #9c6fb0;
-            letter-spacing: 0.5px;
-        }
-        .question-text {
-            font-size: 20px;
-            font-weight: 600;
-            color: #2d1a3a;
-            line-height: 1.5;
-            margin-bottom: 24px;
-            min-height: 56px;
-        }
-        .options-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 28px;
-        }
+        /* 答题页 */
+        #page-quiz { padding:4px 0; }
+        .progress-wrap { display:flex; align-items:center; gap:14px; margin-bottom:26px; }
+        .progress-track { flex:1; height:6px; background:rgba(156,111,176,0.20); border-radius:12px; overflow:hidden; }
+        .progress-fill { height:100%; width:0%; background:linear-gradient(90deg,#b388c9,#d896b8); border-radius:12px; transition:width .35s ease; }
+        .progress-text { font-size:14px; font-weight:600; color:#4a2c5e; min-width:50px; text-align:right; opacity:0.80; }
+        .question-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; }
+        .question-number { font-size:14px; font-weight:600; color:#9c6fb0; letter-spacing:.5px; }
+        .question-text { font-size:20px; font-weight:600; color:#2d1a3a; line-height:1.5; margin-bottom:24px; min-height:56px; }
+        .options-list { display:flex; flex-direction:column; gap:12px; margin-bottom:28px; }
         .option-item {
-            background: rgba(255, 255, 255, 0.65);
-            backdrop-filter: blur(4px);
-            border: 2px solid rgba(179, 136, 201, 0.20);
-            border-radius: 18px;
-            padding: 16px 20px;
-            font-size: 16px;
-            color: #2d1a3a;
-            cursor: pointer;
-            transition: all 0.20s ease;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+            background:rgba(255,255,255,0.65);
+            backdrop-filter:blur(4px);
+            border:2px solid rgba(179,136,201,0.20);
+            border-radius:18px;
+            padding:16px 20px;
+            font-size:16px;
+            color:#2d1a3a;
+            cursor:pointer;
+            transition:all .20s ease;
+            display:flex;
+            align-items:center;
+            gap:14px;
+            box-shadow:0 2px 8px rgba(0,0,0,0.02);
         }
-        .option-item:hover {
-            background: rgba(255, 255, 255, 0.85);
-            border-color: #b388c9;
-            transform: translateX(4px);
-        }
+        .option-item:hover { background:rgba(255,255,255,0.85); border-color:#b388c9; transform:translateX(4px); }
         .option-item .letter {
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: rgba(179, 136, 201, 0.15);
-            color: #7a5a8a;
-            font-weight: 700;
-            font-size: 15px;
-            flex-shrink: 0;
-            transition: 0.20s;
+            display:inline-flex;
+            justify-content:center;
+            align-items:center;
+            width:32px;
+            height:32px;
+            border-radius:50%;
+            background:rgba(179,136,201,0.15);
+            color:#7a5a8a;
+            font-weight:700;
+            font-size:15px;
+            flex-shrink:0;
+            transition:.20s;
         }
-        .option-item.selected {
-            border-color: #9c6fb0;
-            background: rgba(179, 136, 201, 0.18);
-            box-shadow: 0 4px 16px rgba(156, 111, 176, 0.15);
-        }
-        .option-item.selected .letter {
-            background: #9c6fb0;
-            color: #fff;
-        }
-        .option-item:active {
-            transform: scale(0.97);
-        }
+        .option-item.selected { border-color:#9c6fb0; background:rgba(179,136,201,0.18); box-shadow:0 4px 16px rgba(156,111,176,0.15); }
+        .option-item.selected .letter { background:#9c6fb0; color:#fff; }
+        .option-item:active { transform:scale(0.97); }
 
-        .quiz-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-        }
-        .btn-action {
-            flex: 1;
-        }
-        .btn-action.primary {
-            flex: 2;
-        }
+        .quiz-actions { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+        .btn-action { flex:1; }
+        .btn-action.primary { flex:2; }
 
-        /* ---------- 结果页 ---------- */
-        #page-result {
-            text-align: center;
-            padding: 8px 0 4px;
-        }
-        .result-badge {
-            font-size: 14px;
-            font-weight: 600;
-            color: #9c6fb0;
-            letter-spacing: 2px;
-            margin-bottom: 4px;
-        }
-        .result-name-wrapper {
-            display: inline-block;
-            position: relative;
-            margin-bottom: 2px;
-        }
-        .result-name {
-            font-size: 30px;
-            font-weight: 700;
-            color: #2d1a3a;
-            cursor: pointer;
-            display: inline-block;
-            border-bottom: 2px dashed rgba(156, 111, 176, 0.3);
-            padding-bottom: 2px;
-            transition: border-color 0.2s;
-        }
-        .result-name:hover {
-            border-color: #9c6fb0;
-        }
-        .result-hint {
-            font-size: 13px;
-            color: #9c6fb0;
-            opacity: 0.75;
-            margin-top: 2px;
-            letter-spacing: 0.3px;
-        }
-        .result-drama {
-            font-size: 16px;
-            color: #7a5a8a;
-            font-weight: 500;
-            margin-bottom: 6px;
-        }
-        .result-image {
-            width: 160px;
-            height: 160px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin: 12px auto 16px;
-            display: block;
-            box-shadow: 0 12px 40px rgba(156, 111, 176, 0.25);
-            border: 4px solid rgba(255, 255, 255, 0.70);
-            background: #f3e5f5;
-        }
-        .result-tags {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 8px 12px;
-            margin-bottom: 14px;
-        }
-        .result-tags span {
-            background: rgba(179, 136, 201, 0.20);
-            padding: 4px 16px;
-            border-radius: 40px;
-            font-size: 13px;
-            color: #6a4a7a;
-            font-weight: 500;
-        }
-        .result-bg {
-            font-size: 16px;
-            line-height: 1.7;
-            color: #3d2a4a;
-            background: rgba(255, 255, 255, 0.50);
-            border-radius: 20px;
-            padding: 16px 18px;
-            margin: 12px 0 10px;
-            text-align: left;
-            backdrop-filter: blur(4px);
-            font-weight: 500;
-        }
-        .result-bg strong {
-            color: #6a4a7a;
-        }
-        .result-story {
-            font-size: 16px;
-            line-height: 1.8;
-            color: #3d2a4a;
-            background: rgba(255, 255, 255, 0.30);
-            border-radius: 20px;
-            padding: 16px 18px;
-            margin: 0 0 10px;
-            text-align: left;
-            backdrop-filter: blur(4px);
-        }
+        /* 结果页 */
+        #page-result { text-align:center; padding:8px 0 4px; }
+        .result-badge { font-size:14px; font-weight:600; color:#9c6fb0; letter-spacing:2px; margin-bottom:4px; }
+        .result-name-wrapper { display:inline-block; position:relative; margin-bottom:2px; }
+        .result-name { font-size:30px; font-weight:700; color:#2d1a3a; cursor:pointer; display:inline-block; border-bottom:2px dashed rgba(156,111,176,0.3); padding-bottom:2px; transition:border-color .2s; }
+        .result-name:hover { border-color:#9c6fb0; }
+        .result-hint { font-size:13px; color:#9c6fb0; opacity:0.75; margin-top:2px; letter-spacing:.3px; }
+        .result-drama { font-size:16px; color:#7a5a8a; font-weight:500; margin-bottom:6px; }
+        .result-image { width:160px; height:160px; border-radius:50%; object-fit:cover; margin:12px auto 16px; display:block; box-shadow:0 12px 40px rgba(156,111,176,0.25); border:4px solid rgba(255,255,255,0.70); background:#f3e5f5; }
+        .result-tags { display:flex; flex-wrap:wrap; justify-content:center; gap:8px 12px; margin-bottom:14px; }
+        .result-tags span { background:rgba(179,136,201,0.20); padding:4px 16px; border-radius:40px; font-size:13px; color:#6a4a7a; font-weight:500; }
+        .result-bg { font-size:16px; line-height:1.7; color:#3d2a4a; background:rgba(255,255,255,0.50); border-radius:20px; padding:16px 18px; margin:12px 0 10px; text-align:left; backdrop-filter:blur(4px); font-weight:500; }
+        .result-bg strong { color:#6a4a7a; }
         .result-signature {
-            font-size: 17px;
-            font-style: italic;
-            color: #6a4a7a;
-            background: rgba(179, 136, 201, 0.15);
-            border-radius: 20px;
-            padding: 12px 18px;
-            margin: 0 0 20px;
-            text-align: center;
-            backdrop-filter: blur(4px);
-            border-left: 3px solid #b388c9;
-            border-right: 3px solid #b388c9;
+            font-size:17px;
+            font-style:italic;
+            color:#6a4a7a;
+            background:rgba(179,136,201,0.15);
+            border-radius:20px;
+            padding:12px 18px;
+            margin:10px 0 12px;
+            text-align:center;
+            backdrop-filter:blur(4px);
+            border-left:3px solid #b388c9;
+            border-right:3px solid #b388c9;
         }
-        .radar-container {
-            width: 100%;
-            max-width: 320px;
-            margin: 16px auto 20px;
-            background: rgba(255, 255, 255, 0.30);
-            border-radius: 20px;
-            padding: 12px;
-        }
-        .radar-container canvas {
-            width: 100% !important;
-            height: auto !important;
-        }
-
-        /* 鸣谢板块 */
+        .result-story { font-size:16px; line-height:1.8; color:#3d2a4a; background:rgba(255,255,255,0.30); border-radius:20px; padding:16px 18px; margin:0 0 20px; text-align:left; backdrop-filter:blur(4px); }
+        .radar-container { width:100%; max-width:320px; margin:16px auto 20px; background:rgba(255,255,255,0.30); border-radius:20px; padding:12px; }
+        .radar-container canvas { width:100% !important; height:auto !important; }
         .result-credits {
-            margin: 18px 0 16px;
-            padding: 10px 14px 10px 14px;
-            border-radius: 16px;
-            background: rgba(255, 255, 255, 0.35);
-            backdrop-filter: blur(4px);
-            font-size: 20px;
-            color: #7a5a8a;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 6px;
-            border: 1px solid rgba(255, 255, 255, 0.20);
+            margin:18px 0 16px;
+            padding:10px 14px;
+            border-radius:16px;
+            background:rgba(255,255,255,0.35);
+            backdrop-filter:blur(4px);
+            font-size:20px;
+            color:#7a5a8a;
+            display:flex;
+            flex-direction:column;
+            align-items:flex-start;
+            gap:6px;
+            border:1px solid rgba(255,255,255,0.20);
         }
-        .result-credits span {
-            display: inline-block;
-        }
+        .result-credits span { display:inline-block; }
+        .result-actions { display:flex; flex-wrap:wrap; justify-content:center; gap:14px; margin-top:10px; }
 
-        .result-actions {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 14px;
-            margin-top: 10px;
-        }
-
-        /* ---------- 模态框（显示卡片图） ---------- */
+        /* 模态框 */
         .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.60);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 999;
-            padding: 20px;
-            animation: fadeIn 0.3s ease;
+            position:fixed;
+            top:0; left:0;
+            width:100%; height:100%;
+            background:rgba(0,0,0,0.60);
+            backdrop-filter:blur(8px);
+            -webkit-backdrop-filter:blur(8px);
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            z-index:999;
+            padding:20px;
+            animation:fadeIn .3s ease;
         }
         .modal-content {
-            background: transparent;
-            max-width: 90%;
-            max-height: 90vh;
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.40);
-            position: relative;
+            background:transparent;
+            max-width:90%;
+            max-height:90vh;
+            border-radius:24px;
+            overflow:hidden;
+            box-shadow:0 30px 60px rgba(0,0,0,0.40);
+            position:relative;
         }
-        .modal-content img {
-            display: block;
-            width: 100%;
-            height: auto;
-            max-height: 85vh;
-            object-fit: contain;
-            border-radius: 24px;
-            background: #fff;
-        }
-        .modal-close {
-            position: absolute;
-            top: 12px;
-            right: 20px;
-            font-size: 32px;
-            font-weight: 300;
-            cursor: pointer;
-            color: #fff;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-            transition: transform 0.2s;
-            z-index: 10;
-        }
-        .modal-close:hover {
-            transform: rotate(90deg);
-        }
+        .modal-content img { display:block; width:100%; height:auto; max-height:85vh; object-fit:contain; border-radius:24px; background:#fff; }
+        .modal-close { position:absolute; top:12px; right:20px; font-size:32px; font-weight:300; cursor:pointer; color:#fff; text-shadow:0 2px 8px rgba(0,0,0,0.5); transition:transform .2s; z-index:10; }
+        .modal-close:hover { transform:rotate(90deg); }
 
-        /* ---------- 响应式 ---------- */
-        @media (max-width: 480px) {
-            .app { padding: 24px 18px 28px; border-radius: 28px; }
-            .test-title { font-size: 22px; }
-            .question-text { font-size: 18px; min-height: 48px; }
-            .option-item { padding: 14px 16px; font-size: 15px; }
-            .result-name { font-size: 26px; }
-            .result-image { width: 130px; height: 130px; }
-            .btn-action { min-width: 80px; padding: 10px 16px; font-size: 14px; }
-            .modal-content { max-width: 95%; }
+        /* 响应式 */
+        @media (max-width:480px) {
+            .app { padding:24px 18px 28px; border-radius:28px; }
+            .test-title { font-size:22px; }
+            .question-text { font-size:18px; min-height:48px; }
+            .option-item { padding:14px 16px; font-size:15px; }
+            .result-name { font-size:26px; }
+            .result-image { width:130px; height:130px; }
+            .btn-action { min-width:80px; padding:10px 16px; font-size:14px; }
+            .modal-content { max-width:95%; }
         }
-        @media (max-width: 380px) {
-            .app { padding: 18px 12px 22px; }
-            .question-text { font-size: 16px; }
-            .option-item { padding: 12px 14px; font-size: 14px; }
-            .result-story { font-size: 14px; }
+        @media (max-width:380px) {
+            .app { padding:18px 12px 22px; }
+            .question-text { font-size:16px; }
+            .option-item { padding:12px 14px; font-size:14px; }
+            .result-story { font-size:14px; }
         }
     </style>
 </head>
@@ -531,7 +258,6 @@
 
 <div class="app" id="app">
 
-    <!-- ===== 开始页 ===== -->
     <div id="page-start" class="fade-in">
         <span class="hero-icon">🥰</span>
         <h1 class="test-title">欢迎加入黛溪宇宙</h1>
@@ -540,12 +266,9 @@
         <button class="btn-primary" id="btnStart">开始测试 →</button>
     </div>
 
-    <!-- ===== 答题页 ===== -->
     <div id="page-quiz" class="hidden">
         <div class="progress-wrap">
-            <div class="progress-track">
-                <div class="progress-fill" id="progressFill" style="width:0%;"></div>
-            </div>
+            <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%;"></div></div>
             <span class="progress-text" id="progressText">1 / 12</span>
         </div>
         <div class="question-header">
@@ -559,7 +282,6 @@
         </div>
     </div>
 
-    <!-- ===== 结果页 ===== -->
     <div id="page-result" class="hidden">
         <div class="result-badge">✨ 你的黛溪分身</div>
         <div class="result-name-wrapper">
@@ -570,19 +292,17 @@
         <img class="result-image" id="resultImage" src="" alt="角色插画" />
         <div class="result-tags" id="resultTags"></div>
         <div class="result-bg" id="resultBg"></div>
-        <div class="result-story" id="resultStory"></div>
+        <!-- 签名台词移到这里（人格底色下方） -->
         <div class="result-signature" id="resultSignature"></div>
+        <div class="result-story" id="resultStory"></div>
         <div class="radar-container">
             <canvas id="radarChart"></canvas>
         </div>
-
-        <!-- 鸣谢板块 -->
         <div class="result-credits">
             <span>🎨 插画来源：@OsAtNb</span>
             <span>📝 内容提供：@Flipped</span>
             <span>💻 前端开发：@杨伽桉</span>
         </div>
-
         <div class="result-actions">
             <button class="btn-secondary" id="btnRetry">🔄 重新测试</button>
         </div>
@@ -590,7 +310,6 @@
 
 </div>
 
-<!-- ===== 模态框（显示卡片图） ===== -->
 <div id="modalOverlay" class="modal-overlay hidden" onclick="closeModal(event)">
     <div class="modal-content" onclick="event.stopPropagation()">
         <span class="modal-close" onclick="closeModal()">×</span>
@@ -600,7 +319,7 @@
 
 <script>
     // =============================================================
-    //  数据（按用户要求更新）
+    // 数据（完整更新，含12题和 signatureLine）
     // =============================================================
     const DATA = {
         introText: "一共12道趣味选择题，凭第一直觉选择即可，没有对错之分，测测你最像赵黛溪饰演的哪个角色～",
@@ -675,120 +394,20 @@
             }
         },
         questionList: [
-            {
-                question: "生活遇到棘手难题，你更偏向怎么做？",
-                options: [
-                    { text: "稳住情绪梳理思路，独立把问题妥善解决", scoreRole: "wangruolan" },
-                    { text: "主动寻找突破口，不服输想要扭转局面", scoreRole: "hujuaner" },
-                    { text: "心里憋着一股劲，硬扛到底不愿低头妥协", scoreRole: "wushuang" },
-                    { text: "不对外倾诉，独自消化情绪慢慢熬过去", scoreRole: "xiaoyun" }
-                ]
-            },
-            {
-                question: "和身边人相处时，你的常态是？",
-                options: [
-                    { text: "懂得换位思考，习惯性包容体谅他人难处", scoreRole: "zhangyuanman" },
-                    { text: "待人坦率直白，喜怒哀乐都不会刻意隐藏", scoreRole: "hujuaner" },
-                    { text: "待人毫无防备，愿意拿出全部真心对待别人", scoreRole: "wushuang" },
-                    { text: "相处轻松自在，不喜欢拘束和复杂算计", scoreRole: "xianqing" }
-                ]
-            },
-            {
-                question: "被他人无端误会、随意抹黑时，你会？",
-                options: [
-                    { text: "冷静简单解释，不纠缠，守住自身底线即可", scoreRole: "wangruolan" },
-                    { text: "主动表明立场，不会默默忍受无端非议", scoreRole: "hujuaner" },
-                    { text: "内心委屈但绝不认输，坚持自己没有做错", scoreRole: "wushuang" },
-                    { text: "选择宽容释怀，不会记恨对方的恶意", scoreRole: "zhangyuanman" }
-                ]
-            },
-            {
-                question: "你内心最向往什么样的生活节奏？",
-                options: [
-                    { text: "拥有自己的坚持与目标，清醒独立有担当", scoreRole: "wangruolan" },
-                    { text: "热烈鲜活，经历风雨也依旧对生活热忱", scoreRole: "hujuaner" },
-                    { text: "不受条条框框束缚，随心自在奔赴远方", scoreRole: "xianqing" },
-                    { text: "平淡安静，岁月舒缓，守住自己的小天地", scoreRole: "xiaoyun" }
-                ]
-            },
-            {
-                question: "面对十分在意的人，你的相处方式是？",
-                options: [
-                    { text: "不善言辞，习惯用行动默默守护对方", scoreRole: "wangruolan" },
-                    { text: "真诚专一，愿意和对方双向奔赴彼此", scoreRole: "hujuaner" },
-                    { text: "愿意倾尽所有，拼尽全力守护在意的人", scoreRole: "wushuang" },
-                    { text: "细心照料，包容对方所有小缺点", scoreRole: "zhangyuanman" }
-                ]
-            },
-            {
-                question: "你认为自己身上最亮眼的特质是？",
-                options: [
-                    { text: "外表柔和内心有棱角，困境中不断成长蜕变", scoreRole: "hujuaner" },
-                    { text: "内心纯粹善良，即便身处低谷也保有温柔", scoreRole: "wushuang" },
-                    { text: "心态松弛鲜活，自带治愈他人的灵气", scoreRole: "xianqing" },
-                    { text: "心思细腻念旧，温柔长久且内敛深情", scoreRole: "xiaoyun" }
-                ]
-            },
-            {
-                question: "努力过后遭遇沉重打击，你会如何调整？",
-                options: [
-                    { text: "快速平复心情，沉淀自己重新出发", scoreRole: "wangruolan" },
-                    { text: "越挫越勇，把挫折当作成长的契机", scoreRole: "hujuaner" },
-                    { text: "心里不甘，默默蓄力等待证明自己的机会", scoreRole: "wushuang" },
-                    { text: "慢慢自愈，依旧愿意善待这个世界", scoreRole: "zhangyuanman" }
-                ]
-            },
-            {
-                question: "面对世俗固有偏见与不合理规矩，你会？",
-                options: [
-                    { text: "敢于表达不同想法，不盲从大众的看法", scoreRole: "hujuaner" },
-                    { text: "坚守自身清白，不公之事绝不轻易退让", scoreRole: "wushuang" },
-                    { text: "不在意他人眼光，按自己的心意生活", scoreRole: "xianqing" },
-                    { text: "不与外界争辩，守好自己内心的温柔", scoreRole: "xiaoyun" }
-                ]
-            },
-            {
-                question: "身边朋友对你的普遍评价更接近？",
-                options: [
-                    { text: "沉稳可靠，遇到难事都会想来依靠你", scoreRole: "wangruolan" },
-                    { text: "温和心软，总能包容身边所有人", scoreRole: "zhangyuanman" },
-                    { text: "明媚有主见，温柔同时自带锋芒", scoreRole: "hujuaner" },
-                    { text: "心思干净纯粹，倔强的样子让人忍不住心疼", scoreRole: "wushuang" }
-                ]
-            },
-            {
-                question: "下面哪一种人生心境最能让你共情？",
-                options: [
-                    { text: "历经世间疾苦，心底依旧保留一份赤诚善意", scoreRole: "zhangyuanman" },
-                    { text: "不受世俗拘束，自由洒脱走完这一生", scoreRole: "xianqing" },
-                    { text: "纵使被世人误解，也始终坚守本心清白", scoreRole: "wushuang" },
-                    { text: "爱意藏于心底，安静温柔走过岁岁年年", scoreRole: "xiaoyun" }
-                ]
-            },
-            {
-                question: "团队出现分歧争执时，你会如何处理？",
-                options: [
-                    { text: "稳住整体节奏，理性梳理各方矛盾", scoreRole: "wangruolan" },
-                    { text: "温和劝解调和，体谅每个人的难处", scoreRole: "zhangyuanman" },
-                    { text: "坚守心中公道，主动站出来发声", scoreRole: "hujuaner" },
-                    { text: "不愿卷入争吵，独自消化内心情绪", scoreRole: "xiaoyun" }
-                ]
-            },
-            {
-                question: "如果可以自主选择属于自己的人生底色，你偏爱？",
-                options: [
-                    { text: "心怀信仰，以长久坚守跨越风雨", scoreRole: "wangruolan" },
-                    { text: "平凡温暖，善意常伴身边朝夕", scoreRole: "zhangyuanman" },
-                    { text: "纯粹热忱，这一生只求问心无愧", scoreRole: "wushuang" },
-                    { text: "肆意洒脱，奔赴山野自在无拘", scoreRole: "xianqing" }
-                ]
-            }
+            { question: "生活遇到棘手难题，你更偏向怎么做？", options: [{ text: "稳住情绪梳理思路，独立把问题妥善解决", scoreRole: "wangruolan" }, { text: "主动寻找突破口，不服输想要扭转局面", scoreRole: "hujuaner" }, { text: "心里憋着一股劲，硬扛到底不愿低头妥协", scoreRole: "wushuang" }, { text: "不对外倾诉，独自消化情绪慢慢熬过去", scoreRole: "xiaoyun" }] },
+            { question: "和身边人相处时，你的常态是？", options: [{ text: "懂得换位思考，习惯性包容体谅他人难处", scoreRole: "zhangyuanman" }, { text: "待人坦率直白，喜怒哀乐都不会刻意隐藏", scoreRole: "hujuaner" }, { text: "待人毫无防备，愿意拿出全部真心对待别人", scoreRole: "wushuang" }, { text: "相处轻松自在，不喜欢拘束和复杂算计", scoreRole: "xianqing" }] },
+            { question: "被他人无端误会、随意抹黑时，你会？", options: [{ text: "冷静简单解释，不纠缠，守住自身底线即可", scoreRole: "wangruolan" }, { text: "主动表明立场，不会默默忍受无端非议", scoreRole: "hujuaner" }, { text: "内心委屈但绝不认输，坚持自己没有做错", scoreRole: "wushuang" }, { text: "选择宽容释怀，不会记恨对方的恶意", scoreRole: "zhangyuanman" }] },
+            { question: "你内心最向往什么样的生活节奏？", options: [{ text: "拥有自己的坚持与目标，清醒独立有担当", scoreRole: "wangruolan" }, { text: "热烈鲜活，经历风雨也依旧对生活热忱", scoreRole: "hujuaner" }, { text: "不受条条框框束缚，随心自在奔赴远方", scoreRole: "xianqing" }, { text: "平淡安静，岁月舒缓，守住自己的小天地", scoreRole: "xiaoyun" }] },
+            { question: "面对十分在意的人，你的相处方式是？", options: [{ text: "不善言辞，习惯用行动默默守护对方", scoreRole: "wangruolan" }, { text: "真诚专一，愿意和对方双向奔赴彼此", scoreRole: "hujuaner" }, { text: "愿意倾尽所有，拼尽全力守护在意的人", scoreRole: "wushuang" }, { text: "细心照料，包容对方所有小缺点", scoreRole: "zhangyuanman" }] },
+            { question: "你认为自己身上最亮眼的特质是？", options: [{ text: "外表柔和内心有棱角，困境中不断成长蜕变", scoreRole: "hujuaner" }, { text: "内心纯粹善良，即便身处低谷也保有温柔", scoreRole: "wushuang" }, { text: "心态松弛鲜活，自带治愈他人的灵气", scoreRole: "xianqing" }, { text: "心思细腻念旧，温柔长久且内敛深情", scoreRole: "xiaoyun" }] },
+            { question: "努力过后遭遇沉重打击，你会如何调整？", options: [{ text: "快速平复心情，沉淀自己重新出发", scoreRole: "wangruolan" }, { text: "越挫越勇，把挫折当作成长的契机", scoreRole: "hujuaner" }, { text: "心里不甘，默默蓄力等待证明自己的机会", scoreRole: "wushuang" }, { text: "慢慢自愈，依旧愿意善待这个世界", scoreRole: "zhangyuanman" }] },
+            { question: "面对世俗固有偏见与不合理规矩，你会？", options: [{ text: "敢于表达不同想法，不盲从大众的看法", scoreRole: "hujuaner" }, { text: "坚守自身清白，不公之事绝不轻易退让", scoreRole: "wushuang" }, { text: "不在意他人眼光，按自己的心意生活", scoreRole: "xianqing" }, { text: "不与外界争辩，守好自己内心的温柔", scoreRole: "xiaoyun" }] },
+            { question: "身边朋友对你的普遍评价更接近？", options: [{ text: "沉稳可靠，遇到难事都会想来依靠你", scoreRole: "wangruolan" }, { text: "温和心软，总能包容身边所有人", scoreRole: "zhangyuanman" }, { text: "明媚有主见，温柔同时自带锋芒", scoreRole: "hujuaner" }, { text: "心思干净纯粹，倔强的样子让人忍不住心疼", scoreRole: "wushuang" }] },
+            { question: "下面哪一种人生心境最能让你共情？", options: [{ text: "历经世间疾苦，心底依旧保留一份赤诚善意", scoreRole: "zhangyuanman" }, { text: "不受世俗拘束，自由洒脱走完这一生", scoreRole: "xianqing" }, { text: "纵使被世人误解，也始终坚守本心清白", scoreRole: "wushuang" }, { text: "爱意藏于心底，安静温柔走过岁岁年年", scoreRole: "xiaoyun" }] },
+            { question: "团队出现分歧争执时，你会如何处理？", options: [{ text: "稳住整体节奏，理性梳理各方矛盾", scoreRole: "wangruolan" }, { text: "温和劝解调和，体谅每个人的难处", scoreRole: "zhangyuanman" }, { text: "坚守心中公道，主动站出来发声", scoreRole: "hujuaner" }, { text: "不愿卷入争吵，独自消化内心情绪", scoreRole: "xiaoyun" }] },
+            { question: "如果可以自主选择属于自己的人生底色，你偏爱？", options: [{ text: "心怀信仰，以长久坚守跨越风雨", scoreRole: "wangruolan" }, { text: "平凡温暖，善意常伴身边朝夕", scoreRole: "zhangyuanman" }, { text: "纯粹热忱，这一生只求问心无愧", scoreRole: "wushuang" }, { text: "肆意洒脱，奔赴山野自在无拘", scoreRole: "xianqing" }] }
         ],
-        rule: {
-            singleScore: 10,
-            fullScore: 120,
-            desc: "共12题，每题选择对应选项，该角色累加10分；总选项48个，6个角色各出场8次，出场完全均衡；总分最高角色为本命，同分按rolePriority优先级判定；结果页可展示得分第二、第三的角色作为次要特质参考"
-        }
+        rule: { singleScore: 10, fullScore: 120 }
     };
 
     // =============================================================
@@ -797,7 +416,6 @@
     (function() {
         'use strict';
 
-        // DOM refs
         const $ = (s) => document.querySelector(s);
         const pageStart = $('#page-start');
         const pageQuiz = $('#page-quiz');
@@ -822,26 +440,19 @@
         const modalOverlay = $('#modalOverlay');
         const modalCardImage = $('#modalCardImage');
 
-        // 数据
         const rolePriority = DATA.rolePriority;
         const roleData = DATA.roleData;
         const questions = DATA.questionList;
         const totalQ = questions.length;
         const singleScore = DATA.rule.singleScore;
-        const maxScore = totalQ * singleScore;
 
-        // ---------- 提取特质维度 ----------
         function extractTraits() {
             const freq = {};
             rolePriority.forEach(id => {
                 const tags = roleData[id].tags.split(/[、，,\s]+/).filter(t => t.trim());
-                tags.forEach(t => {
-                    const key = t.trim();
-                    freq[key] = (freq[key] || 0) + 1;
-                });
+                tags.forEach(t => { const key = t.trim(); freq[key] = (freq[key] || 0) + 1; });
             });
-            const sorted = Object.keys(freq).sort((a, b) => freq[b] - freq[a]);
-            return sorted.slice(0, 6);
+            return Object.keys(freq).sort((a,b) => freq[b]-freq[a]).slice(0,6);
         }
         const traitDimensions = extractTraits();
         const roleTraits = {};
@@ -850,92 +461,57 @@
             roleTraits[id] = tags.map(t => t.trim());
         });
 
-        // 状态
-        let currentIndex = 0;
-        let scores = {};
-        let selectedOptionIndex = null;
-        let history = [];
-        let isAutoJumping = false;
-        let currentTopRoleId = null;
+        let currentIndex = 0, scores = {}, selectedOptionIndex = null, history = [], isAutoJumping = false;
 
-        // 初始化分数
-        function resetScores() {
-            scores = {};
-            rolePriority.forEach(id => { scores[id] = 0; });
-        }
-
-        // 渲染介绍
+        function resetScores() { scores = {}; rolePriority.forEach(id => { scores[id] = 0; }); }
         introText.innerHTML = DATA.introText;
 
-        // 重新计算总分
         function recalcScores() {
             resetScores();
             for (let i = 0; i < history.length; i++) {
                 const optIdx = history[i];
                 if (optIdx === -1) continue;
-                const q = questions[i];
-                const opt = q.options[optIdx];
-                if (opt && opt.scoreRole) {
-                    scores[opt.scoreRole] = (scores[opt.scoreRole] || 0) + singleScore;
-                }
+                const opt = questions[i].options[optIdx];
+                if (opt && opt.scoreRole) scores[opt.scoreRole] = (scores[opt.scoreRole] || 0) + singleScore;
             }
         }
 
-        // 计算特质得分
         function getTraitScores() {
             const traitScores = {};
             traitDimensions.forEach(t => traitScores[t] = 0);
             rolePriority.forEach(id => {
                 const roleScore = scores[id] || 0;
-                const traits = roleTraits[id] || [];
-                traits.forEach(t => {
-                    if (traitScores[t] !== undefined) {
-                        traitScores[t] += roleScore;
-                    }
-                });
+                (roleTraits[id] || []).forEach(t => { if (traitScores[t] !== undefined) traitScores[t] += roleScore; });
             });
             return traitScores;
         }
 
-        // 渲染题目
         function renderQuestion() {
             const q = questions[currentIndex];
             if (!q) return;
-
             const progress = (currentIndex / totalQ) * 100;
             progressFill.style.width = progress + '%';
-            progressText.textContent = `${currentIndex + 1} / ${totalQ}`;
-            questionNumber.textContent = `第 ${currentIndex + 1} 题`;
-
-            if (currentIndex === 0) {
-                btnBack.style.visibility = 'hidden';
-            } else {
-                btnBack.style.visibility = 'visible';
-            }
-
+            progressText.textContent = `${currentIndex+1} / ${totalQ}`;
+            questionNumber.textContent = `第 ${currentIndex+1} 题`;
+            btnBack.style.visibility = currentIndex === 0 ? 'hidden' : 'visible';
             questionText.textContent = q.question;
-
             optionsList.innerHTML = '';
-            const letters = ['A', 'B', 'C', 'D'];
+            const letters = ['A','B','C','D'];
             q.options.forEach((opt, idx) => {
                 const div = document.createElement('div');
                 div.className = 'option-item';
                 div.dataset.index = idx;
                 div.dataset.scoreRole = opt.scoreRole;
-
                 const letterSpan = document.createElement('span');
                 letterSpan.className = 'letter';
                 letterSpan.textContent = letters[idx] || '•';
-
                 const textSpan = document.createElement('span');
                 textSpan.textContent = opt.text;
-
                 div.appendChild(letterSpan);
                 div.appendChild(textSpan);
                 div.addEventListener('click', function() { selectOption(this); });
                 optionsList.appendChild(div);
             });
-
             const savedIdx = history[currentIndex];
             if (savedIdx !== undefined && savedIdx !== -1) {
                 const items = optionsList.querySelectorAll('.option-item');
@@ -943,23 +519,11 @@
                     items[savedIdx].classList.add('selected');
                     selectedOptionIndex = savedIdx;
                     btnNext.classList.add('active');
-                } else {
-                    selectedOptionIndex = null;
-                    btnNext.classList.remove('active');
-                }
-            } else {
-                selectedOptionIndex = null;
-                btnNext.classList.remove('active');
-            }
-
-            if (currentIndex === totalQ - 1 && selectedOptionIndex !== null) {
-                btnNext.textContent = '查看结果';
-            } else {
-                btnNext.textContent = '下一题 →';
-            }
+                } else { selectedOptionIndex = null; btnNext.classList.remove('active'); }
+            } else { selectedOptionIndex = null; btnNext.classList.remove('active'); }
+            btnNext.textContent = (currentIndex === totalQ-1 && selectedOptionIndex !== null) ? '查看结果' : '下一题 →';
         }
 
-        // 选择选项
         function selectOption(el) {
             if (isAutoJumping) return;
             optionsList.querySelectorAll('.option-item').forEach(item => item.classList.remove('selected'));
@@ -969,101 +533,68 @@
             selectedOptionIndex = idx;
             history[currentIndex] = idx;
             recalcScores();
-
             btnNext.classList.add('active');
-            if (currentIndex === totalQ - 1) {
-                btnNext.textContent = '查看结果';
-            }
-
+            if (currentIndex === totalQ-1) btnNext.textContent = '查看结果';
             isAutoJumping = true;
             setTimeout(() => {
                 isAutoJumping = false;
-                if (currentIndex < totalQ - 1) {
-                    goToNext();
-                }
+                if (currentIndex < totalQ-1) goToNext();
             }, 500);
         }
 
-        // 下一题
         function goToNext() {
             if (selectedOptionIndex === null) return;
-            if (currentIndex === totalQ - 1) {
-                showResult();
-                return;
-            }
+            if (currentIndex === totalQ-1) { showResult(); return; }
             currentIndex++;
             renderQuestion();
-            document.querySelector('.app').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            document.querySelector('.app').scrollIntoView({ behavior:'smooth', block:'start' });
         }
 
-        // 返回
         function goBack() {
             if (currentIndex === 0) return;
             currentIndex--;
             renderQuestion();
-            document.querySelector('.app').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            document.querySelector('.app').scrollIntoView({ behavior:'smooth', block:'start' });
         }
 
-        // 获取最高分角色
         function getTopRole() {
-            let max = -1;
-            let top = rolePriority[0];
-            for (const id of rolePriority) {
-                if (scores[id] > max) {
-                    max = scores[id];
-                    top = id;
-                }
-            }
+            let max = -1, top = rolePriority[0];
+            for (const id of rolePriority) { if (scores[id] > max) { max = scores[id]; top = id; } }
             return top;
         }
 
-        // 显示结果
         function showResult() {
             if (selectedOptionIndex !== null && history[currentIndex] === undefined) {
                 history[currentIndex] = selectedOptionIndex;
                 recalcScores();
             }
             const topId = getTopRole();
-            currentTopRoleId = topId;
             const role = roleData[topId];
             if (!role) return;
-
             pageQuiz.classList.add('hidden');
             pageResult.classList.remove('hidden');
             pageResult.classList.add('fade-in');
-
             resultName.textContent = role.roleName;
             resultDrama.textContent = `「${role.dramaName}」`;
-            const imageUrl = role.image || `https://picsum.photos/seed/${topId}/400/400`;
-            resultImage.src = imageUrl;
+            resultImage.src = role.image || `https://picsum.photos/seed/${topId}/400/400`;
             resultImage.alt = role.roleName;
-
-            const tags = role.tags.split('、');
-            resultTags.innerHTML = tags.map(t => `<span># ${t}</span>`).join('');
-
+            resultTags.innerHTML = role.tags.split('、').map(t => `<span># ${t}</span>`).join('');
             resultBg.innerHTML = `<strong>🧠 人格底色</strong><br>${role.personalityBg}`;
-            resultStory.textContent = role.resultText;
+            // 签名台词显示在人格底色下方
             resultSignature.textContent = role.signatureLine || '';
-
+            resultStory.textContent = role.resultText;
             drawRadarChart();
-
-            // 点击角色名 -> 打开卡片弹窗
             resultName.onclick = function() { openCardModal(topId); };
         }
 
-        // 绘制雷达图
         function drawRadarChart() {
             const canvas = document.getElementById('radarChart');
             if (!canvas) return;
-            if (window.myRadarChart) {
-                window.myRadarChart.destroy();
-            }
-
+            if (window.myRadarChart) { window.myRadarChart.destroy(); }
             const traitScores = getTraitScores();
             const values = traitDimensions.map(t => traitScores[t] || 0);
             const maxVal = Math.max(...values, 10);
             const axisMax = Math.ceil(maxVal / 10) * 10;
-
             const ctx = canvas.getContext('2d');
             window.myRadarChart = new Chart(ctx, {
                 type: 'radar',
@@ -1072,7 +603,7 @@
                     datasets: [{
                         label: '性格特质契合度',
                         data: values,
-                        backgroundColor: 'rgba(179, 136, 201, 0.25)',
+                        backgroundColor: 'rgba(179,136,201,0.25)',
                         borderColor: '#9c6fb0',
                         borderWidth: 2,
                         pointBackgroundColor: '#9c6fb0',
@@ -1084,32 +615,20 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: true,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: { enabled: false }
-                    },
+                    plugins: { legend: { display: false }, tooltip: { enabled: false } },
                     scales: {
                         r: {
                             beginAtZero: true,
                             max: Math.max(axisMax, 50),
-                            ticks: {
-                                display: false,
-                                stepSize: Math.ceil(axisMax / 5),
-                                backdropColor: 'transparent',
-                                font: { size: 10 }
-                            },
-                            grid: { color: 'rgba(156, 111, 176, 0.2)' },
-                            pointLabels: {
-                                font: { size: 12, weight: '500' },
-                                color: '#4a2c5e'
-                            }
+                            ticks: { display: false, stepSize: Math.ceil(axisMax/5), backdropColor: 'transparent', font: { size: 10 } },
+                            grid: { color: 'rgba(156,111,176,0.2)' },
+                            pointLabels: { font: { size: 12, weight: '500' }, color: '#4a2c5e' }
                         }
                     }
                 }
             });
         }
 
-        // -------- 卡片弹窗（显示卡片图） --------
         function openCardModal(roleId) {
             const role = roleData[roleId];
             if (!role) return;
@@ -1124,7 +643,6 @@
             modalOverlay.classList.add('hidden');
         };
 
-        // -------- 重置测试 --------
         function resetTest() {
             currentIndex = 0;
             selectedOptionIndex = null;
@@ -1138,13 +656,9 @@
             progressText.textContent = `1 / ${totalQ}`;
             btnNext.classList.remove('active');
             btnNext.textContent = '下一题 →';
-            if (window.myRadarChart) {
-                window.myRadarChart.destroy();
-                window.myRadarChart = null;
-            }
+            if (window.myRadarChart) { window.myRadarChart.destroy(); window.myRadarChart = null; }
         }
 
-        // -------- 事件绑定 --------
         btnStart.addEventListener('click', function() {
             pageStart.classList.add('hidden');
             pageQuiz.classList.remove('hidden');
@@ -1154,46 +668,23 @@
             currentIndex = 0;
             renderQuestion();
         });
-
-        btnNext.addEventListener('click', function() {
-            if (btnNext.classList.contains('active')) {
-                goToNext();
-            }
-        });
-
+        btnNext.addEventListener('click', function() { if (btnNext.classList.contains('active')) goToNext(); });
         btnBack.addEventListener('click', goBack);
-
         btnRetry.addEventListener('click', resetTest);
 
-        // -------- 键盘快捷键 --------
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'ArrowLeft' && !pageQuiz.classList.contains('hidden')) {
-                if (currentIndex > 0) goBack();
-            }
-            if (e.key === 'ArrowRight' && !pageQuiz.classList.contains('hidden')) {
-                if (btnNext.classList.contains('active')) goToNext();
-            }
-            if (e.key === 'Enter' && !pageQuiz.classList.contains('hidden')) {
-                if (btnNext.classList.contains('active')) goToNext();
-            }
-            if (e.key === 'Escape') {
-                if (!modalOverlay.classList.contains('hidden')) closeModal();
-            }
+            if (e.key === 'ArrowLeft' && !pageQuiz.classList.contains('hidden') && currentIndex > 0) goBack();
+            if (e.key === 'ArrowRight' && !pageQuiz.classList.contains('hidden') && btnNext.classList.contains('active')) goToNext();
+            if (e.key === 'Enter' && !pageQuiz.classList.contains('hidden') && btnNext.classList.contains('active')) goToNext();
+            if (e.key === 'Escape' && !modalOverlay.classList.contains('hidden')) closeModal();
         });
 
-        // -------- 初始化 --------
         resetScores();
         rolePriority.forEach(id => {
-            if (!roleData[id].image) {
-                roleData[id].image = `https://picsum.photos/seed/${id}/400/400`;
-            }
-            if (!roleData[id].card) {
-                roleData[id].card = roleData[id].still || `https://picsum.photos/seed/${id}_card/800/600`;
-            }
+            if (!roleData[id].image) roleData[id].image = `https://picsum.photos/seed/${id}/400/400`;
+            if (!roleData[id].card) roleData[id].card = roleData[id].still || `https://picsum.photos/seed/${id}_card/800/600`;
         });
-        if (totalQ === 0) {
-            document.querySelector('.intro-desc').innerHTML = '⚠️ 题目数据为空。';
-        }
+        if (totalQ === 0) document.querySelector('.intro-desc').innerHTML = '⚠️ 题目数据为空。';
     })();
 </script>
 </body>
