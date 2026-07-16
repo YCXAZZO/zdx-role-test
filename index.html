@@ -200,7 +200,11 @@
             border-radius: 50%;
             object-fit: cover;
         }
-
+        /* 新增：点击 Logo 的链接样式 */
+        .hero-icon-link {
+             display: inline-block;   /* 让 a 标签只包裹图片大小 */
+             text-decoration: none;   /* 去掉下划线 */
+        }
         .test-title {
             font-size: 26px;
             font-weight: 700;
@@ -759,7 +763,9 @@
 
         <div id="page-start" class="fade-in">
             <!-- ④ 将 🥰 替换为图片（示例路径） -->
-            <img class="hero-icon" src="./images/logo.png" alt="黛溪宇宙 Logo" />
+            <a href="https://zdx-photo-gallery.ycxazzo.top/" target="_blank" class="hero-icon-link">
+                <img class="hero-icon" src="./images/logo.png" alt="黛溪宇宙 Logo" />
+            </a>
             <h1 class="test-title">🎉欢迎加入黛溪宇宙🎉</h1>
             <p class="test-subtitle">—— 你是平行时空的哪个角色？</p>
             <p class="intro-desc" id="introText"></p>
@@ -893,8 +899,11 @@
                     signatureLine: "<b>别动我哥，千错万错都冲我来，<br>我只求世间还我一份清白。</b>",
                     image: "./images/wushuang_avatar.jpg",
                     cards: [
-                        "https://picsum.photos/seed/wushuang_1/800/600",
-                        "https://picsum.photos/seed/wushuang_2/800/600"
+                        "./images/wushuang_1.webp",
+                        "./images/wushuang_2.webp",
+                        "./images/wushuang_3.webp",
+                        "./images/wushuang_4.jpg",
+                        "./images/wushuang_5.jpg"
                     ],
                     card: "https://picsum.photos/seed/wushuang_card/800/600"
                 },
@@ -1325,7 +1334,7 @@
                 pageResult.classList.remove('hidden');
                 pageResult.classList.add('fade-in');
 
-                const demoRoleId = 'hujuaner';
+                const demoRoleId = 'wushuang';
                 const role = DATA.roleData[demoRoleId];
                 if (!role) return;
 
