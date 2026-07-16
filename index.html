@@ -5,13 +5,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
     <title>🎉黛溪宇宙🎉</title>
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <!-- Swiper CSS & JS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <style>
-        /* ===== 原有样式保持不变 ===== */
+        /* ===== 全局重置与基础 ===== */
         * {
             margin: 0;
             padding: 0;
@@ -24,7 +22,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(145deg, #fce4ec 0%, #f3e5f5 40%, #e8eaf6 100%);
+            /* ① 背景色改为 #D6F2D5 */
+            background: linear-gradient(145deg, #D6F2D5 0%, #F2CDC4 50%, #ffd2d4 100%);
             padding: 20px;
             margin: 0;
         }
@@ -58,7 +57,7 @@
             right: -60px;
             width: 220px;
             height: 220px;
-            background: radial-gradient(circle, rgba(206, 147, 216, 0.25) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(242, 205, 196, 0.25) 0%, transparent 70%);
         }
 
         .app::after {
@@ -66,7 +65,7 @@
             left: -80px;
             width: 280px;
             height: 280px;
-            background: radial-gradient(circle, rgba(244, 143, 177, 0.20) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(214, 242, 213, 0.20) 0%, transparent 70%);
         }
 
         .app>* {
@@ -94,9 +93,10 @@
             }
         }
 
+        /* ===== 按钮配色 ===== */
         .btn-primary {
             display: inline-block;
-            background: linear-gradient(135deg, #b388c9, #9c6fb0);
+            background: #F2CDC4;
             color: #fff;
             border: none;
             padding: 14px 48px;
@@ -105,14 +105,15 @@
             font-weight: 600;
             cursor: pointer;
             transition: all .25s ease;
-            box-shadow: 0 8px 24px rgba(156, 111, 176, 0.35);
+            box-shadow: 0 8px 24px rgba(242, 205, 196, 0.35);
             letter-spacing: .5px;
             border: 1px solid rgba(255, 255, 255, 0.25);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 12px 32px rgba(156, 111, 176, 0.45);
+            background: #e8b8ae;
+            box-shadow: 0 12px 32px rgba(242, 205, 196, 0.45);
         }
 
         .btn-primary:active {
@@ -122,7 +123,7 @@
         .btn-secondary {
             background: rgba(255, 255, 255, 0.70);
             backdrop-filter: blur(4px);
-            border: 1.5px solid #b388c9;
+            border: 1.5px solid #D6F2D5;
             color: #4a2c5e;
             padding: 12px 36px;
             border-radius: 60px;
@@ -130,7 +131,7 @@
             font-weight: 600;
             cursor: pointer;
             transition: all .25s ease;
-            box-shadow: 0 4px 12px rgba(156, 111, 176, 0.10);
+            box-shadow: 0 4px 12px rgba(214, 242, 213, 0.10);
         }
 
         .btn-secondary:hover {
@@ -151,9 +152,9 @@
         }
 
         .btn-action.primary {
-            background: linear-gradient(135deg, #b388c9, #9c6fb0);
+            background: #F2CDC4;
             color: #fff;
-            box-shadow: 0 6px 20px rgba(156, 111, 176, 0.30);
+            box-shadow: 0 6px 20px rgba(242, 205, 196, 0.30);
         }
 
         .btn-action.primary.active {
@@ -163,7 +164,8 @@
 
         .btn-action.primary.active:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 28px rgba(156, 111, 176, 0.40);
+            background: #e8b8ae;
+            box-shadow: 0 10px 28px rgba(242, 205, 196, 0.40);
         }
 
         .btn-action.primary:active {
@@ -173,9 +175,9 @@
         .btn-action.secondary {
             background: rgba(255, 255, 255, 0.70);
             backdrop-filter: blur(4px);
-            border: 1.5px solid #b388c9;
+            border: 1.5px solid #D6F2D5;
             color: #4a2c5e;
-            box-shadow: 0 4px 12px rgba(156, 111, 176, 0.10);
+            box-shadow: 0 4px 12px rgba(214, 242, 213, 0.10);
         }
 
         .btn-action.secondary:hover {
@@ -183,16 +185,20 @@
             transform: translateY(-2px);
         }
 
-        /* 开始页 */
+        /* ===== 开始页 ===== */
         #page-start {
             text-align: center;
             padding: 12px 0 6px;
         }
 
+        /* ② 图标替换为图片（样式示例） */
         .hero-icon {
-            font-size: 68px;
-            margin-bottom: 10px;
             display: block;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 10px;
+            border-radius: 50%;
+            object-fit: cover;
         }
 
         .test-title {
@@ -222,7 +228,7 @@
             opacity: 0.85;
         }
 
-        /* 答题页 */
+        /* ===== 答题页 ===== */
         #page-quiz {
             padding: 4px 0;
         }
@@ -237,7 +243,7 @@
         .progress-track {
             flex: 1;
             height: 6px;
-            background: rgba(156, 111, 176, 0.20);
+            background: rgba(242, 205, 196, 0.20);
             border-radius: 12px;
             overflow: hidden;
         }
@@ -245,7 +251,7 @@
         .progress-fill {
             height: 100%;
             width: 0%;
-            background: linear-gradient(90deg, #b388c9, #d896b8);
+            background: #F2CDC4;
             border-radius: 12px;
             transition: width .35s ease;
         }
@@ -266,10 +272,11 @@
             margin-bottom: 4px;
         }
 
+        /* ③ 颜色调整为 #6a4a7a，移除背景填充 */
         .question-number {
             font-size: 14px;
             font-weight: 600;
-            color: #9c6fb0;
+            color: #6a4a7a;
             letter-spacing: .5px;
         }
 
@@ -292,7 +299,7 @@
         .option-item {
             background: rgba(255, 255, 255, 0.65);
             backdrop-filter: blur(4px);
-            border: 2px solid rgba(179, 136, 201, 0.20);
+            border: 2px solid rgba(242, 205, 196, 0.20);
             border-radius: 18px;
             padding: 16px 20px;
             font-size: 16px;
@@ -307,7 +314,7 @@
 
         .option-item:hover {
             background: rgba(255, 255, 255, 0.85);
-            border-color: #b388c9;
+            border-color: #F2CDC4;
             transform: translateX(4px);
         }
 
@@ -318,7 +325,7 @@
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            background: rgba(179, 136, 201, 0.15);
+            background: rgba(242, 205, 196, 0.15);
             color: #7a5a8a;
             font-weight: 700;
             font-size: 15px;
@@ -327,13 +334,13 @@
         }
 
         .option-item.selected {
-            border-color: #9c6fb0;
-            background: rgba(179, 136, 201, 0.18);
-            box-shadow: 0 4px 16px rgba(156, 111, 176, 0.15);
+            border-color: #F2CDC4;
+            background: rgba(242, 205, 196, 0.18);
+            box-shadow: 0 4px 16px rgba(242, 205, 196, 0.15);
         }
 
         .option-item.selected .letter {
-            background: #9c6fb0;
+            background: #F2CDC4;
             color: #fff;
         }
 
@@ -356,7 +363,7 @@
             flex: 2;
         }
 
-        /* 结果页 */
+        /* ===== 结果页 ===== */
         #page-result {
             text-align: center;
             padding: 8px 0 4px;
@@ -365,7 +372,7 @@
         .result-badge {
             font-size: 14px;
             font-weight: 600;
-            color: #9c6fb0;
+            color: #6a4a7a;
             letter-spacing: 2px;
             margin-bottom: 4px;
         }
@@ -382,18 +389,18 @@
             color: #2d1a3a;
             cursor: pointer;
             display: inline-block;
-            border-bottom: 2px dashed rgba(156, 111, 176, 0.3);
+            border-bottom: 2px dashed rgba(242, 205, 196, 0.3);
             padding-bottom: 2px;
             transition: border-color .2s;
         }
 
         .result-name:hover {
-            border-color: #9c6fb0;
+            border-color: #F2CDC4;
         }
 
         .result-hint {
             font-size: 13px;
-            color: #9c6fb0;
+            color: #6a4a7a;
             opacity: 0.75;
             margin-top: 2px;
             letter-spacing: .3px;
@@ -413,7 +420,7 @@
             object-fit: cover;
             margin: 12px auto 16px;
             display: block;
-            box-shadow: 0 12px 40px rgba(156, 111, 176, 0.25);
+            box-shadow: 0 12px 40px rgba(242, 205, 196, 0.25);
             border: 4px solid rgba(255, 255, 255, 0.70);
             background: #f3e5f5;
         }
@@ -427,7 +434,7 @@
         }
 
         .result-tags span {
-            background: rgba(179, 136, 201, 0.20);
+            background: rgba(242, 205, 196, 0.20);
             padding: 4px 16px;
             border-radius: 40px;
             font-size: 13px;
@@ -456,14 +463,14 @@
             font-size: 17px;
             font-style: italic;
             color: #6a4a7a;
-            background: rgba(179, 136, 201, 0.15);
+            background: rgba(242, 205, 196, 0.15);
             border-radius: 20px;
             padding: 12px 18px;
             margin: 10px 0 12px;
             text-align: center;
             backdrop-filter: blur(4px);
-            border-left: 3px solid #b388c9;
-            border-right: 3px solid #b388c9;
+            border-left: 3px solid #F2CDC4;
+            border-right: 3px solid #F2CDC4;
         }
 
         .result-story {
@@ -495,7 +502,7 @@
         /* ===== 双栏鸣谢 ===== */
         .result-credits {
             margin: 18px 0 16px;
-            padding:  10px 14px 10px 50px;
+            padding: 10px 14px 10px 50px;
             border-radius: 16px;
             background: rgba(255, 255, 255, 0.35);
             backdrop-filter: blur(4px);
@@ -548,7 +555,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: transparent(0, 0, 0, 0.70);
+            background: transparent;
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             display: flex;
@@ -585,7 +592,6 @@
             height: auto;
             max-height: 80vh;
             aspect-ratio: 4 / 3;
-            /* 保持比例，也可取消 */
             background: transparent;
             border-radius: 24px;
         }
@@ -620,7 +626,7 @@
         }
 
         .modal-content .swiper-pagination-bullet-active {
-            background: #fff;
+            background: #F2CDC4;
             opacity: 1;
         }
 
@@ -720,7 +726,6 @@
 
             .modal-content .swiper-container {
                 aspect-ratio: 3 / 4;
-                /* 移动端可调整为竖屏比例 */
             }
         }
 
@@ -753,8 +758,9 @@
     <div class="app" id="app">
 
         <div id="page-start" class="fade-in">
-            <span class="hero-icon">🥰</span>
-            <h1 class="test-title">欢迎加入黛溪宇宙</h1>
+            <!-- ④ 将 🥰 替换为图片（示例路径） -->
+            <img class="hero-icon" src="./images/logo.png" alt="黛溪宇宙 Logo" />
+            <h1 class="test-title">🎉欢迎加入黛溪宇宙🎉</h1>
             <p class="test-subtitle">—— 你是平行时空的哪个角色？</p>
             <p class="intro-desc" id="introText"></p>
             <button class="btn-primary" id="btnStart">开始测试 →</button>
@@ -827,7 +833,7 @@
         // 数据（新增 cards 数组，支持多张剧照）
         // =============================================================
         const DATA = {
-            introText: "12道选择题，凭第一直觉选择，<br>测测你潜意识的黛溪分身～",
+            introText: "12道题，第一直觉选择<br>找到你潜意识的黛溪分身💕",
             shareSlogan: "我测出自己和赵黛溪饰演的【{{roleName}}】高度契合！快来测测你的本命角色是谁",
             rolePriority: ["hujuaner", "wushuang", "wangruolan", "zhangyuanman", "meiqing", "xiaoyun"],
             roleData: {
@@ -871,8 +877,8 @@
                     signatureLine: "<b>流言再多我也不怕，真相总会大白，<br>我信你，也信公道。</b>",
                     image: "./images/hujuaner_avatar.jpg",
                     cards: [
-                        "./images/hujuaner_1.jpg",
-                        "./images/hujuaner_2.png",
+                        "./images/hujuaner_1.webp",
+                        "./images/hujuaner_2.webp",
                         "./images/hujuaner_3.png",
                         "./images/hujuaner_4.jpg"
                     ],
@@ -983,7 +989,10 @@
                 const freq = {};
                 rolePriority.forEach(id => {
                     const tags = roleData[id].tags.split(/[、，,\s]+/).filter(t => t.trim());
-                    tags.forEach(t => { const key = t.trim(); freq[key] = (freq[key] || 0) + 1; });
+                    tags.forEach(t => {
+                        const key = t.trim();
+                        freq[key] = (freq[key] || 0) + 1;
+                    });
                 });
                 return Object.keys(freq).sort((a, b) => freq[b] - freq[a]).slice(0, 6);
             }
@@ -1056,8 +1065,14 @@
                         items[savedIdx].classList.add('selected');
                         selectedOptionIndex = savedIdx;
                         btnNext.classList.add('active');
-                    } else { selectedOptionIndex = null; btnNext.classList.remove('active'); }
-                } else { selectedOptionIndex = null; btnNext.classList.remove('active'); }
+                    } else {
+                        selectedOptionIndex = null;
+                        btnNext.classList.remove('active');
+                    }
+                } else {
+                    selectedOptionIndex = null;
+                    btnNext.classList.remove('active');
+                }
                 btnNext.textContent = (currentIndex === totalQ - 1 && selectedOptionIndex !== null) ? '查看结果' : '下一题 →';
             }
 
@@ -1148,10 +1163,10 @@
                         datasets: [{
                             label: '性格特质契合度',
                             data: values,
-                            backgroundColor: 'rgba(179,136,201,0.25)',
-                            borderColor: '#9c6fb0',
+                            backgroundColor: 'rgba(242, 205, 196, 0.25)',
+                            borderColor: '#F2CDC4',
                             borderWidth: 2,
-                            pointBackgroundColor: '#9c6fb0',
+                            pointBackgroundColor: '#D6F2D5',
                             pointBorderColor: '#fff',
                             pointBorderWidth: 1,
                             pointRadius: 4,
@@ -1169,7 +1184,7 @@
                                     display: false, stepSize: Math.ceil(axisMax / 5), backdropColor: 'transparent',
                                     font: { size: 10 }
                                 },
-                                grid: { color: 'rgba(156,111,176,0.2)' },
+                                grid: { color: 'rgba(242, 205, 196, 0.2)' },
                                 pointLabels: { font: { size: 12, weight: '500' }, color: '#4a2c5e' }
                             }
                         }
