@@ -539,6 +539,24 @@
             display: inline-block;
         }
 
+        /* 复制提示样式 */
+        .copy-hint {
+            font-size: 13px;
+            color: #6a4a7a;
+            opacity: 0.7;
+            margin-top: 4px;
+            letter-spacing: 0.3px;
+        }
+
+        /* 可点击的账号样式 */
+        #copyAccount {
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        #copyAccount:hover {
+            color: #b388c9;
+        }
+
         @media (max-width: 480px) {
 
             .credits-left,
@@ -782,6 +800,30 @@
             background: #F2CDC4;
         }
 
+        /* ===== Toast 样式（顶部居中） ===== */
+        #toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.75);
+            color: #fff;
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 500;
+            z-index: 99999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            white-space: nowrap;
+        }
+        #toast.show {
+            opacity: 1;
+        }
+
         /* ===== 原有响应式 ===== */
         @media (max-width:480px) {
             .app {
@@ -825,6 +867,12 @@
             .role-picker-content {
                 padding: 24px 16px;
             }
+
+            #toast {
+                font-size: 14px;
+                padding: 8px 18px;
+                top: 12px;
+            }
         }
 
         @media (max-width:380px) {
@@ -852,6 +900,9 @@
 
     <!-- 临时测试按钮 -->
     <button id="devSkipBtn" title="调试：点击打开角色选择器"></button>
+
+    <!-- Toast 容器 -->
+    <div id="toast"></div>
 
     <div class="app" id="app">
 
@@ -906,7 +957,8 @@
                     <span>💻 开发维护：@杨伽桉</span>
                 </div>
                 <div class="credits-right">
-                    <span>❤️ 欢迎关注全平台社媒 ❤️<br><b>@赵黛溪Daisy</b></span>
+                    <span>❤️ 欢迎关注全平台社媒 ❤️<br><b id="copyAccount">@赵黛溪Daisy</b></span>
+                    <p class="copy-hint">👆 点击复制 @赵黛溪Daisy</p>
                 </div>
             </div>
             <div class="result-actions">
@@ -1256,6 +1308,56 @@
                 drawRadarChart();
                 // 点击角色名打开剧照弹窗
                 resultName.onclick = function () { openCardModal(topId); };
+
+                // 绑定复制账号事件（每次显示结果页时重新绑定，确保有效）
+                const copyEl = document.getElementById('copyAccount');
+                if (copyEl) {
+                    // 移除之前绑定的监听器（避免重复绑定，但此处用新函数替换即可）
+                    copyEl.onclick = function (e) {
+                        e.stopPropagation();
+                        copyText('赵黛溪Daisy');
+                    };
+                }
+            }
+
+            // -------- 复制功能 --------
+            function copyText(text) {
+                const toast = document.getElementById('toast');
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text).then(() => {
+                        showToast('✅ 已复制 ' + text);
+                    }).catch(() => {
+                        fallbackCopy(text);
+                    });
+                } else {
+                    fallbackCopy(text);
+                }
+            }
+
+            function fallbackCopy(text) {
+                const input = document.createElement('input');
+                input.value = text;
+                document.body.appendChild(input);
+                input.select();
+                try {
+                    document.execCommand('copy');
+                    showToast('✅ 已复制 ' + text);
+                } catch (e) {
+                    alert('复制失败，请手动复制');
+                }
+                document.body.removeChild(input);
+            }
+
+            // -------- Toast 提示 --------
+            function showToast(msg) {
+                const toast = document.getElementById('toast');
+                if (!toast) return;
+                toast.textContent = msg;
+                toast.classList.add('show');
+                clearTimeout(toast._timer);
+                toast._timer = setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
             }
 
             // -------- 雷达图 --------
@@ -1438,6 +1540,15 @@
                 scores[roleId] = 999;
                 // 重绘雷达图
                 drawRadarChart();
+
+                // 同样绑定复制账号
+                const copyEl = document.getElementById('copyAccount');
+                if (copyEl) {
+                    copyEl.onclick = function (e) {
+                        e.stopPropagation();
+                        copyText('赵黛溪Daisy');
+                    };
+                }
             }
 
             // -------- 重置测试 --------
