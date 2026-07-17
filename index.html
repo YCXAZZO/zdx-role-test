@@ -9,12 +9,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <style>
-        /* ===== 全部样式保持不变 ===== */
+        /* ===== 全局重置与基础 ===== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent; /* 新增：消除移动端点击高亮 */
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -559,6 +559,21 @@
             color: #b388c9;
         }
 
+        /* 迭代路线触发器 */
+        #roadmapTrigger {
+            cursor: pointer;
+            font-size: 14px;
+            color: #6a4a7a;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            margin-left: 6px;
+            border-bottom: 1px dashed #6a4a7a;
+        }
+        #roadmapTrigger:hover {
+            opacity: 1;
+            color: #b388c9;
+        }
+
         @media (max-width: 480px) {
 
             .credits-left,
@@ -826,8 +841,8 @@
             opacity: 1;
         }
 
-        /* ===== 密码输入模态框（自定义） ===== */
-        .password-overlay {
+        /* ===== 迭代路线模态框 ===== */
+        .roadmap-modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
@@ -839,85 +854,102 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 99998;
+            z-index: 10001;
+            padding: 20px;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.3s, visibility 0.3s;
-            padding: 20px;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
         }
-        .password-overlay.active {
+
+        .roadmap-modal-overlay.active {
             opacity: 1;
             visibility: visible;
         }
-        .password-content {
+
+        .roadmap-modal-content {
             background: #fff;
             border-radius: 24px;
             padding: 30px 24px;
-            max-width: 360px;
+            max-width: 500px;
             width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            text-align: center;
             position: relative;
         }
-        .password-content h2 {
-            font-size: 20px;
-            color: #37352f;
-            margin-top: 0;
-            margin-bottom: 10px;
-        }
-        .password-content p {
-            font-size: 15px;
-            color: #6b6b6b;
-            margin-bottom: 20px;
-        }
-        .password-content input[type="password"] {
-            width: 100%;
-            padding: 12px 16px;
-            border-radius: 12px;
-            border: 1.5px solid #ddd;
-            font-size: 16px;
-            outline: none;
-            transition: border-color 0.2s;
-            box-sizing: border-box;
-        }
-        .password-content input[type="password"]:focus {
-            border-color: #F2CDC4;
-        }
-        .password-content .password-actions {
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-            margin-top: 20px;
-        }
-        .password-content .password-actions button {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 500;
+
+        .roadmap-modal-close {
+            position: absolute;
+            top: 12px;
+            right: 20px;
+            font-size: 28px;
             cursor: pointer;
-            transition: background 0.2s;
+            color: #999;
+            transition: color 0.2s;
+            z-index: 1;
         }
-        .password-content .password-actions .btn-confirm {
-            background: #F2CDC4;
-            color: #fff;
+
+        .roadmap-modal-close:hover {
+            color: #333;
         }
-        .password-content .password-actions .btn-confirm:hover {
-            background: #e8b8ae;
-        }
-        .password-content .password-actions .btn-cancel {
-            background: #f0efec;
+
+        .roadmap-modal-content h2 {
+            margin-top: 0;
+            font-size: 22px;
             color: #37352f;
+            border-bottom: 2px solid #F2CDC4;
+            padding-bottom: 10px;
+            margin-bottom: 16px;
         }
-        .password-content .password-actions .btn-cancel:hover {
-            background: #e0dfdc;
+
+        .roadmap-item {
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #eee;
         }
-        .password-error {
-            color: #e74c3c;
+
+        .roadmap-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .roadmap-item .version {
+            font-weight: 700;
+            color: #4a2c5e;
+            font-size: 18px;
+        }
+
+        .roadmap-item .date {
             font-size: 14px;
-            margin-top: 8px;
-            min-height: 20px;
+            color: #999;
+            margin-left: 10px;
+        }
+
+        .roadmap-item ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 6px;
+        }
+
+        .roadmap-item ul li {
+            font-size: 15px;
+            color: #37352f;
+            padding: 2px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .roadmap-item ul li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #F2CDC4;
+            font-weight: 700;
+        }
+
+        .roadmap-item .planned {
+            color: #b388c9;
+            font-style: italic;
         }
 
         /* ===== 原有响应式 ===== */
@@ -969,8 +1001,9 @@
                 padding: 8px 18px;
                 top: 12px;
             }
-            .password-content {
-                padding: 24px 18px;
+
+            .roadmap-modal-content {
+                padding: 20px 16px;
             }
         }
 
@@ -1002,20 +1035,6 @@
 
     <!-- Toast 容器 -->
     <div id="toast"></div>
-
-    <!-- 密码输入模态框 -->
-    <div id="passwordOverlay" class="password-overlay" onclick="closePasswordModal(event)">
-        <div class="password-content" onclick="event.stopPropagation()">
-            <h2>🔐 请输入调试密码</h2>
-            <p>仅用于开发者调试，请勿泄露</p>
-            <input type="password" id="passwordInput" placeholder="请输入密码" />
-            <div id="passwordError" class="password-error"></div>
-            <div class="password-actions">
-                <button class="btn-cancel" onclick="closePasswordModal()">取消</button>
-                <button class="btn-confirm" onclick="confirmPassword()">确认</button>
-            </div>
-        </div>
-    </div>
 
     <div class="app" id="app">
 
@@ -1067,7 +1086,7 @@
                 <div class="credits-left">
                     <span>🎨 原画创作：@OsAtNb</span>
                     <span>📝 素材审校：@Flipped_</span>
-                    <span>💻 开发维护：@杨伽桉</span>
+                    <span>💻 开发维护：@杨伽桉 <span id="roadmapTrigger">📋 迭代路线</span></span>
                 </div>
                 <div class="credits-right">
                     <span>❤️ 欢迎关注全平台社媒 ❤️<br><b id="copyAccount">@赵黛溪Daisy</b></span>
@@ -1099,6 +1118,15 @@
             <span class="role-picker-close" onclick="closeRolePicker(event)">×</span>
             <h2>📋 调试：选择角色</h2>
             <div id="roleList" class="role-list"></div>
+        </div>
+    </div>
+
+    <!-- ===== 迭代路线模态框 ===== -->
+    <div id="roadmapModal" class="roadmap-modal-overlay hidden" onclick="closeRoadmap(event)">
+        <div class="roadmap-modal-content" onclick="event.stopPropagation()">
+            <span class="roadmap-modal-close" onclick="closeRoadmap()">×</span>
+            <h2>📋 迭代路线</h2>
+            <div id="roadmapList"></div>
         </div>
     </div>
 
@@ -1220,6 +1248,28 @@
         };
 
         // =============================================================
+        // 迭代路线数据（硬编码，方便你后续修改）
+        // =============================================================
+        const roadmapData = [{
+            version: "v1.0",
+            date: "2025.06.15",
+            changes: ["✅ 初始版本上线", "✅ 6个角色测试", "✅ 基础UI设计"]
+        }, {
+            version: "v1.1",
+            date: "2025.07.01",
+            changes: ["✨ 新增角色“美清”", "🐛 修复若干显示问题", "🎨 优化移动端适配"]
+        }, {
+            version: "v1.2 (当前)",
+            date: "2025.07.18",
+            changes: ["📋 新增“迭代路线”功能", "🔐 调试按钮增加密码保护", "📱 消除手机端点击闪烁"]
+        }, {
+            version: "v1.3 (计划)",
+            date: "2025.08.xx",
+            changes: ["📸 独立“照片墙”项目上线", "🔍 优化雷达图显示效果", "💬 增加社交分享功能"],
+            planned: true
+        }];
+
+        // =============================================================
         //  核心逻辑
         // =============================================================
         (function () {
@@ -1251,6 +1301,8 @@
             const swiperWrapper = $('#swiperWrapper');
             const rolePicker = $('#rolePicker');
             const roleList = $('#roleList');
+            const roadmapModal = $('#roadmapModal');
+            const roadmapList = $('#roadmapList');
 
             const rolePriority = DATA.rolePriority;
             const roleData = DATA.roleData;
@@ -1422,10 +1474,9 @@
                 // 点击角色名打开剧照弹窗
                 resultName.onclick = function () { openCardModal(topId); };
 
-                // 绑定复制账号事件（每次显示结果页时重新绑定，确保有效）
+                // 绑定复制账号事件
                 const copyEl = document.getElementById('copyAccount');
                 if (copyEl) {
-                    // 移除之前绑定的监听器（避免重复绑定，但此处用新函数替换即可）
                     copyEl.onclick = function (e) {
                         e.stopPropagation();
                         copyText('赵黛溪Daisy');
@@ -1589,7 +1640,6 @@
 
             // -------- 角色选择器（调试功能） --------
             function openRolePicker() {
-                // 清空并填充角色列表
                 roleList.innerHTML = '';
                 rolePriority.forEach(id => {
                     const role = roleData[id];
@@ -1606,37 +1656,30 @@
                 rolePicker.classList.add('active');
             }
 
-            // 关闭角色选择器（同时支持点击 × 和点击背景关闭）
             function closeRolePicker(e) {
-                // 如果有事件且点击的目标不是背景也不是关闭按钮，则不关闭
                 if (e) {
                     const target = e.target;
-                    // 如果点击的是背景（遮罩）或关闭按钮，则关闭
                     if (target === e.currentTarget || target.classList.contains('role-picker-close')) {
                         // 执行关闭
                     } else {
-                        return; // 点击内部其他区域不关闭
+                        return;
                     }
                 }
-                // 执行关闭
                 rolePicker.classList.remove('active');
                 setTimeout(() => {
                     rolePicker.classList.add('hidden');
                 }, 300);
             }
 
-            // 强制显示指定角色的结果页（跳过计分）
             function showRoleResult(roleId) {
                 const role = roleData[roleId];
                 if (!role) return;
 
-                // 隐藏所有页面，显示结果页
                 pageQuiz.classList.add('hidden');
                 pageStart.classList.add('hidden');
                 pageResult.classList.remove('hidden');
                 pageResult.classList.add('fade-in');
 
-                // 填充数据
                 resultName.textContent = role.roleName;
                 resultDrama.textContent = `「${role.dramaName}」`;
                 resultImage.src = role.image || `https://picsum.photos/seed/${roleId}/400/400`;
@@ -1645,16 +1688,12 @@
                 resultBg.innerHTML = `<strong>🧠 人格底色</strong><br>${role.personalityBg}`;
                 resultSignature.innerHTML = role.signatureLine || '';
                 resultStory.innerHTML = `<strong>📖 角色故事</strong><br>${role.resultText}`;
-                // 绑定点击角色名打开剧照
                 resultName.onclick = function () { openCardModal(roleId); };
 
-                // 模拟分数使该角色最高
                 resetScores();
                 scores[roleId] = 999;
-                // 重绘雷达图
                 drawRadarChart();
 
-                // 同样绑定复制账号
                 const copyEl = document.getElementById('copyAccount');
                 if (copyEl) {
                     copyEl.onclick = function (e) {
@@ -1687,55 +1726,41 @@
                 }
             }
 
-            // -------- 密码相关函数（自定义模态框） --------
-            function openPasswordModal() {
-                const overlay = document.getElementById('passwordOverlay');
-                const input = document.getElementById('passwordInput');
-                const error = document.getElementById('passwordError');
-                if (!overlay) return;
-                // 重置状态
-                input.value = '';
-                error.textContent = '';
-                overlay.classList.remove('hidden');
-                void overlay.offsetWidth;
-                overlay.classList.add('active');
-                // 自动聚焦
-                setTimeout(() => input.focus(), 100);
+            // -------- 迭代路线功能 --------
+            function openRoadmap() {
+                // 填充内容
+                roadmapList.innerHTML = '';
+                roadmapData.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'roadmap-item';
+                    const plannedClass = item.planned ? ' planned' : '';
+                    let versionHtml = `<span class="version">${item.version}</span>`;
+                    if (item.planned) {
+                        versionHtml += ` <span class="planned">（计划中）</span>`;
+                    }
+                    div.innerHTML = `
+                        <div>${versionHtml} <span class="date">${item.date}</span></div>
+                        <ul>
+                            ${item.changes.map(c => `<li>${c}</li>`).join('')}
+                        </ul>
+                    `;
+                    roadmapList.appendChild(div);
+                });
+                roadmapModal.classList.remove('hidden');
+                void roadmapModal.offsetWidth;
+                roadmapModal.classList.add('active');
             }
 
-            window.closePasswordModal = function (e) {
+            function closeRoadmap(e) {
                 if (e && e.target !== e.currentTarget) return;
-                const overlay = document.getElementById('passwordOverlay');
-                if (!overlay) return;
-                overlay.classList.remove('active');
+                roadmapModal.classList.remove('active');
                 setTimeout(() => {
-                    overlay.classList.add('hidden');
+                    roadmapModal.classList.add('hidden');
                 }, 300);
-                // 清空错误
-                document.getElementById('passwordError').textContent = '';
-            };
+            }
 
-            window.confirmPassword = function () {
-                const input = document.getElementById('passwordInput');
-                const error = document.getElementById('passwordError');
-                const pwd = input.value.trim();
-                if (pwd === '0708') {
-                    // 正确：关闭密码框，打开调试窗口
-                    closePasswordModal();
-                    openRolePicker();
-                } else {
-                    error.textContent = '❌ 密码错误，请重试';
-                    input.value = '';
-                    input.focus();
-                }
-            };
-
-            // 支持回车键提交
-            document.getElementById('passwordInput').addEventListener('keydown', function (e) {
-                if (e.key === 'Enter') {
-                    confirmPassword();
-                }
-            });
+            // 暴露全局函数供 HTML 使用
+            window.closeRoadmap = closeRoadmap;
 
             // -------- 事件绑定 --------
             btnStart.addEventListener('click', function () {
@@ -1751,7 +1776,6 @@
             btnBack.addEventListener('click', goBack);
             btnRetry.addEventListener('click', resetTest);
 
-            // -------- 键盘事件 --------
             document.addEventListener('keydown', function (e) {
                 if (e.key === 'ArrowLeft' && !pageQuiz.classList.contains('hidden') && currentIndex > 0) goBack();
                 if (e.key === 'ArrowRight' && !pageQuiz.classList.contains('hidden') && btnNext.classList.contains('active'))
@@ -1761,16 +1785,27 @@
                 if (e.key === 'Escape') {
                     if (modalOverlay.classList.contains('active')) closeModal();
                     if (rolePicker.classList.contains('active')) closeRolePicker();
-                    if (!document.getElementById('passwordOverlay').classList.contains('hidden')) closePasswordModal();
+                    if (roadmapModal.classList.contains('active')) closeRoadmap();
                 }
             });
 
-            // -------- 隐形按钮：打开密码输入框 --------
+            // 临时测试按钮：带密码验证
             document.getElementById('devSkipBtn').addEventListener('click', function () {
-                openPasswordModal();
+                const inputPwd = prompt('请输入调试密码：');
+                if (inputPwd === null) return;
+                if (inputPwd === '0708') {
+                    openRolePicker();
+                } else {
+                    alert('密码错误，访问被拒绝');
+                }
             });
 
-            // 将 closeRolePicker 暴露到全局，以便 HTML 中的 onclick 调用
+            // 迭代路线触发器
+            document.getElementById('roadmapTrigger').addEventListener('click', function (e) {
+                e.stopPropagation();
+                openRoadmap();
+            });
+
             window.closeRolePicker = closeRolePicker;
 
             // -------- 初始化 --------
