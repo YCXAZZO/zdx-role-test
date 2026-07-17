@@ -1,0 +1,1717 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>🎉黛溪宇宙🎉</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <style>
+        /* ===== 全局重置与基础 ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'PingFang SC', Roboto, system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(145deg, #D6F2D5 0%, #F2CDC4 50%, #ffd2d4 100%);
+            padding: 20px;
+            margin: 0;
+        }
+
+        .app {
+            width: 100%;
+            max-width: 520px;
+            background: rgba(255, 255, 255, 0.70);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-radius: 40px;
+            padding: 32px 28px 36px;
+            box-shadow: 0 30px 60px rgba(120, 80, 150, 0.18), 0 10px 30px rgba(120, 80, 150, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.50);
+            transition: all .25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app::before,
+        .app::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .app::before {
+            top: -60px;
+            right: -60px;
+            width: 220px;
+            height: 220px;
+            background: radial-gradient(circle, rgba(242, 205, 196, 0.25) 0%, transparent 70%);
+        }
+
+        .app::after {
+            bottom: -80px;
+            left: -80px;
+            width: 280px;
+            height: 280px;
+            background: radial-gradient(circle, rgba(214, 242, 213, 0.20) 0%, transparent 70%);
+        }
+
+        .app>* {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.45s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(18px)
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        /* ===== 按钮配色 ===== */
+        .btn-primary {
+            display: inline-block;
+            background: #F2CDC4;
+            color: #fff;
+            border: none;
+            padding: 14px 48px;
+            border-radius: 60px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .25s ease;
+            box-shadow: 0 8px 24px rgba(242, 205, 196, 0.35);
+            letter-spacing: .5px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            background: #e8b8ae;
+            box-shadow: 0 12px 32px rgba(242, 205, 196, 0.45);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.96);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.70);
+            backdrop-filter: blur(4px);
+            border: 1.5px solid #D6F2D5;
+            color: #4a2c5e;
+            padding: 12px 36px;
+            border-radius: 60px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .25s ease;
+            box-shadow: 0 4px 12px rgba(214, 242, 213, 0.10);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.90);
+            transform: translateY(-2px);
+        }
+
+        .btn-action {
+            min-width: 120px;
+            padding: 12px 20px;
+            border-radius: 60px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .25s ease;
+            border: none;
+            text-align: center;
+        }
+
+        .btn-action.primary {
+            background: #F2CDC4;
+            color: #fff;
+            box-shadow: 0 6px 20px rgba(242, 205, 196, 0.30);
+        }
+
+        .btn-action.primary.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .btn-action.primary.active:hover {
+            transform: translateY(-2px);
+            background: #e8b8ae;
+            box-shadow: 0 10px 28px rgba(242, 205, 196, 0.40);
+        }
+
+        .btn-action.primary:active {
+            transform: scale(0.96);
+        }
+
+        .btn-action.secondary {
+            background: rgba(255, 255, 255, 0.70);
+            backdrop-filter: blur(4px);
+            border: 1.5px solid #D6F2D5;
+            color: #4a2c5e;
+            box-shadow: 0 4px 12px rgba(214, 242, 213, 0.10);
+        }
+
+        .btn-action.secondary:hover {
+            background: rgba(255, 255, 255, 0.90);
+            transform: translateY(-2px);
+        }
+
+        /* ===== 开始页 ===== */
+        #page-start {
+            text-align: center;
+            padding: 12px 0 6px;
+        }
+
+        .hero-icon {
+            display: block;
+            width: 240px;
+            height: 240px;
+            margin: 0 auto 10px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .hero-icon-link {
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .test-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: #4a2c5e;
+            text-align: center;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .test-subtitle {
+            text-align: center;
+            font-size: 15px;
+            color: #7a5a8a;
+            opacity: 0.80;
+            margin-bottom: 16px;
+            font-weight: 400;
+        }
+
+        .intro-desc {
+            color: #4a2c5e;
+            font-size: 16px;
+            line-height: 1.7;
+            margin: 8px 0 28px;
+            padding: 0 6px;
+            opacity: 0.85;
+        }
+
+        /* ===== 答题页 ===== */
+        #page-quiz {
+            padding: 4px 0;
+        }
+
+        .progress-wrap {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 26px;
+        }
+
+        .progress-track {
+            flex: 1;
+            height: 6px;
+            background: rgba(242, 205, 196, 0.20);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: #F2CDC4;
+            border-radius: 12px;
+            transition: width .35s ease;
+        }
+
+        .progress-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: #4a2c5e;
+            min-width: 50px;
+            text-align: right;
+            opacity: 0.80;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .question-number {
+            font-size: 14px;
+            font-weight: 600;
+            color: #6a4a7a;
+            letter-spacing: .5px;
+        }
+
+        .question-text {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2d1a3a;
+            line-height: 1.5;
+            margin-bottom: 24px;
+            min-height: 56px;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .option-item {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(4px);
+            border: 2px solid rgba(242, 205, 196, 0.20);
+            border-radius: 18px;
+            padding: 16px 20px;
+            font-size: 16px;
+            color: #2d1a3a;
+            cursor: pointer;
+            transition: all .20s ease;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        .option-item:hover {
+            background: rgba(255, 255, 255, 0.85);
+            border-color: #F2CDC4;
+            transform: translateX(4px);
+        }
+
+        .option-item .letter {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(242, 205, 196, 0.15);
+            color: #7a5a8a;
+            font-weight: 700;
+            font-size: 15px;
+            flex-shrink: 0;
+            transition: .20s;
+        }
+
+        .option-item.selected {
+            border-color: #F2CDC4;
+            background: rgba(242, 205, 196, 0.18);
+            box-shadow: 0 4px 16px rgba(242, 205, 196, 0.15);
+        }
+
+        .option-item.selected .letter {
+            background: #F2CDC4;
+            color: #fff;
+        }
+
+        .option-item:active {
+            transform: scale(0.97);
+        }
+
+        .quiz-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-action {
+            flex: 1;
+        }
+
+        .btn-action.primary {
+            flex: 2;
+        }
+
+        /* ===== 结果页 ===== */
+        #page-result {
+            text-align: center;
+            padding: 8px 0 4px;
+        }
+
+        .result-badge {
+            font-size: 14px;
+            font-weight: 600;
+            color: #6a4a7a;
+            letter-spacing: 2px;
+            margin-bottom: 4px;
+        }
+
+        .result-name-wrapper {
+            display: inline-block;
+            position: relative;
+            margin-bottom: 2px;
+        }
+
+        .result-name {
+            font-size: 30px;
+            font-weight: 700;
+            color: #2d1a3a;
+            cursor: pointer;
+            display: inline-block;
+            border-bottom: 2px dashed rgba(242, 205, 196, 0.3);
+            padding-bottom: 2px;
+            transition: border-color .2s;
+        }
+
+        .result-name:hover {
+            border-color: #F2CDC4;
+        }
+
+        .result-hint {
+            font-size: 13px;
+            color: #6a4a7a;
+            opacity: 0.75;
+            margin-top: 2px;
+            letter-spacing: .3px;
+        }
+
+        .hero-hint {
+            font-size: 13px;
+            color: #6a4a7a;
+            opacity: 0.7;
+            margin-top: 4px;
+            letter-spacing: 0.3px;
+            text-align: center;
+        }
+
+        .result-drama {
+            font-size: 16px;
+            color: #7a5a8a;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .result-image {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 12px auto 16px;
+            display: block;
+            box-shadow: 0 12px 40px rgba(242, 205, 196, 0.25);
+            border: 4px solid rgba(255, 255, 255, 0.70);
+            background: #f3e5f5;
+        }
+
+        .result-tags {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px 12px;
+            margin-bottom: 14px;
+        }
+
+        .result-tags span {
+            background: rgba(242, 205, 196, 0.20);
+            padding: 4px 16px;
+            border-radius: 40px;
+            font-size: 13px;
+            color: #6a4a7a;
+            font-weight: 500;
+        }
+
+        .result-bg {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #3d2a4a;
+            background: rgba(255, 255, 255, 0.50);
+            border-radius: 20px;
+            padding: 16px 18px;
+            margin: 12px 0 10px;
+            text-align: left;
+            backdrop-filter: blur(4px);
+            font-weight: 500;
+        }
+
+        .result-bg strong {
+            color: #6a4a7a;
+        }
+
+        .result-signature {
+            font-size: 17px;
+            font-style: italic;
+            color: #6a4a7a;
+            background: rgba(242, 205, 196, 0.15);
+            border-radius: 20px;
+            padding: 12px 18px;
+            margin: 10px 0 12px;
+            text-align: center;
+            backdrop-filter: blur(4px);
+            border-left: 3px solid #F2CDC4;
+            border-right: 3px solid #F2CDC4;
+        }
+
+        .result-story {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #3d2a4a;
+            background: rgba(255, 255, 255, 0.30);
+            border-radius: 20px;
+            padding: 16px 18px;
+            margin: 0 0 20px;
+            text-align: left;
+            backdrop-filter: blur(4px);
+        }
+
+        .radar-container {
+            width: 100%;
+            max-width: 320px;
+            margin: 16px auto 20px;
+            background: rgba(255, 255, 255, 0.30);
+            border-radius: 20px;
+            padding: 12px;
+        }
+
+        .radar-container canvas {
+            width: 100% !important;
+            height: auto !important;
+        }
+
+        /* ===== 双栏鸣谢 ===== */
+        .result-credits {
+            margin: 18px 0 16px;
+            padding: 10px 14px 10px 50px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(4px);
+            font-size: 18px;
+            color: #7a5a8a;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.20);
+        }
+
+        .credits-left,
+        .credits-right {
+            flex: 1 1 40%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+        }
+
+        .credits-left span,
+        .credits-right span {
+            display: inline-block;
+        }
+
+        /* 复制提示样式 */
+        .copy-hint {
+            font-size: 13px;
+            color: #6a4a7a;
+            opacity: 0.7;
+            margin-top: 4px;
+            margin-left: 70px;
+            letter-spacing: 0.3px;
+        }
+
+        /* 可点击的账号样式 */
+        #copyAccount {
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        #copyAccount:hover {
+            color: #b388c9;
+        }
+
+        /* 迭代路线触发器 */
+        #roadmapTrigger {
+            cursor: pointer;
+            font-size: 14px;
+            color: #6a4a7a;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            margin-left: 6px;
+            border-bottom: 1px dashed #6a4a7a;
+        }
+        #roadmapTrigger:hover {
+            opacity: 1;
+            color: #b388c9;
+        }
+
+        @media (max-width: 480px) {
+
+            .credits-left,
+            .credits-right {
+                flex: 1 1 100%;
+            }
+
+            .credits-right {
+                order: -1;
+            }
+        }
+
+        .result-actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 14px;
+            margin-top: 10px;
+        }
+
+        /* ===== 模态框（Swiper 容器） ===== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+            transform: scale(0.95);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+        }
+
+        .modal-content {
+            background: transparent;
+            width: 100%;
+            max-width: 560px;
+            max-height: 90vh;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.40);
+            position: relative;
+        }
+
+        /* Swiper 容器覆盖 */
+        .modal-content .swiper-container {
+            width: auto;
+            height: auto;
+            max-height: 80vh;
+            aspect-ratio: 4 / 3;
+            background: transparent;
+            border-radius: 24px;
+        }
+
+        .modal-content .swiper-slide {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: transparent;
+        }
+
+        .modal-content .swiper-slide img {
+            width: auto;
+            height: auto;
+            max-height: 80vh;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* Swiper 分页指示点（底部） */
+        .modal-content .swiper-pagination {
+            position: absolute;
+            bottom: 16px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+        }
+
+        .modal-content .swiper-pagination-bullet {
+            background: rgba(255, 255, 255, 0.6);
+            opacity: 0.8;
+        }
+
+        .modal-content .swiper-pagination-bullet-active {
+            background: #F2CDC4;
+            opacity: 1;
+        }
+
+        /* 关闭按钮（绝对定位） */
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            font-size: 32px;
+            font-weight: 300;
+            cursor: pointer;
+            color: #fff;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+            transition: transform .2s;
+            z-index: 20;
+            background: rgba(0, 0, 0, 0.3);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            transform: rotate(90deg);
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        /* ===== 临时测试按钮 ===== */
+        #devSkipBtn {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            width: 60px;
+            height: 60px;
+            z-index: 9999;
+            background: transparent;
+            border: none;
+            color: transparent;
+            cursor: default;
+            padding: 0;
+            opacity: 0;
+            pointer-events: auto;
+        }
+
+        #devSkipBtn:hover {
+            opacity: 0.2;
+            background: #ff6b6b;
+        }
+
+        @media (max-width:480px) {
+            #devSkipBtn {
+                top: 8px;
+                right: 8px;
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        /* ===== 角色选择器（调试模态框） ===== */
+        .role-picker-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            padding: 20px;
+        }
+
+        .role-picker-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .role-picker-content {
+            background: #fff;
+            border-radius: 24px;
+            padding: 30px 24px;
+            max-width: 400px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .role-picker-close {
+            position: absolute;
+            top: 12px;
+            right: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.2s;
+            z-index: 1;
+        }
+
+        .role-picker-close:hover {
+            color: #333;
+        }
+
+        .role-picker-content h2 {
+            margin-top: 0;
+            font-size: 20px;
+            color: #37352f;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .role-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .role-list button {
+            background: #f5f5f5;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 16px;
+            text-align: left;
+            cursor: pointer;
+            transition: background 0.2s;
+            color: #2d1a3a;
+        }
+
+        .role-list button:hover {
+            background: #F2CDC4;
+        }
+
+        /* ===== Toast 样式（顶部居中） ===== */
+        #toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.75);
+            color: #fff;
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 500;
+            z-index: 99999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            white-space: nowrap;
+        }
+        #toast.show {
+            opacity: 1;
+        }
+
+        /* ===== 迭代路线模态框 ===== */
+        .roadmap-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10001;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .roadmap-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .roadmap-modal-content {
+            background: #fff;
+            border-radius: 24px;
+            padding: 30px 24px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .roadmap-modal-close {
+            position: absolute;
+            top: 12px;
+            right: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.2s;
+            z-index: 1;
+        }
+
+        .roadmap-modal-close:hover {
+            color: #333;
+        }
+
+        .roadmap-modal-content h2 {
+            margin-top: 0;
+            font-size: 22px;
+            color: #37352f;
+            border-bottom: 2px solid #F2CDC4;
+            padding-bottom: 10px;
+            margin-bottom: 16px;
+        }
+
+        .roadmap-group-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #4a2c5e;
+            margin: 16px 0 10px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #e8e7e3;
+        }
+
+        .roadmap-item {
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #f0efec;
+        }
+
+        .roadmap-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .roadmap-item .version {
+            font-weight: 700;
+            color: #4a2c5e;
+            font-size: 17px;
+        }
+
+        .roadmap-item ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 4px;
+        }
+
+        .roadmap-item ul li {
+            font-size: 14px;
+            color: #37352f;
+            padding: 2px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .roadmap-item ul li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #F2CDC4;
+            font-weight: 700;
+        }
+
+        /* ===== 原有响应式 ===== */
+        @media (max-width:480px) {
+            .app {
+                padding: 24px 18px 28px;
+                border-radius: 28px;
+            }
+
+            .test-title {
+                font-size: 22px;
+            }
+
+            .question-text {
+                font-size: 18px;
+                min-height: 48px;
+            }
+
+            .option-item {
+                padding: 14px 16px;
+                font-size: 15px;
+            }
+
+            .result-name {
+                font-size: 26px;
+            }
+
+            .result-image {
+                width: 130px;
+                height: 130px;
+            }
+
+            .btn-action {
+                min-width: 80px;
+                padding: 10px 16px;
+                font-size: 14px;
+            }
+
+            .modal-content .swiper-container {
+                aspect-ratio: 3 / 4;
+            }
+
+            .role-picker-content {
+                padding: 24px 16px;
+            }
+
+            #toast {
+                font-size: 14px;
+                padding: 8px 18px;
+                top: 12px;
+            }
+
+            .roadmap-modal-content {
+                padding: 20px 16px;
+            }
+        }
+
+        @media (max-width:380px) {
+            .app {
+                padding: 18px 12px 22px;
+            }
+
+            .question-text {
+                font-size: 16px;
+            }
+
+            .option-item {
+                padding: 12px 14px;
+                font-size: 14px;
+            }
+
+            .result-story {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 临时测试按钮 -->
+    <button id="devSkipBtn" title="调试：点击打开角色选择器"></button>
+
+    <!-- Toast 容器 -->
+    <div id="toast"></div>
+
+    <div class="app" id="app">
+
+        <div id="page-start" class="fade-in">
+            <a href="https://zdx-photo-gallery.ycxazzo.top" target="_blank" class="hero-icon-link">
+                <img class="hero-icon" src="./images/logo.png" alt="黛溪宇宙 Logo" />
+            </a>
+            <p class="hero-hint">👆 点击头像感受 #黛机时刻 </p>
+            <h1 class="test-title">🎉欢迎加入黛溪宇宙🎉</h1>
+            <p class="test-subtitle">—— 你是平行时空的哪个角色？</p>
+            <p class="intro-desc" id="introText"></p>
+            <button class="btn-primary" id="btnStart">开始测试 →</button>
+        </div>
+
+        <div id="page-quiz" class="hidden">
+            <div class="progress-wrap">
+                <div class="progress-track">
+                    <div class="progress-fill" id="progressFill" style="width:0%;"></div>
+                </div>
+                <span class="progress-text" id="progressText">1 / 12</span>
+            </div>
+            <div class="question-header">
+                <span class="question-number" id="questionNumber">第 1 题</span>
+            </div>
+            <div class="question-text" id="questionText">题目加载中…</div>
+            <div class="options-list" id="optionsList"></div>
+            <div class="quiz-actions">
+                <button class="btn-action secondary" id="btnBack">‹ 返回</button>
+                <button class="btn-action primary" id="btnNext">下一题 →</button>
+            </div>
+        </div>
+
+        <div id="page-result" class="hidden">
+            <div class="result-badge">✨ 你的黛溪分身</div>
+            <div class="result-name-wrapper">
+                <div class="result-name" id="resultName">角色名</div>
+                <div class="result-hint">👆 点击角色名查看剧照</div>
+            </div>
+            <div class="result-drama" id="resultDrama">（剧名）</div>
+            <img class="result-image" id="resultImage" src="" alt="角色插画" />
+            <div class="result-tags" id="resultTags"></div>
+            <div class="result-signature" id="resultSignature"></div>
+            <div class="result-bg" id="resultBg"></div>
+            <div class="result-story" id="resultStory"></div>
+            <div class="radar-container">
+                <canvas id="radarChart"></canvas>
+            </div>
+            <div class="result-credits">
+                <div class="credits-left">
+                    <span>🎨 原画创作：@OsAtNb</span>
+                    <span>📝 素材审校：@Flipped_</span>
+                    <span>💻 开发维护：@杨伽桉 <span id="roadmapTrigger">📋 迭代路线</span></span>
+                </div>
+                <div class="credits-right">
+                    <span>❤️ 欢迎关注全平台社媒 ❤️<br><b id="copyAccount">@赵黛溪Daisy</b></span>
+                    <p class="copy-hint">👆点击复制</p>
+                </div>
+            </div>
+            <div class="result-actions">
+                <button class="btn-secondary" id="btnRetry">🔄 重新测试</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 模态框（Swiper 容器） ===== -->
+    <div id="modalOverlay" class="modal-overlay hidden" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="modal-close" onclick="closeModal()">×</span>
+            <div class="swiper-container" id="swiperContainer">
+                <div class="swiper-wrapper" id="swiperWrapper">
+                    <!-- slides 由 JS 动态生成 -->
+                </div>
+                <div class="swiper-pagination" id="swiperPagination"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 角色选择器（调试模态框） ===== -->
+    <div id="rolePicker" class="role-picker-overlay hidden" onclick="closeRolePicker(event)">
+        <div class="role-picker-content" onclick="event.stopPropagation()">
+            <span class="role-picker-close" onclick="closeRolePicker(event)">×</span>
+            <h2>📋 调试：选择角色</h2>
+            <div id="roleList" class="role-list"></div>
+        </div>
+    </div>
+
+    <!-- ===== 迭代路线模态框 ===== -->
+    <div id="roadmapModal" class="roadmap-modal-overlay hidden" onclick="closeRoadmap(event)">
+        <div class="roadmap-modal-content" onclick="event.stopPropagation()">
+            <span class="roadmap-modal-close" onclick="closeRoadmap()">×</span>
+            <h2>📋 迭代路线</h2>
+            <div id="roadmapList"></div>
+        </div>
+    </div>
+
+    <script>
+        // =============================================================
+        // 主程序：加载 data.json 和 roadmap.json 后执行
+        // =============================================================
+        (async function () {
+            'use strict';
+
+            // ---------- 并行加载两个数据文件 ----------
+            let DATA, roadmapData;
+            try {
+                const [dataResp, roadmapResp] = await Promise.all([
+                    fetch('./data.json'),
+                    fetch('./roadmap.json')
+                ]);
+                if (!dataResp.ok) throw new Error('加载 data.json 失败');
+                if (!roadmapResp.ok) throw new Error('加载 roadmap.json 失败');
+                DATA = await dataResp.json();
+                roadmapData = await roadmapResp.json();
+            } catch (error) {
+                console.error('数据加载失败:', error);
+                document.querySelector('.intro-desc').innerHTML = '⚠️ 数据加载失败，请刷新重试。';
+                return; // 终止执行
+            }
+
+            // ---------- 解构数据 ----------
+            const rolePriority = DATA.rolePriority;
+            const roleData = DATA.roleData;
+            const questions = DATA.questionList;
+            const totalQ = questions.length;
+            const singleScore = DATA.rule.singleScore;
+
+            // ---------- DOM 引用 ----------
+            const $ = (s) => document.querySelector(s);
+            const pageStart = $('#page-start');
+            const pageQuiz = $('#page-quiz');
+            const pageResult = $('#page-result');
+            const btnStart = $('#btnStart');
+            const btnNext = $('#btnNext');
+            const btnBack = $('#btnBack');
+            const btnRetry = $('#btnRetry');
+            const progressFill = $('#progressFill');
+            const progressText = $('#progressText');
+            const questionNumber = $('#questionNumber');
+            const questionText = $('#questionText');
+            const optionsList = $('#optionsList');
+            const resultName = $('#resultName');
+            const resultDrama = $('#resultDrama');
+            const resultImage = $('#resultImage');
+            const resultTags = $('#resultTags');
+            const resultBg = $('#resultBg');
+            const resultStory = $('#resultStory');
+            const resultSignature = $('#resultSignature');
+            const introText = $('#introText');
+            const modalOverlay = $('#modalOverlay');
+            const swiperContainer = $('#swiperContainer');
+            const swiperWrapper = $('#swiperWrapper');
+            const rolePicker = $('#rolePicker');
+            const roleList = $('#roleList');
+            const roadmapModal = $('#roadmapModal');
+            const roadmapList = $('#roadmapList');
+
+            // ---------- Swiper 实例引用 ----------
+            let swiperInstance = null;
+
+            // ---------- 提取特质维度 ----------
+            function extractTraits() {
+                const freq = {};
+                rolePriority.forEach(id => {
+                    const tags = roleData[id].tags.split(/[、，,\s]+/).filter(t => t.trim());
+                    tags.forEach(t => {
+                        const key = t.trim();
+                        freq[key] = (freq[key] || 0) + 1;
+                    });
+                });
+                return Object.keys(freq).sort((a, b) => freq[b] - freq[a]).slice(0, 6);
+            }
+            const traitDimensions = extractTraits();
+            const roleTraits = {};
+            rolePriority.forEach(id => {
+                const tags = roleData[id].tags.split(/[、，,\s]+/).filter(t => t.trim());
+                roleTraits[id] = tags.map(t => t.trim());
+            });
+
+            // ---------- 状态 ----------
+            let currentIndex = 0,
+                scores = {},
+                selectedOptionIndex = null,
+                history = [],
+                isAutoJumping = false;
+
+            function resetScores() { scores = {}; rolePriority.forEach(id => { scores[id] = 0; }); }
+
+            // 渲染介绍文字
+            introText.innerHTML = DATA.introText;
+
+            function recalcScores() {
+                resetScores();
+                for (let i = 0; i < history.length; i++) {
+                    const optIdx = history[i];
+                    if (optIdx === -1) continue;
+                    const opt = questions[i].options[optIdx];
+                    if (opt && opt.scoreRole) scores[opt.scoreRole] = (scores[opt.scoreRole] || 0) + singleScore;
+                }
+            }
+
+            function getTraitScores() {
+                const traitScores = {};
+                traitDimensions.forEach(t => traitScores[t] = 0);
+                rolePriority.forEach(id => {
+                    const roleScore = scores[id] || 0;
+                    (roleTraits[id] || []).forEach(t => { if (traitScores[t] !== undefined) traitScores[t] += roleScore; });
+                });
+                return traitScores;
+            }
+
+            // ---------- 渲染题目 ----------
+            function renderQuestion() {
+                const q = questions[currentIndex];
+                if (!q) return;
+                const progress = (currentIndex / totalQ) * 100;
+                progressFill.style.width = progress + '%';
+                progressText.textContent = `${currentIndex + 1} / ${totalQ}`;
+                questionNumber.textContent = `第 ${currentIndex + 1} 题`;
+                btnBack.style.visibility = currentIndex === 0 ? 'hidden' : 'visible';
+                questionText.textContent = q.question;
+                optionsList.innerHTML = '';
+                const letters = ['A', 'B', 'C', 'D'];
+                q.options.forEach((opt, idx) => {
+                    const div = document.createElement('div');
+                    div.className = 'option-item';
+                    div.dataset.index = idx;
+                    div.dataset.scoreRole = opt.scoreRole;
+                    const letterSpan = document.createElement('span');
+                    letterSpan.className = 'letter';
+                    letterSpan.textContent = letters[idx] || '•';
+                    const textSpan = document.createElement('span');
+                    textSpan.textContent = opt.text;
+                    div.appendChild(letterSpan);
+                    div.appendChild(textSpan);
+                    div.addEventListener('click', function () { selectOption(this); });
+                    optionsList.appendChild(div);
+                });
+                const savedIdx = history[currentIndex];
+                if (savedIdx !== undefined && savedIdx !== -1) {
+                    const items = optionsList.querySelectorAll('.option-item');
+                    if (items[savedIdx]) {
+                        items[savedIdx].classList.add('selected');
+                        selectedOptionIndex = savedIdx;
+                        btnNext.classList.add('active');
+                    } else {
+                        selectedOptionIndex = null;
+                        btnNext.classList.remove('active');
+                    }
+                } else {
+                    selectedOptionIndex = null;
+                    btnNext.classList.remove('active');
+                }
+                btnNext.textContent = (currentIndex === totalQ - 1 && selectedOptionIndex !== null) ? '查看结果' : '下一题 →';
+            }
+
+            function selectOption(el) {
+                if (isAutoJumping) return;
+                optionsList.querySelectorAll('.option-item').forEach(item => item.classList.remove('selected'));
+                el.classList.add('selected');
+                const allItems = optionsList.querySelectorAll('.option-item');
+                const idx = Array.from(allItems).indexOf(el);
+                selectedOptionIndex = idx;
+                history[currentIndex] = idx;
+                recalcScores();
+                btnNext.classList.add('active');
+                if (currentIndex === totalQ - 1) btnNext.textContent = '查看结果';
+                isAutoJumping = true;
+                setTimeout(() => {
+                    isAutoJumping = false;
+                    if (currentIndex < totalQ - 1) goToNext();
+                }, 500);
+            }
+
+            function goToNext() {
+                if (selectedOptionIndex === null) return;
+                if (currentIndex === totalQ - 1) { showResult(); return; }
+                currentIndex++;
+                renderQuestion();
+                document.querySelector('.app').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            function goBack() {
+                if (currentIndex === 0) return;
+                currentIndex--;
+                renderQuestion();
+                document.querySelector('.app').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            function getTopRole() {
+                let max = -1,
+                    top = rolePriority[0];
+                for (const id of rolePriority) {
+                    if (scores[id] > max) {
+                        max = scores[id];
+                        top = id;
+                    }
+                }
+                return top;
+            }
+
+            // -------- 显示结果 --------
+            function showResult() {
+                if (selectedOptionIndex !== null && history[currentIndex] === undefined) {
+                    history[currentIndex] = selectedOptionIndex;
+                    recalcScores();
+                }
+                const topId = getTopRole();
+                const role = roleData[topId];
+                if (!role) return;
+                pageQuiz.classList.add('hidden');
+                pageResult.classList.remove('hidden');
+                pageResult.classList.add('fade-in');
+                resultName.textContent = role.roleName;
+                resultDrama.textContent = `「${role.dramaName}」`;
+                resultImage.src = role.image || `https://picsum.photos/seed/${topId}/400/400`;
+                resultImage.alt = role.roleName;
+                resultTags.innerHTML = role.tags.split('、').map(t => `<span># ${t}</span>`).join('');
+                resultBg.innerHTML = `<strong>🧠 人格底色</strong><br>${role.personalityBg}`;
+                resultSignature.innerHTML = role.signatureLine || '';
+                resultStory.innerHTML = `<strong>📖 角色故事</strong><br>${role.resultText}`;
+                drawRadarChart();
+                // 点击角色名打开剧照弹窗
+                resultName.onclick = function () { openCardModal(topId); };
+
+                // 绑定复制账号事件
+                const copyEl = document.getElementById('copyAccount');
+                if (copyEl) {
+                    copyEl.onclick = function (e) {
+                        e.stopPropagation();
+                        copyText('赵黛溪Daisy');
+                    };
+                }
+            }
+
+            // -------- 复制功能 --------
+            function copyText(text) {
+                const toast = document.getElementById('toast');
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text).then(() => {
+                        showToast('✅ 已复制 ' + text);
+                    }).catch(() => {
+                        fallbackCopy(text);
+                    });
+                } else {
+                    fallbackCopy(text);
+                }
+            }
+
+            function fallbackCopy(text) {
+                const input = document.createElement('input');
+                input.value = text;
+                document.body.appendChild(input);
+                input.select();
+                try {
+                    document.execCommand('copy');
+                    showToast('✅ 已复制 ' + text);
+                } catch (e) {
+                    alert('复制失败，请手动复制');
+                }
+                document.body.removeChild(input);
+            }
+
+            // -------- Toast 提示 --------
+            function showToast(msg) {
+                const toast = document.getElementById('toast');
+                if (!toast) return;
+                toast.textContent = msg;
+                toast.classList.add('show');
+                clearTimeout(toast._timer);
+                toast._timer = setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            }
+
+            // -------- 雷达图 --------
+            function drawRadarChart() {
+                const canvas = document.getElementById('radarChart');
+                if (!canvas) return;
+                if (window.myRadarChart) { window.myRadarChart.destroy(); }
+                const traitScores = getTraitScores();
+                const values = traitDimensions.map(t => traitScores[t] || 0);
+                const maxVal = Math.max(...values, 10);
+                const axisMax = Math.ceil(maxVal / 10) * 10;
+                const ctx = canvas.getContext('2d');
+                window.myRadarChart = new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: traitDimensions,
+                        datasets: [{
+                            label: '性格特质契合度',
+                            data: values,
+                            backgroundColor: 'rgba(242, 205, 196, 0.25)',
+                            borderColor: '#F2CDC4',
+                            borderWidth: 2,
+                            pointBackgroundColor: '#D6F2D5',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 1,
+                            pointRadius: 4,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                max: Math.max(axisMax, 50),
+                                ticks: {
+                                    display: false, stepSize: Math.ceil(axisMax / 5), backdropColor: 'transparent',
+                                    font: { size: 10 }
+                                },
+                                grid: { color: 'rgba(242, 205, 196, 0.2)' },
+                                pointLabels: { font: { size: 12, weight: '500' }, color: '#4a2c5e' }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // -------- 暴露雷达图绘制函数（供临时按钮使用） --------
+            window.drawRadarChart = drawRadarChart;
+
+            // -------- 剧照弹窗（Swiper Flip 效果） --------
+            function openCardModal(roleId) {
+                const role = roleData[roleId];
+                if (!role) return;
+
+                let imageList = [];
+                if (role.cards && Array.isArray(role.cards) && role.cards.length > 0) {
+                    imageList = role.cards;
+                } else if (role.card) {
+                    imageList = [role.card];
+                } else {
+                    imageList = [`https://picsum.photos/seed/${roleId}_card/800/600`];
+                }
+
+                swiperWrapper.innerHTML = '';
+                imageList.forEach((url, idx) => {
+                    const slide = document.createElement('div');
+                    slide.className = 'swiper-slide';
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.alt = `${role.roleName} 剧照 ${idx + 1}`;
+                    slide.appendChild(img);
+                    swiperWrapper.appendChild(slide);
+                });
+
+                modalOverlay.classList.remove('hidden');
+                void modalOverlay.offsetWidth;
+                modalOverlay.classList.add('active');
+
+                if (swiperInstance) {
+                    swiperInstance.destroy(true, true);
+                    swiperInstance = null;
+                }
+
+                swiperInstance = new Swiper(swiperContainer, {
+                    effect: 'flip',
+                    flipEffect: {
+                        slideShadows: false,
+                        limitRotation: true,
+                    },
+                    pagination: {
+                        el: '#swiperPagination',
+                        clickable: true,
+                    },
+                    grabCursor: true,
+                    touchEventsTarget: 'container',
+                    allowTouchMove: imageList.length > 1,
+                    autoHeight: false,
+                });
+            }
+
+            // -------- 关闭弹窗 --------
+            window.closeModal = function (e) {
+                if (e && e.target !== e.currentTarget) return;
+                modalOverlay.classList.remove('active');
+                setTimeout(() => {
+                    modalOverlay.classList.add('hidden');
+                    if (swiperInstance) {
+                        swiperInstance.destroy(true, true);
+                        swiperInstance = null;
+                    }
+                    swiperWrapper.innerHTML = '';
+                }, 300);
+            };
+
+            // -------- 角色选择器（调试功能） --------
+            function openRolePicker() {
+                roleList.innerHTML = '';
+                rolePriority.forEach(id => {
+                    const role = roleData[id];
+                    const btn = document.createElement('button');
+                    btn.textContent = `${role.roleName}（${role.dramaName}）`;
+                    btn.addEventListener('click', function () {
+                        showRoleResult(id);
+                        closeRolePicker();
+                    });
+                    roleList.appendChild(btn);
+                });
+                rolePicker.classList.remove('hidden');
+                void rolePicker.offsetWidth;
+                rolePicker.classList.add('active');
+            }
+
+            function closeRolePicker(e) {
+                if (e) {
+                    const target = e.target;
+                    if (target === e.currentTarget || target.classList.contains('role-picker-close')) {
+                        // 执行关闭
+                    } else {
+                        return;
+                    }
+                }
+                rolePicker.classList.remove('active');
+                setTimeout(() => {
+                    rolePicker.classList.add('hidden');
+                }, 300);
+            }
+
+            function showRoleResult(roleId) {
+                const role = roleData[roleId];
+                if (!role) return;
+
+                pageQuiz.classList.add('hidden');
+                pageStart.classList.add('hidden');
+                pageResult.classList.remove('hidden');
+                pageResult.classList.add('fade-in');
+
+                resultName.textContent = role.roleName;
+                resultDrama.textContent = `「${role.dramaName}」`;
+                resultImage.src = role.image || `https://picsum.photos/seed/${roleId}/400/400`;
+                resultImage.alt = role.roleName;
+                resultTags.innerHTML = role.tags.split('、').map(t => `<span># ${t}</span>`).join('');
+                resultBg.innerHTML = `<strong>🧠 人格底色</strong><br>${role.personalityBg}`;
+                resultSignature.innerHTML = role.signatureLine || '';
+                resultStory.innerHTML = `<strong>📖 角色故事</strong><br>${role.resultText}`;
+                resultName.onclick = function () { openCardModal(roleId); };
+
+                resetScores();
+                scores[roleId] = 999;
+                drawRadarChart();
+
+                const copyEl = document.getElementById('copyAccount');
+                if (copyEl) {
+                    copyEl.onclick = function (e) {
+                        e.stopPropagation();
+                        copyText('赵黛溪Daisy');
+                    };
+                }
+            }
+
+            // -------- 重置测试 --------
+            function resetTest() {
+                currentIndex = 0;
+                selectedOptionIndex = null;
+                history = new Array(totalQ).fill(-1);
+                resetScores();
+                pageResult.classList.add('hidden');
+                pageStart.classList.remove('hidden');
+                pageStart.classList.add('fade-in');
+                pageQuiz.classList.add('hidden');
+                progressFill.style.width = '0%';
+                progressText.textContent = `1 / ${totalQ}`;
+                btnNext.classList.remove('active');
+                btnNext.textContent = '下一题 →';
+                if (window.myRadarChart) {
+                    window.myRadarChart.destroy();
+                    window.myRadarChart = null;
+                }
+                if (modalOverlay.classList.contains('active')) {
+                    closeModal();
+                }
+            }
+
+            // -------- 迭代路线功能（分组渲染，无日期） --------
+            function openRoadmap() {
+                roadmapList.innerHTML = '';
+                // roadmapData 是一个对象，键为组名，值为版本数组
+                Object.keys(roadmapData).forEach(groupName => {
+                    const groupDiv = document.createElement('div');
+                    groupDiv.className = 'roadmap-group';
+                    // 组标题
+                    const title = document.createElement('div');
+                    title.className = 'roadmap-group-title';
+                    title.textContent = groupName;
+                    groupDiv.appendChild(title);
+
+                    const items = roadmapData[groupName];
+                    items.forEach(item => {
+                        const div = document.createElement('div');
+                        div.className = 'roadmap-item';
+                        let versionHtml = `<span class="version">${item.version}</span>`;
+                        div.innerHTML = `
+                            <div>${versionHtml}</div>
+                            <ul>
+                                ${item.changes.map(c => `<li>${c}</li>`).join('')}
+                            </ul>
+                        `;
+                        groupDiv.appendChild(div);
+                    });
+                    roadmapList.appendChild(groupDiv);
+                });
+                roadmapModal.classList.remove('hidden');
+                void roadmapModal.offsetWidth;
+                roadmapModal.classList.add('active');
+            }
+
+            function closeRoadmap(e) {
+                if (e && e.target !== e.currentTarget) return;
+                roadmapModal.classList.remove('active');
+                setTimeout(() => {
+                    roadmapModal.classList.add('hidden');
+                }, 300);
+            }
+
+            window.closeRoadmap = closeRoadmap;
+
+            // -------- 事件绑定 --------
+            btnStart.addEventListener('click', function () {
+                pageStart.classList.add('hidden');
+                pageQuiz.classList.remove('hidden');
+                pageQuiz.classList.add('fade-in');
+                resetScores();
+                history = new Array(totalQ).fill(-1);
+                currentIndex = 0;
+                renderQuestion();
+            });
+            btnNext.addEventListener('click', function () { if (btnNext.classList.contains('active')) goToNext(); });
+            btnBack.addEventListener('click', goBack);
+            btnRetry.addEventListener('click', resetTest);
+
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'ArrowLeft' && !pageQuiz.classList.contains('hidden') && currentIndex > 0) goBack();
+                if (e.key === 'ArrowRight' && !pageQuiz.classList.contains('hidden') && btnNext.classList.contains('active'))
+                    goToNext();
+                if (e.key === 'Enter' && !pageQuiz.classList.contains('hidden') && btnNext.classList.contains('active'))
+                    goToNext();
+                if (e.key === 'Escape') {
+                    if (modalOverlay.classList.contains('active')) closeModal();
+                    if (rolePicker.classList.contains('active')) closeRolePicker();
+                    if (roadmapModal.classList.contains('active')) closeRoadmap();
+                }
+            });
+
+            // 临时测试按钮：带密码验证
+            document.getElementById('devSkipBtn').addEventListener('click', function () {
+                const inputPwd = prompt('请输入调试密码：');
+                if (inputPwd === null) return;
+                if (inputPwd === '0708') {
+                    openRolePicker();
+                } else {
+                    alert('密码错误，访问被拒绝');
+                }
+            });
+
+            // 迭代路线触发器
+            document.getElementById('roadmapTrigger').addEventListener('click', function (e) {
+                e.stopPropagation();
+                openRoadmap();
+            });
+
+            window.closeRolePicker = closeRolePicker;
+
+            // -------- 初始化 --------
+            resetScores();
+            rolePriority.forEach(id => {
+                if (!roleData[id].image) roleData[id].image = `https://picsum.photos/seed/${id}/400/400`;
+                if (!roleData[id].card) roleData[id].card = `https://picsum.photos/seed/${id}_card/800/600`;
+                if (!roleData[id].cards || roleData[id].cards.length === 0) {
+                    roleData[id].cards = [roleData[id].card];
+                }
+            });
+            if (totalQ === 0) document.querySelector('.intro-desc').innerHTML = '⚠️ 题目数据为空。';
+
+        })(); // 结束 async IIFE
+    </script>
+
+</body>
+
+</html>
