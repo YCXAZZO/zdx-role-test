@@ -1084,7 +1084,7 @@
                 <div class="credits-left">
                     <span>🎨 原画创作：@OsAtNb</span>
                     <span>📝 素材审校：@Flipped_</span>
-                    <span>💻 开发维护：@杨伽桉<br><span id="roadmapTrigger">📋 迭代路线</span>
+                    <span>💻 开发维护：@杨伽桉<br><span id="roadmapTrigger">📋 迭代路线</span></span>
                 </div>
                 <div class="credits-right">
                     <span>❤️ 欢迎关注全平台社媒 ❤️<br><b id="copyAccount">@赵黛溪Daisy</b></span>
@@ -1609,7 +1609,7 @@
                 }
             }
 
-            // -------- 迭代路线功能（分组渲染，无日期） --------
+            // -------- 迭代路线功能（分组渲染，支持子标题 title） --------
             function openRoadmap() {
                 roadmapList.innerHTML = '';
                 // roadmapData 是一个对象，键为组名，值为版本数组
@@ -1626,9 +1626,13 @@
                     items.forEach(item => {
                         const div = document.createElement('div');
                         div.className = 'roadmap-item';
-                        let versionHtml = `<span class="version">${item.version}</span>`;
+                        // 如果有 title 字段则显示 “版本号 · 子标题”，否则只显示版本号
+                        let versionDisplay = item.version;
+                        if (item.title) {
+                            versionDisplay = `${item.version} · ${item.title}`;
+                        }
                         div.innerHTML = `
-                            <div>${versionHtml}</div>
+                            <div><span class="version">${versionDisplay}</span></div>
                             <ul>
                                 ${item.changes.map(c => `<li>${c}</li>`).join('')}
                             </ul>
