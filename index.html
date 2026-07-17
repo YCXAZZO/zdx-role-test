@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <style>
-        /* ===== 全局重置与基础 ===== */
+        /* ===== 全部样式保持不变 ===== */
         * {
             margin: 0;
             padding: 0;
@@ -825,6 +825,100 @@
             opacity: 1;
         }
 
+        /* ===== 密码输入模态框（自定义） ===== */
+        .password-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99998;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            padding: 20px;
+        }
+        .password-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .password-content {
+            background: #fff;
+            border-radius: 24px;
+            padding: 30px 24px;
+            max-width: 360px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            position: relative;
+        }
+        .password-content h2 {
+            font-size: 20px;
+            color: #37352f;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        .password-content p {
+            font-size: 15px;
+            color: #6b6b6b;
+            margin-bottom: 20px;
+        }
+        .password-content input[type="password"] {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1.5px solid #ddd;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+        .password-content input[type="password"]:focus {
+            border-color: #F2CDC4;
+        }
+        .password-content .password-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .password-content .password-actions button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .password-content .password-actions .btn-confirm {
+            background: #F2CDC4;
+            color: #fff;
+        }
+        .password-content .password-actions .btn-confirm:hover {
+            background: #e8b8ae;
+        }
+        .password-content .password-actions .btn-cancel {
+            background: #f0efec;
+            color: #37352f;
+        }
+        .password-content .password-actions .btn-cancel:hover {
+            background: #e0dfdc;
+        }
+        .password-error {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 8px;
+            min-height: 20px;
+        }
+
         /* ===== 原有响应式 ===== */
         @media (max-width:480px) {
             .app {
@@ -874,6 +968,9 @@
                 padding: 8px 18px;
                 top: 12px;
             }
+            .password-content {
+                padding: 24px 18px;
+            }
         }
 
         @media (max-width:380px) {
@@ -904,6 +1001,20 @@
 
     <!-- Toast 容器 -->
     <div id="toast"></div>
+
+    <!-- 密码输入模态框 -->
+    <div id="passwordOverlay" class="password-overlay" onclick="closePasswordModal(event)">
+        <div class="password-content" onclick="event.stopPropagation()">
+            <h2>🔐 请输入调试密码</h2>
+            <p>仅用于开发者调试，请勿泄露</p>
+            <input type="password" id="passwordInput" placeholder="请输入密码" />
+            <div id="passwordError" class="password-error"></div>
+            <div class="password-actions">
+                <button class="btn-cancel" onclick="closePasswordModal()">取消</button>
+                <button class="btn-confirm" onclick="confirmPassword()">确认</button>
+            </div>
+        </div>
+    </div>
 
     <div class="app" id="app">
 
@@ -1575,6 +1686,56 @@
                 }
             }
 
+            // -------- 密码相关函数（自定义模态框） --------
+            function openPasswordModal() {
+                const overlay = document.getElementById('passwordOverlay');
+                const input = document.getElementById('passwordInput');
+                const error = document.getElementById('passwordError');
+                if (!overlay) return;
+                // 重置状态
+                input.value = '';
+                error.textContent = '';
+                overlay.classList.remove('hidden');
+                void overlay.offsetWidth;
+                overlay.classList.add('active');
+                // 自动聚焦
+                setTimeout(() => input.focus(), 100);
+            }
+
+            window.closePasswordModal = function (e) {
+                if (e && e.target !== e.currentTarget) return;
+                const overlay = document.getElementById('passwordOverlay');
+                if (!overlay) return;
+                overlay.classList.remove('active');
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                }, 300);
+                // 清空错误
+                document.getElementById('passwordError').textContent = '';
+            };
+
+            window.confirmPassword = function () {
+                const input = document.getElementById('passwordInput');
+                const error = document.getElementById('passwordError');
+                const pwd = input.value.trim();
+                if (pwd === '0708') {
+                    // 正确：关闭密码框，打开调试窗口
+                    closePasswordModal();
+                    openRolePicker();
+                } else {
+                    error.textContent = '❌ 密码错误，请重试';
+                    input.value = '';
+                    input.focus();
+                }
+            };
+
+            // 支持回车键提交
+            document.getElementById('passwordInput').addEventListener('keydown', function (e) {
+                if (e.key === 'Enter') {
+                    confirmPassword();
+                }
+            });
+
             // -------- 事件绑定 --------
             btnStart.addEventListener('click', function () {
                 pageStart.classList.add('hidden');
@@ -1599,12 +1760,13 @@
                 if (e.key === 'Escape') {
                     if (modalOverlay.classList.contains('active')) closeModal();
                     if (rolePicker.classList.contains('active')) closeRolePicker();
+                    if (!document.getElementById('passwordOverlay').classList.contains('hidden')) closePasswordModal();
                 }
             });
 
-            // -------- 隐形按钮：打开角色选择器 --------
+            // -------- 隐形按钮：打开密码输入框 --------
             document.getElementById('devSkipBtn').addEventListener('click', function () {
-                openRolePicker();
+                openPasswordModal();
             });
 
             // 将 closeRolePicker 暴露到全局，以便 HTML 中的 onclick 调用
