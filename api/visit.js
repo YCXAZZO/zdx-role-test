@@ -1,4 +1,4 @@
-import { createClient } from 'redis';
+import { redis } from '../lib/redis.js
 
 // 从环境变量读取 Redis 连接地址
 const redis = createClient({
