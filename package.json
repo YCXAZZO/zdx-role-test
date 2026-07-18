@@ -1,7 +1,6 @@
 {
   "name": "zdx-role-test",
   "version": "1.0.0",
-  "description": "黛溪宇宙角色测试",
   "type": "module",
   "dependencies": {
     "redis": "^4.6.0"
