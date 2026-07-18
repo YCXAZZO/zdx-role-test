@@ -9,7 +9,83 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <style>
-        /* ===== 全局重置与基础 ===== */
+        /* ============================================================
+           CSS 变量（浅色为默认，深色在 media 中覆盖）
+           ============================================================ */
+        :root {
+            /* 背景色 */
+            --bg-body: linear-gradient(145deg, #D6F2D5 0%, #F2CDC4 50%, #ffd2d4 100%);
+            --bg-app: rgba(255, 255, 255, 0.70);
+            --bg-card: rgba(255, 255, 255, 0.50);
+            --bg-card-light: rgba(255, 255, 255, 0.30);
+            --bg-modal: #ffffff;
+            --bg-divider: #f0efec;
+            --bg-option: rgba(255, 255, 255, 0.65);
+            --bg-option-hover: rgba(255, 255, 255, 0.85);
+            --bg-role-picker: #f5f5f5;
+
+            /* 文字颜色 */
+            --text-primary: #4a2c5e;
+            --text-secondary: #7a5a8a;
+            --text-dark: #2d1a3a;
+            --text-muted: #999;
+            --text-inverse: #fff;
+
+            /* 边框颜色 */
+            --border-light: rgba(255, 255, 255, 0.50);
+            --border-divider: #e8e7e3;
+
+            /* 阴影 */
+            --shadow-card: 0 30px 60px rgba(120, 80, 150, 0.18);
+            --shadow-hover: 0 10px 30px rgba(120, 80, 150, 0.08);
+            --shadow-modal: 0 30px 60px rgba(0, 0, 0, 0.40);
+
+            /* 主题色（保持不变） */
+            --accent: #F2CDC4;
+            --accent-hover: #e8b8ae;
+            --accent-secondary: #D6F2D5;
+
+            /* 模态框遮罩 */
+            --modal-overlay: rgba(0, 0, 0, 0.60);
+        }
+
+        /* 深色模式覆盖 */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-body: #1a1614;
+                --bg-app: rgba(30, 30, 30, 0.85);
+                --bg-card: rgba(50, 50, 50, 0.70);
+                --bg-card-light: rgba(60, 60, 60, 0.50);
+                --bg-modal: #2a2522;
+                --bg-divider: #3d3530;
+                --bg-option: rgba(60, 60, 60, 0.70);
+                --bg-option-hover: rgba(80, 80, 80, 0.80);
+                --bg-role-picker: #3d3530;
+
+                --text-primary: #e0d6e8;
+                --text-secondary: #b0a0b8;
+                --text-dark: #d0c8d8;
+                --text-muted: #8a7773;
+                --text-inverse: #fff;
+
+                --border-light: rgba(255, 255, 255, 0.10);
+                --border-divider: #4a403a;
+
+                --shadow-card: 0 30px 60px rgba(0, 0, 0, 0.40);
+                --shadow-hover: 0 10px 30px rgba(0, 0, 0, 0.20);
+                --shadow-modal: 0 30px 60px rgba(0, 0, 0, 0.60);
+
+                --accent: #c4a89e;
+                --accent-hover: #b3968a;
+                --accent-secondary: #6f8f6e;
+
+                --modal-overlay: rgba(0, 0, 0, 0.80);
+            }
+        }
+
+        /* ============================================================
+           全局重置与基础
+           ============================================================ */
         * {
             margin: 0;
             padding: 0;
@@ -23,22 +99,24 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(145deg, #D6F2D5 0%, #F2CDC4 50%, #ffd2d4 100%);
+            background: var(--bg-body);
             padding: 20px;
             margin: 0;
+            color: var(--text-primary);
+            transition: background 0.3s, color 0.3s;
         }
 
         .app {
             width: 100%;
             max-width: 520px;
-            background: rgba(255, 255, 255, 0.70);
+            background: var(--bg-app);
             backdrop-filter: blur(18px);
             -webkit-backdrop-filter: blur(18px);
             border-radius: 40px;
             padding: 32px 28px 36px;
-            box-shadow: 0 30px 60px rgba(120, 80, 150, 0.18), 0 10px 30px rgba(120, 80, 150, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.50);
-            transition: all .25s ease;
+            box-shadow: var(--shadow-card), var(--shadow-hover);
+            border: 1px solid var(--border-light);
+            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
         }
@@ -50,6 +128,7 @@
             border-radius: 50%;
             pointer-events: none;
             z-index: 0;
+            opacity: 0.3;
         }
 
         .app::before {
@@ -57,7 +136,7 @@
             right: -60px;
             width: 220px;
             height: 220px;
-            background: radial-gradient(circle, rgba(242, 205, 196, 0.25) 0%, transparent 70%);
+            background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
         }
 
         .app::after {
@@ -65,7 +144,7 @@
             left: -80px;
             width: 280px;
             height: 280px;
-            background: radial-gradient(circle, rgba(214, 242, 213, 0.20) 0%, transparent 70%);
+            background: radial-gradient(circle, var(--accent-secondary) 0%, transparent 70%);
         }
 
         .app>* {
@@ -96,15 +175,15 @@
         /* ===== 按钮配色 ===== */
         .btn-primary {
             display: inline-block;
-            background: #F2CDC4;
-            color: #fff;
+            background: var(--accent);
+            color: var(--text-inverse);
             border: none;
             padding: 14px 48px;
             border-radius: 60px;
             font-size: 18px;
             font-weight: 600;
             cursor: pointer;
-            transition: all .25s ease;
+            transition: all 0.25s ease;
             box-shadow: 0 8px 24px rgba(242, 205, 196, 0.35);
             letter-spacing: .5px;
             border: 1px solid rgba(255, 255, 255, 0.25);
@@ -112,7 +191,7 @@
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            background: #e8b8ae;
+            background: var(--accent-hover);
             box-shadow: 0 12px 32px rgba(242, 205, 196, 0.45);
         }
 
@@ -121,10 +200,10 @@
         }
 
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.70);
+            background: var(--bg-card);
             backdrop-filter: blur(4px);
-            border: 1.5px solid #D6F2D5;
-            color: #4a2c5e;
+            border: 1.5px solid var(--accent-secondary);
+            color: var(--text-primary);
             padding: 12px 36px;
             border-radius: 60px;
             font-size: 16px;
@@ -135,7 +214,7 @@
         }
 
         .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.90);
+            background: var(--bg-option-hover);
             transform: translateY(-2px);
         }
 
@@ -152,8 +231,8 @@
         }
 
         .btn-action.primary {
-            background: #F2CDC4;
-            color: #fff;
+            background: var(--accent);
+            color: var(--text-inverse);
             box-shadow: 0 6px 20px rgba(242, 205, 196, 0.30);
         }
 
@@ -164,7 +243,7 @@
 
         .btn-action.primary.active:hover {
             transform: translateY(-2px);
-            background: #e8b8ae;
+            background: var(--accent-hover);
             box-shadow: 0 10px 28px rgba(242, 205, 196, 0.40);
         }
 
@@ -173,15 +252,15 @@
         }
 
         .btn-action.secondary {
-            background: rgba(255, 255, 255, 0.70);
+            background: var(--bg-card);
             backdrop-filter: blur(4px);
-            border: 1.5px solid #D6F2D5;
-            color: #4a2c5e;
+            border: 1.5px solid var(--accent-secondary);
+            color: var(--text-primary);
             box-shadow: 0 4px 12px rgba(214, 242, 213, 0.10);
         }
 
         .btn-action.secondary:hover {
-            background: rgba(255, 255, 255, 0.90);
+            background: var(--bg-option-hover);
             transform: translateY(-2px);
         }
 
@@ -208,7 +287,7 @@
         .test-title {
             font-size: 26px;
             font-weight: 700;
-            color: #4a2c5e;
+            color: var(--text-primary);
             text-align: center;
             letter-spacing: 1px;
             margin-bottom: 4px;
@@ -217,14 +296,14 @@
         .test-subtitle {
             text-align: center;
             font-size: 15px;
-            color: #7a5a8a;
+            color: var(--text-secondary);
             opacity: 0.80;
             margin-bottom: 16px;
             font-weight: 400;
         }
 
         .intro-desc {
-            color: #4a2c5e;
+            color: var(--text-primary);
             font-size: 16px;
             line-height: 1.7;
             margin: 8px 0 28px;
@@ -255,7 +334,7 @@
         .progress-fill {
             height: 100%;
             width: 0%;
-            background: #F2CDC4;
+            background: var(--accent);
             border-radius: 12px;
             transition: width .35s ease;
         }
@@ -263,7 +342,7 @@
         .progress-text {
             font-size: 14px;
             font-weight: 600;
-            color: #4a2c5e;
+            color: var(--text-primary);
             min-width: 50px;
             text-align: right;
             opacity: 0.80;
@@ -279,14 +358,14 @@
         .question-number {
             font-size: 14px;
             font-weight: 600;
-            color: #6a4a7a;
+            color: var(--text-secondary);
             letter-spacing: .5px;
         }
 
         .question-text {
             font-size: 20px;
             font-weight: 600;
-            color: #2d1a3a;
+            color: var(--text-dark);
             line-height: 1.5;
             margin-bottom: 24px;
             min-height: 56px;
@@ -300,13 +379,13 @@
         }
 
         .option-item {
-            background: rgba(255, 255, 255, 0.65);
+            background: var(--bg-option);
             backdrop-filter: blur(4px);
             border: 2px solid rgba(242, 205, 196, 0.20);
             border-radius: 18px;
             padding: 16px 20px;
             font-size: 16px;
-            color: #2d1a3a;
+            color: var(--text-dark);
             cursor: pointer;
             transition: all .20s ease;
             display: flex;
@@ -316,8 +395,8 @@
         }
 
         .option-item:hover {
-            background: rgba(255, 255, 255, 0.85);
-            border-color: #F2CDC4;
+            background: var(--bg-option-hover);
+            border-color: var(--accent);
             transform: translateX(4px);
         }
 
@@ -329,7 +408,7 @@
             height: 32px;
             border-radius: 50%;
             background: rgba(242, 205, 196, 0.15);
-            color: #7a5a8a;
+            color: var(--text-secondary);
             font-weight: 700;
             font-size: 15px;
             flex-shrink: 0;
@@ -337,13 +416,13 @@
         }
 
         .option-item.selected {
-            border-color: #F2CDC4;
+            border-color: var(--accent);
             background: rgba(242, 205, 196, 0.18);
             box-shadow: 0 4px 16px rgba(242, 205, 196, 0.15);
         }
 
         .option-item.selected .letter {
-            background: #F2CDC4;
+            background: var(--accent);
             color: #fff;
         }
 
@@ -375,7 +454,7 @@
         .result-badge {
             font-size: 14px;
             font-weight: 600;
-            color: #6a4a7a;
+            color: var(--text-secondary);
             letter-spacing: 2px;
             margin-bottom: 4px;
         }
@@ -389,7 +468,7 @@
         .result-name {
             font-size: 30px;
             font-weight: 700;
-            color: #2d1a3a;
+            color: var(--text-dark);
             cursor: pointer;
             display: inline-block;
             border-bottom: 2px dashed rgba(242, 205, 196, 0.3);
@@ -398,12 +477,12 @@
         }
 
         .result-name:hover {
-            border-color: #F2CDC4;
+            border-color: var(--accent);
         }
 
         .result-hint {
             font-size: 13px;
-            color: #6a4a7a;
+            color: var(--text-secondary);
             opacity: 0.75;
             margin-top: 2px;
             letter-spacing: .3px;
@@ -411,7 +490,7 @@
 
         .hero-hint {
             font-size: 13px;
-            color: #6a4a7a;
+            color: var(--text-secondary);
             opacity: 0.7;
             margin-top: 4px;
             letter-spacing: 0.3px;
@@ -420,7 +499,7 @@
 
         .result-drama {
             font-size: 16px;
-            color: #7a5a8a;
+            color: var(--text-secondary);
             font-weight: 500;
             margin-bottom: 6px;
         }
@@ -450,15 +529,15 @@
             padding: 4px 16px;
             border-radius: 40px;
             font-size: 13px;
-            color: #6a4a7a;
+            color: var(--text-secondary);
             font-weight: 500;
         }
 
         .result-bg {
             font-size: 16px;
             line-height: 1.7;
-            color: #3d2a4a;
-            background: rgba(255, 255, 255, 0.50);
+            color: var(--text-dark);
+            background: var(--bg-card);
             border-radius: 20px;
             padding: 16px 18px;
             margin: 12px 0 10px;
@@ -468,28 +547,28 @@
         }
 
         .result-bg strong {
-            color: #6a4a7a;
+            color: var(--text-secondary);
         }
 
         .result-signature {
             font-size: 17px;
             font-style: italic;
-            color: #6a4a7a;
+            color: var(--text-secondary);
             background: rgba(242, 205, 196, 0.15);
             border-radius: 20px;
             padding: 12px 18px;
             margin: 10px 0 12px;
             text-align: center;
             backdrop-filter: blur(4px);
-            border-left: 3px solid #F2CDC4;
-            border-right: 3px solid #F2CDC4;
+            border-left: 3px solid var(--accent);
+            border-right: 3px solid var(--accent);
         }
 
         .result-story {
             font-size: 16px;
             line-height: 1.8;
-            color: #3d2a4a;
-            background: rgba(255, 255, 255, 0.30);
+            color: var(--text-dark);
+            background: var(--bg-card-light);
             border-radius: 20px;
             padding: 16px 18px;
             margin: 0 0 20px;
@@ -501,7 +580,7 @@
             width: 100%;
             max-width: 320px;
             margin: 16px auto 20px;
-            background: rgba(255, 255, 255, 0.30);
+            background: var(--bg-card-light);
             border-radius: 20px;
             padding: 12px;
         }
@@ -516,14 +595,14 @@
             margin: 18px 0 16px;
             padding: 10px 14px 10px 50px;
             border-radius: 16px;
-            background: rgba(255, 255, 255, 0.35);
+            background: var(--bg-card-light);
             backdrop-filter: blur(4px);
             font-size: 18px;
-            color: #7a5a8a;
+            color: var(--text-secondary);
             display: flex;
             flex-wrap: wrap;
             gap: 12px 20px;
-            border: 1px solid rgba(255, 255, 255, 0.20);
+            border: 1px solid var(--border-light);
         }
 
         .credits-left,
@@ -540,17 +619,15 @@
             display: inline-block;
         }
 
-        /* 复制提示样式 */
         .copy-hint {
             font-size: 13px;
-            color: #6a4a7a;
+            color: var(--text-secondary);
             opacity: 0.7;
             margin-top: 4px;
             margin-left: 70px;
             letter-spacing: 0.3px;
         }
 
-        /* 可点击的账号样式 */
         #copyAccount {
             cursor: pointer;
             transition: color 0.2s;
@@ -559,15 +636,14 @@
             color: #b388c9;
         }
 
-        /* 迭代路线触发器 */
         #roadmapTrigger {
             cursor: pointer;
             font-size: 14px;
-            color: #6a4a7a;
+            color: var(--text-secondary);
             opacity: 0.7;
             transition: opacity 0.2s;
             margin-left: 6px;
-            border-bottom: 1px dashed #6a4a7a;
+            border-bottom: 1px dashed var(--text-secondary);
         }
         #roadmapTrigger:hover {
             opacity: 1;
@@ -575,12 +651,10 @@
         }
 
         @media (max-width: 480px) {
-
             .credits-left,
             .credits-right {
                 flex: 1 1 100%;
             }
-
             .credits-right {
                 order: -1;
             }
@@ -594,6 +668,19 @@
             margin-top: 10px;
         }
 
+        /* ===== 访客计数器 ===== */
+        .visit-counter {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            opacity: 0.7;
+        }
+        .visit-counter span {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
         /* ===== 模态框（Swiper 容器） ===== */
         .modal-overlay {
             position: fixed;
@@ -601,7 +688,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: transparent;
+            background: var(--modal-overlay);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             display: flex;
@@ -628,11 +715,10 @@
             max-height: 90vh;
             border-radius: 24px;
             overflow: hidden;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.40);
+            box-shadow: var(--shadow-modal);
             position: relative;
         }
 
-        /* Swiper 容器覆盖 */
         .modal-content .swiper-container {
             width: auto;
             height: auto;
@@ -657,7 +743,6 @@
             display: block;
         }
 
-        /* Swiper 分页指示点（底部） */
         .modal-content .swiper-pagination {
             position: absolute;
             bottom: 16px;
@@ -672,11 +757,10 @@
         }
 
         .modal-content .swiper-pagination-bullet-active {
-            background: #F2CDC4;
+            background: var(--accent);
             opacity: 1;
         }
 
-        /* 关闭按钮（绝对定位） */
         .modal-close {
             position: absolute;
             top: 16px;
@@ -760,15 +844,16 @@
         }
 
         .role-picker-content {
-            background: #fff;
+            background: var(--bg-modal);
             border-radius: 24px;
             padding: 30px 24px;
             max-width: 400px;
             width: 100%;
             max-height: 80vh;
             overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: var(--shadow-modal);
             position: relative;
+            color: var(--text-primary);
         }
 
         .role-picker-close {
@@ -777,20 +862,20 @@
             right: 20px;
             font-size: 28px;
             cursor: pointer;
-            color: #999;
+            color: var(--text-muted);
             transition: color 0.2s;
             z-index: 1;
         }
 
         .role-picker-close:hover {
-            color: #333;
+            color: var(--text-primary);
         }
 
         .role-picker-content h2 {
             margin-top: 0;
             font-size: 20px;
-            color: #37352f;
-            border-bottom: 1px solid #eee;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border-divider);
             padding-bottom: 10px;
         }
 
@@ -802,7 +887,7 @@
         }
 
         .role-list button {
-            background: #f5f5f5;
+            background: var(--bg-role-picker);
             border: none;
             border-radius: 12px;
             padding: 12px 16px;
@@ -810,11 +895,12 @@
             text-align: left;
             cursor: pointer;
             transition: background 0.2s;
-            color: #2d1a3a;
+            color: var(--text-primary);
         }
 
         .role-list button:hover {
-            background: #F2CDC4;
+            background: var(--accent);
+            color: var(--text-inverse);
         }
 
         /* ===== Toast 样式（顶部居中） ===== */
@@ -867,15 +953,16 @@
         }
 
         .roadmap-modal-content {
-            background: #fff;
+            background: var(--bg-modal);
             border-radius: 24px;
             padding: 30px 24px;
             max-width: 500px;
             width: 100%;
             max-height: 80vh;
             overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: var(--shadow-modal);
             position: relative;
+            color: var(--text-primary);
         }
 
         .roadmap-modal-close {
@@ -884,20 +971,20 @@
             right: 20px;
             font-size: 28px;
             cursor: pointer;
-            color: #999;
+            color: var(--text-muted);
             transition: color 0.2s;
             z-index: 1;
         }
 
         .roadmap-modal-close:hover {
-            color: #333;
+            color: var(--text-primary);
         }
 
         .roadmap-modal-content h2 {
             margin-top: 0;
             font-size: 22px;
-            color: #37352f;
-            border-bottom: 2px solid #F2CDC4;
+            color: var(--text-primary);
+            border-bottom: 2px solid var(--accent);
             padding-bottom: 10px;
             margin-bottom: 16px;
         }
@@ -905,16 +992,16 @@
         .roadmap-group-title {
             font-size: 18px;
             font-weight: 600;
-            color: #4a2c5e;
+            color: var(--text-primary);
             margin: 16px 0 10px;
             padding-bottom: 4px;
-            border-bottom: 1px solid #e8e7e3;
+            border-bottom: 1px solid var(--border-divider);
         }
 
         .roadmap-item {
             margin-bottom: 16px;
             padding-bottom: 12px;
-            border-bottom: 1px solid #f0efec;
+            border-bottom: 1px solid var(--border-divider);
         }
 
         .roadmap-item:last-child {
@@ -924,7 +1011,7 @@
 
         .roadmap-item .version {
             font-weight: 700;
-            color: #4a2c5e;
+            color: var(--text-primary);
             font-size: 17px;
         }
 
@@ -936,7 +1023,7 @@
 
         .roadmap-item ul li {
             font-size: 14px;
-            color: #37352f;
+            color: var(--text-primary);
             padding: 2px 0;
             padding-left: 20px;
             position: relative;
@@ -946,11 +1033,11 @@
             content: "•";
             position: absolute;
             left: 0;
-            color: #F2CDC4;
+            color: var(--accent);
             font-weight: 700;
         }
 
-        /* ===== 原有响应式 ===== */
+        /* ===== 响应式 ===== */
         @media (max-width:480px) {
             .app {
                 padding: 24px 18px 28px;
@@ -1093,6 +1180,10 @@
             </div>
             <div class="result-actions">
                 <button class="btn-secondary" id="btnRetry">🔄 重新测试</button>
+            </div>
+            <!-- ===== 访客计数器 ===== -->
+            <div class="visit-counter">
+                👁️ 已有 <span id="visitCount">--</span> 位访客
             </div>
         </div>
     </div>
@@ -1425,9 +1516,9 @@
                             label: '性格特质契合度',
                             data: values,
                             backgroundColor: 'rgba(242, 205, 196, 0.25)',
-                            borderColor: '#F2CDC4',
+                            borderColor: 'var(--accent)',
                             borderWidth: 2,
-                            pointBackgroundColor: '#D6F2D5',
+                            pointBackgroundColor: 'var(--accent-secondary)',
                             pointBorderColor: '#fff',
                             pointBorderWidth: 1,
                             pointRadius: 4,
@@ -1446,7 +1537,7 @@
                                     font: { size: 10 }
                                 },
                                 grid: { color: 'rgba(242, 205, 196, 0.2)' },
-                                pointLabels: { font: { size: 12, weight: '500' }, color: '#4a2c5e' }
+                                pointLabels: { font: { size: 12, weight: '500' }, color: 'var(--text-primary)' }
                             }
                         }
                     }
@@ -1701,6 +1792,22 @@
             });
 
             window.closeRolePicker = closeRolePicker;
+
+            // -------- 访客计数器 --------
+            async function updateVisitCount() {
+                try {
+                    const response = await fetch('/api/visit');
+                    if (!response.ok) throw new Error('网络请求失败');
+                    const data = await response.json();
+                    document.getElementById('visitCount').textContent = data.count;
+                } catch (error) {
+                    console.warn('访客计数失败:', error);
+                    document.getElementById('visitCount').textContent = '?';
+                }
+            }
+
+            // 页面加载后调用
+            updateVisitCount();
 
             // -------- 初始化 --------
             resetScores();
