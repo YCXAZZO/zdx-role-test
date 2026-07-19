@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
-    <title>🎉黛溪宇宙🎉</title>
+    <title>🎉星途璀璨🎉</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
@@ -1193,7 +1193,7 @@
                 <img class="hero-icon" src="./images/logo.png" alt="黛溪宇宙 Logo" />
             </a>
             <p class="hero-hint">👆 点击头像感受 #黛机时刻 </p>
-            <h1 class="test-title">🎉欢迎加入黛溪宇宙🎉</h1>
+            <h1 class="test-title">✨欢迎加入黛溪宇宙✨</h1>
             <p class="test-subtitle">—— 你是平行时空的哪个角色？</p>
             <p class="intro-desc" id="introText"></p>
             <button class="btn-primary" id="btnStart">开始测试 →</button>
@@ -1277,7 +1277,7 @@
     <!-- ===== 迭代路线模态框（普通用户查看） ===== -->
     <div id="roadmapModal" class="roadmap-modal-overlay hidden" onclick="closeRoadmap(event)">
         <div class="roadmap-modal-content" onclick="event.stopPropagation()">
-            <span class="roadmap-modal-close" onclick="closeRoadmap()">×</span>
+            <span class="roadmap-modal-close" onclick="closeRoadmap(event)">×</span>
             <h2>📋 迭代路线</h2>
             <div id="roadmapList"></div>
         </div>
@@ -1302,9 +1302,7 @@
             </div>
 
             <div id="adminTabRoadmap" class="admin-tab-content hidden">
-                <!-- 分组子选项卡 -->
                 <div id="roadmapGroupTabs" class="roadmap-group-tabs"></div>
-                <!-- 当前分组版本列表 -->
                 <div id="adminRoadmapList"></div>
                 <button class="btn-primary" id="addVersionBtn" style="margin-top:12px;">➕ 添加版本</button>
                 <div style="margin-top:16px; display:flex; gap:12px;">
@@ -1318,7 +1316,7 @@
                 <div style="text-align:center; padding:40px 20px; color:var(--text-secondary);">
                     <div style="font-size:48px; margin-bottom:12px;">🚧</div>
                     <h3 style="font-weight:500;">先画个饼…</h3>
-                    <p style="margin-top:8px;">你已急哭</p>
+                    <p style="margin-top:8px;">我已急哭</p>
                 </div>
             </div>
 
@@ -1326,7 +1324,7 @@
                 <div style="text-align:center; padding:40px 20px; color:var(--text-secondary);">
                     <div style="font-size:48px; margin-bottom:12px;">🚧</div>
                     <h3 style="font-weight:500;">再挖个坑…</h3>
-                    <p style="margin-top:8px;">我已急哭</p>
+                    <p style="margin-top:8px;">你已急哭</p>
                 </div>
             </div>
         </div>
@@ -1350,11 +1348,9 @@
                 if (!roadmapResp.ok) throw new Error('加载 roadmap 数据失败');
                 DATA = await dataResp.json();
                 roadmapData = await roadmapResp.json();
-                // 确保 roadmapData 是对象
                 if (typeof roadmapData !== 'object' || Array.isArray(roadmapData)) {
                     roadmapData = {};
                 }
-                // 确保每个分组都是数组
                 Object.keys(roadmapData).forEach(key => {
                     if (!Array.isArray(roadmapData[key])) {
                         roadmapData[key] = [];
@@ -1366,7 +1362,6 @@
                 return;
             }
 
-            // ---------- 解构数据 ----------
             const rolePriority = DATA.rolePriority;
             const roleData = DATA.roleData;
             const questions = DATA.questionList;
@@ -1577,23 +1572,245 @@
                 }
             }
 
-            // -------- 复制、Toast、雷达图、剧照弹窗等（与之前相同，省略重复）--------
-            // 为保持完整，此处保留关键函数，但为避免篇幅过长，仅保留必要部分
-            // 实际代码中这些函数已完整实现
-            function copyText(text) { /* ... */ }
-            function fallbackCopy(text) { /* ... */ }
-            function showToast(msg) { /* ... */ }
-            function drawRadarChart() { /* ... */ }
-            function openCardModal(roleId) { /* ... */ }
-            window.closeModal = function (e) { /* ... */ }
+            // -------- 复制功能 --------
+            function copyText(text) {
+                const toast = document.getElementById('toast');
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text).then(() => {
+                        showToast('✅ 已复制 ' + text);
+                    }).catch(() => {
+                        fallbackCopy(text);
+                    });
+                } else {
+                    fallbackCopy(text);
+                }
+            }
 
-            // -------- 角色选择器（调试） --------
-            function openRolePicker() { /* ... */ }
-            function closeRolePicker(e) { /* ... */ }
-            function showRoleResult(roleId) { /* ... */ }
+            function fallbackCopy(text) {
+                const input = document.createElement('input');
+                input.value = text;
+                document.body.appendChild(input);
+                input.select();
+                try {
+                    document.execCommand('copy');
+                    showToast('✅ 已复制 ' + text);
+                } catch (e) {
+                    alert('复制失败，请手动复制');
+                }
+                document.body.removeChild(input);
+            }
+
+            // -------- Toast 提示 --------
+            function showToast(msg) {
+                const toast = document.getElementById('toast');
+                if (!toast) return;
+                toast.textContent = msg;
+                toast.classList.add('show');
+                clearTimeout(toast._timer);
+                toast._timer = setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            }
+
+            // -------- 雷达图 --------
+            function drawRadarChart() {
+                const canvas = document.getElementById('radarChart');
+                if (!canvas) return;
+                if (window.myRadarChart) { window.myRadarChart.destroy(); }
+                const traitScores = getTraitScores();
+                const values = traitDimensions.map(t => traitScores[t] || 0);
+                const maxVal = Math.max(...values, 10);
+                const axisMax = Math.ceil(maxVal / 10) * 10;
+                const ctx = canvas.getContext('2d');
+                window.myRadarChart = new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: traitDimensions,
+                        datasets: [{
+                            label: '性格特质契合度',
+                            data: values,
+                            backgroundColor: 'rgba(242, 205, 196, 0.25)',
+                            borderColor: 'var(--accent)',
+                            borderWidth: 2,
+                            pointBackgroundColor: 'var(--accent-secondary)',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 1,
+                            pointRadius: 4,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                max: Math.max(axisMax, 50),
+                                ticks: {
+                                    display: false, stepSize: Math.ceil(axisMax / 5), backdropColor: 'transparent',
+                                    font: { size: 10 }
+                                },
+                                grid: { color: 'rgba(242, 205, 196, 0.2)' },
+                                pointLabels: { font: { size: 12, weight: '500' }, color: 'var(--text-primary)' }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // -------- 剧照弹窗（Swiper Flip 效果） --------
+            function openCardModal(roleId) {
+                const role = roleData[roleId];
+                if (!role) return;
+
+                let imageList = [];
+                if (role.cards && Array.isArray(role.cards) && role.cards.length > 0) {
+                    imageList = role.cards;
+                } else if (role.card) {
+                    imageList = [role.card];
+                } else {
+                    imageList = [`https://picsum.photos/seed/${roleId}_card/800/600`];
+                }
+
+                swiperWrapper.innerHTML = '';
+                imageList.forEach((url, idx) => {
+                    const slide = document.createElement('div');
+                    slide.className = 'swiper-slide';
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.alt = `${role.roleName} 剧照 ${idx + 1}`;
+                    slide.appendChild(img);
+                    swiperWrapper.appendChild(slide);
+                });
+
+                modalOverlay.classList.remove('hidden');
+                void modalOverlay.offsetWidth;
+                modalOverlay.classList.add('active');
+
+                if (swiperInstance) {
+                    swiperInstance.destroy(true, true);
+                    swiperInstance = null;
+                }
+
+                swiperInstance = new Swiper(swiperContainer, {
+                    effect: 'flip',
+                    flipEffect: {
+                        slideShadows: false,
+                        limitRotation: true,
+                    },
+                    pagination: {
+                        el: '#swiperPagination',
+                        clickable: true,
+                    },
+                    grabCursor: true,
+                    touchEventsTarget: 'container',
+                    allowTouchMove: imageList.length > 1,
+                    autoHeight: false,
+                });
+            }
+
+            // -------- 关闭剧照弹窗 --------
+            window.closeModal = function (e) {
+                if (e && e.target !== e.currentTarget) return;
+                modalOverlay.classList.remove('active');
+                setTimeout(() => {
+                    modalOverlay.classList.add('hidden');
+                    if (swiperInstance) {
+                        swiperInstance.destroy(true, true);
+                        swiperInstance = null;
+                    }
+                    swiperWrapper.innerHTML = '';
+                }, 300);
+            };
+
+            // -------- 角色选择器（调试功能） --------
+            function openRolePicker() {
+                roleList.innerHTML = '';
+                rolePriority.forEach(id => {
+                    const role = roleData[id];
+                    const btn = document.createElement('button');
+                    btn.textContent = `${role.roleName}（${role.dramaName}）`;
+                    btn.addEventListener('click', function () {
+                        showRoleResult(id);
+                        closeRolePicker();
+                    });
+                    roleList.appendChild(btn);
+                });
+                rolePicker.classList.remove('hidden');
+                void rolePicker.offsetWidth;
+                rolePicker.classList.add('active');
+            }
+
+            function closeRolePicker(e) {
+                if (e) {
+                    const target = e.target;
+                    if (target === e.currentTarget || target.classList.contains('role-picker-close')) {
+                        // 执行关闭
+                    } else {
+                        return;
+                    }
+                }
+                rolePicker.classList.remove('active');
+                setTimeout(() => {
+                    rolePicker.classList.add('hidden');
+                }, 300);
+            }
+
+            // -------- 强制显示指定角色结果页（用于管理面板和调试） --------
+            function showRoleResult(roleId) {
+                const role = roleData[roleId];
+                if (!role) return;
+
+                pageQuiz.classList.add('hidden');
+                pageStart.classList.add('hidden');
+                pageResult.classList.remove('hidden');
+                pageResult.classList.add('fade-in');
+
+                resultName.textContent = role.roleName;
+                resultDrama.textContent = `「${role.dramaName}」`;
+                resultImage.src = role.image || `https://picsum.photos/seed/${roleId}/400/400`;
+                resultImage.alt = role.roleName;
+                resultTags.innerHTML = role.tags.split('、').map(t => `<span># ${t}</span>`).join('');
+                resultBg.innerHTML = `<strong>🧠 人格底色</strong><br>${role.personalityBg}`;
+                resultSignature.innerHTML = role.signatureLine || '';
+                resultStory.innerHTML = `<strong>📖 角色故事</strong><br>${role.resultText}`;
+                resultName.onclick = function () { openCardModal(roleId); };
+
+                resetScores();
+                scores[roleId] = 999;
+                drawRadarChart();
+
+                const copyEl = document.getElementById('copyAccount');
+                if (copyEl) {
+                    copyEl.onclick = function (e) {
+                        e.stopPropagation();
+                        copyText('赵黛溪Daisy');
+                    };
+                }
+            }
 
             // -------- 重置测试 --------
-            function resetTest() { /* ... */ }
+            function resetTest() {
+                currentIndex = 0;
+                selectedOptionIndex = null;
+                history = new Array(totalQ).fill(-1);
+                resetScores();
+                pageResult.classList.add('hidden');
+                pageStart.classList.remove('hidden');
+                pageStart.classList.add('fade-in');
+                pageQuiz.classList.add('hidden');
+                progressFill.style.width = '0%';
+                progressText.textContent = `1 / ${totalQ}`;
+                btnNext.classList.remove('active');
+                btnNext.textContent = '下一题 →';
+                if (window.myRadarChart) {
+                    window.myRadarChart.destroy();
+                    window.myRadarChart = null;
+                }
+                if (modalOverlay.classList.contains('active')) {
+                    closeModal();
+                }
+            }
 
             // -------- 普通用户查看迭代路线 --------
             function openRoadmap() {
@@ -1627,11 +1844,18 @@
                 void roadmapModal.offsetWidth;
                 roadmapModal.classList.add('active');
             }
-            function closeRoadmap(e) { /* ... */ }
+
+            function closeRoadmap(e) {
+                if (e && e.target !== e.currentTarget) return;
+                roadmapModal.classList.remove('active');
+                setTimeout(() => {
+                    roadmapModal.classList.add('hidden');
+                }, 300);
+            }
             window.closeRoadmap = closeRoadmap;
 
             // -------- 管理面板 ----------
-            let currentGroup = null; // 当前选中的分组键名
+            let currentGroup = null;
 
             window.openAdminPanel = function (password) {
                 window._adminPassword = password;
@@ -1714,7 +1938,6 @@
                     });
                     tabsContainer.appendChild(btn);
                 });
-                // 默认选中第一个
                 currentGroup = groupNames[0];
                 renderAdminRoadmapEditor(roadmapData[currentGroup]);
             }
@@ -1805,7 +2028,7 @@
                 }
             }
 
-            // 添加版本（向当前分组添加）
+            // 添加版本
             document.getElementById('addVersionBtn').addEventListener('click', function () {
                 if (!currentGroup || !roadmapData[currentGroup]) {
                     alert('请先选择一个分组');
@@ -1899,6 +2122,7 @@
             });
 
             window.closeRolePicker = closeRolePicker;
+            window.closeRoadmap = closeRoadmap;
 
             // -------- 访客计数 --------
             async function updateVisitCount() {
