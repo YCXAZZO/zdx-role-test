@@ -1037,6 +1037,128 @@
             font-weight: 700;
         }
 
+        /* ===== 管理面板样式 ===== */
+        .admin-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--modal-overlay);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 20000;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        .admin-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .admin-modal-content {
+            background: var(--bg-modal);
+            border-radius: 24px;
+            padding: 30px 24px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-modal);
+            color: var(--text-primary);
+            position: relative;
+        }
+        .admin-modal-close {
+            position: absolute;
+            top: 12px;
+            right: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: color 0.2s;
+        }
+        .admin-modal-close:hover {
+            color: var(--text-primary);
+        }
+        .admin-modal-content h2 {
+            margin-top: 0;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 10px;
+        }
+        .admin-version-item {
+            background: var(--bg-card-light);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border-divider);
+            position: relative;
+        }
+        .admin-version-item .remove-btn {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            background: transparent;
+            border: none;
+            color: #e74c3c;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .admin-version-item .remove-btn:hover {
+            color: #c0392b;
+        }
+        .admin-version-item input,
+        .admin-version-item textarea {
+            width: 100%;
+            padding: 6px 10px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            border: 1px solid var(--border-divider);
+            background: var(--bg-option);
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+        .admin-version-item textarea {
+            min-height: 60px;
+            resize: vertical;
+        }
+        .admin-change-item {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+        .admin-change-item input {
+            flex: 1;
+        }
+        .admin-change-item .remove-change {
+            background: transparent;
+            border: none;
+            color: #e74c3c;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .admin-add-change {
+            margin-top: 4px;
+            font-size: 13px;
+            color: var(--accent);
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            padding: 4px 0;
+        }
+        .admin-add-change:hover {
+            text-decoration: underline;
+        }
+        #adminMessage {
+            margin-top: 12px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
         /* ===== 响应式 ===== */
         @media (max-width:480px) {
             .app {
@@ -1089,6 +1211,11 @@
 
             .roadmap-modal-content {
                 padding: 20px 16px;
+            }
+
+            .admin-modal-content {
+                padding: 20px 16px;
+                max-width: 100%;
             }
         }
 
@@ -1219,22 +1346,37 @@
         </div>
     </div>
 
+    <!-- ===== 管理面板（迭代路线编辑器） ===== -->
+    <div id="adminModal" class="admin-modal-overlay hidden" onclick="closeAdminPanel(event)">
+        <div class="admin-modal-content" onclick="event.stopPropagation()">
+            <span class="admin-modal-close" onclick="closeAdminPanel()">×</span>
+            <h2>📋 管理迭代路线</h2>
+            <div id="adminRoadmapList"></div>
+            <button class="btn-primary" id="addVersionBtn" style="margin-top:12px;">➕ 添加版本</button>
+            <div style="margin-top:16px; display:flex; gap:12px;">
+                <button class="btn-primary" id="saveRoadmapBtn">💾 保存</button>
+                <button class="btn-secondary" onclick="closeAdminPanel()">取消</button>
+            </div>
+            <div id="adminMessage" style="margin-top:10px; font-size:14px; color:var(--text-secondary);"></div>
+        </div>
+    </div>
+
     <script>
         // =============================================================
-        // 主程序：加载 data.json 和 roadmap.json 后执行
+        // 主程序：加载 data.json 和 roadmap 数据（从 API）
         // =============================================================
         (async function () {
             'use strict';
 
-            // ---------- 并行加载两个数据文件 ----------
+            // ---------- 并行加载两个数据文件（data.json 和 API） ----------
             let DATA, roadmapData;
             try {
                 const [dataResp, roadmapResp] = await Promise.all([
                     fetch('./data.json'),
-                    fetch('./roadmap.json')
+                    fetch('/api/roadmap') // 从 API 获取迭代路线
                 ]);
                 if (!dataResp.ok) throw new Error('加载 data.json 失败');
-                if (!roadmapResp.ok) throw new Error('加载 roadmap.json 失败');
+                if (!roadmapResp.ok) throw new Error('加载 roadmap 数据失败');
                 DATA = await dataResp.json();
                 roadmapData = await roadmapResp.json();
             } catch (error) {
@@ -1808,6 +1950,166 @@
 
             // 页面加载后调用
             updateVisitCount();
+
+            // =============================================================
+            // 管理面板（迭代路线编辑器）
+            // =============================================================
+            const urlParams = new URLSearchParams(window.location.search);
+            const isAdmin = urlParams.get('admin') === '1';
+
+            if (isAdmin) {
+                const pwd = prompt('请输入管理密码：');
+                if (pwd === null) {
+                    // 取消则移除参数，刷新页面
+                    window.location.search = '';
+                } else {
+                    // 直接显示管理面板，保存时会再次验证密码
+                    showAdminPanel();
+                }
+            }
+
+            function showAdminPanel() {
+                const modal = document.getElementById('adminModal');
+                modal.classList.remove('hidden');
+                renderAdminEditor(roadmapData);
+                void modal.offsetWidth;
+                modal.classList.add('active');
+            }
+
+            window.closeAdminPanel = function (e) {
+                if (e && e.target !== e.currentTarget) return;
+                const modal = document.getElementById('adminModal');
+                modal.classList.remove('active');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 300);
+            };
+
+            function renderAdminEditor(data) {
+                const container = document.getElementById('adminRoadmapList');
+                container.innerHTML = '';
+                if (!data || data.length === 0) {
+                    container.innerHTML = '<p style="color:var(--text-muted);">暂无版本，点击下方添加</p>';
+                    return;
+                }
+                data.forEach((item, index) => {
+                    const div = document.createElement('div');
+                    div.className = 'admin-version-item';
+                    div.dataset.index = index;
+
+                    // 删除版本按钮
+                    const removeBtn = document.createElement('button');
+                    removeBtn.className = 'remove-btn';
+                    removeBtn.textContent = '✕';
+                    removeBtn.title = '删除此版本';
+                    removeBtn.addEventListener('click', () => {
+                        data.splice(index, 1);
+                        renderAdminEditor(data);
+                    });
+                    div.appendChild(removeBtn);
+
+                    // 版本号输入
+                    const versionInput = document.createElement('input');
+                    versionInput.type = 'text';
+                    versionInput.placeholder = '版本号 (如 v1.0)';
+                    versionInput.value = item.version || '';
+                    versionInput.addEventListener('input', () => {
+                        data[index].version = versionInput.value;
+                    });
+                    div.appendChild(versionInput);
+
+                    // 标题输入
+                    const titleInput = document.createElement('input');
+                    titleInput.type = 'text';
+                    titleInput.placeholder = '子标题 (可选)';
+                    titleInput.value = item.title || '';
+                    titleInput.addEventListener('input', () => {
+                        data[index].title = titleInput.value;
+                    });
+                    div.appendChild(titleInput);
+
+                    // 变更列表
+                    const changesContainer = document.createElement('div');
+                    changesContainer.style.marginTop = '6px';
+                    const changes = item.changes || [];
+                    changes.forEach((change, ci) => {
+                        const changeDiv = document.createElement('div');
+                        changeDiv.className = 'admin-change-item';
+                        const input = document.createElement('input');
+                        input.type = 'text';
+                        input.placeholder = '变更项';
+                        input.value = change;
+                        input.addEventListener('input', () => {
+                            data[index].changes[ci] = input.value;
+                        });
+                        changeDiv.appendChild(input);
+                        const removeChangeBtn = document.createElement('button');
+                        removeChangeBtn.className = 'remove-change';
+                        removeChangeBtn.textContent = '✕';
+                        removeChangeBtn.addEventListener('click', () => {
+                            data[index].changes.splice(ci, 1);
+                            renderAdminEditor(data);
+                        });
+                        changeDiv.appendChild(removeChangeBtn);
+                        changesContainer.appendChild(changeDiv);
+                    });
+
+                    // 添加变更按钮
+                    const addChangeBtn = document.createElement('button');
+                    addChangeBtn.className = 'admin-add-change';
+                    addChangeBtn.textContent = '+ 添加变更项';
+                    addChangeBtn.addEventListener('click', () => {
+                        if (!data[index].changes) data[index].changes = [];
+                        data[index].changes.push('');
+                        renderAdminEditor(data);
+                    });
+                    changesContainer.appendChild(addChangeBtn);
+                    div.appendChild(changesContainer);
+
+                    container.appendChild(div);
+                });
+            }
+
+            // 保存迭代路线
+            document.getElementById('saveRoadmapBtn').addEventListener('click', async function () {
+                const message = document.getElementById('adminMessage');
+                message.textContent = '保存中...';
+                message.style.color = 'var(--text-secondary)';
+
+                const password = prompt('请输入管理密码以确认保存：');
+                if (password === null) return;
+
+                try {
+                    const resp = await fetch('/api/roadmap', {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ password, roadmap: roadmapData })
+                    });
+                    const result = await resp.json();
+                    if (resp.ok) {
+                        message.textContent = '✅ 保存成功！';
+                        message.style.color = '#2ecc71';
+                        setTimeout(() => location.reload(), 1000);
+                    } else {
+                        message.textContent = '❌ 保存失败：' + (result.error || '未知错误');
+                        message.style.color = '#e74c3c';
+                    }
+                } catch (err) {
+                    message.textContent = '❌ 网络错误，请重试';
+                    message.style.color = '#e74c3c';
+                    console.error(err);
+                }
+            });
+
+            // 添加版本按钮
+            document.getElementById('addVersionBtn').addEventListener('click', function () {
+                roadmapData.push({
+                    version: 'v1.x',
+                    title: '新版本',
+                    changes: ['新功能描述']
+                });
+                renderAdminEditor(roadmapData);
+            });
 
             // -------- 初始化 --------
             resetScores();
