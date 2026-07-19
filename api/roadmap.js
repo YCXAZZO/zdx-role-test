@@ -8,21 +8,22 @@ const ROADMAP_KEY = 'role_test:roadmap';
 export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
 
-    // GET：返回 roadmap 数据（若 Redis 为空，则从静态文件初始化）
     if (req.method === 'GET') {
         try {
             let data = await redis.get(ROADMAP_KEY);
 
+            // 如果 Redis 中没有数据，尝试从本地 roadmap.json 初始化
             if (data === null) {
-                // Redis 中没有数据，尝试从本地 roadmap.json 读取并初始化
                 try {
+                    // 在 Vercel 环境中，process.cwd() 是项目根目录
                     const filePath = path.join(process.cwd(), 'roadmap.json');
                     const fileContent = fs.readFileSync(filePath, 'utf8');
                     const defaultRoadmap = JSON.parse(fileContent);
+                    // 写入 Redis
                     await redis.set(ROADMAP_KEY, JSON.stringify(defaultRoadmap));
                     data = JSON.stringify(defaultRoadmap);
                 } catch (readError) {
-                    // 如果文件不存在或解析失败，则用空数组
+                    // 如果文件不存在，则用空数组
                     await redis.set(ROADMAP_KEY, JSON.stringify([]));
                     data = JSON.stringify([]);
                 }
@@ -37,7 +38,6 @@ export default async function handler(req, res) {
         return;
     }
 
-    // PUT：更新 roadmap 数据（需要密码验证）
     if (req.method === 'PUT') {
         try {
             const { password, roadmap } = req.body;
