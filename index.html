@@ -6,8 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
     <title>🎉星途璀璨🎉</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- 加载 Swiper 核心库 + 效果模块 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <!-- 额外加载 cards 效果模块（Swiper 11 需单独引入） -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/modules/effect-cards.min.js"></script>
     <style>
         /* ============================================================
            CSS 变量（浅色为默认，深色在 media 中覆盖）
@@ -611,7 +614,7 @@
             color: var(--text-primary);
         }
 
-        /* ===== 模态框（Swiper 容器） ===== */
+        /* ===== 模态框（Swiper 容器）—— 动态适配图片比例 ===== */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -646,11 +649,12 @@
             box-shadow: var(--shadow-modal);
             position: relative;
         }
+
+        /* 移除固定宽高比，让 Swiper 自适应内容 */
         .modal-content .swiper-container {
-            width: auto;
+            width: 100%;
             height: auto;
             max-height: 80vh;
-            aspect-ratio: 4 / 3;
             background: transparent;
             border-radius: 24px;
         }
@@ -661,12 +665,13 @@
             background: transparent;
         }
         .modal-content .swiper-slide img {
-            width: auto;
+            width: 100%;
             height: auto;
             max-height: 80vh;
             object-fit: contain;
             display: block;
         }
+
         .modal-content .swiper-pagination {
             position: absolute;
             bottom: 16px;
@@ -707,7 +712,7 @@
             background: rgba(0, 0, 0, 0.5);
         }
 
-        /* ===== 临时测试按钮（移到左上角，避免与音乐按钮冲突） ===== */
+        /* ===== 临时测试按钮（左上角） ===== */
         #devSkipBtn {
             position: fixed;
             top: 10px;
@@ -1202,7 +1207,7 @@
                 font-size: 14px;
             }
             .modal-content .swiper-container {
-                aspect-ratio: 3 / 4;
+                max-height: 70vh;
             }
             .role-picker-content {
                 padding: 24px 16px;
@@ -1245,7 +1250,7 @@
     </button>
     <audio id="bgmAudio" src="https://img.ycxazzo.top/music/I%27m%20Just%20Your%20Type%20-%20sienna%20Miller%EF%BC%88%E5%B8%8C%E5%A8%9C%EF%BC%89_min.mp3" preload="auto" loop></audio>
 
-    <!-- 临时测试按钮（左上角，避免与音乐按钮重叠） -->
+    <!-- 临时测试按钮 -->
     <button id="devSkipBtn" title="调试：点击打开角色选择器"></button>
 
     <!-- Toast 容器 -->
@@ -1463,7 +1468,7 @@
             const roadmapModal = $('#roadmapModal');
             const roadmapList = $('#roadmapList');
 
-            // ---------- BGM 相关 DOM 和状态 ----------
+            // ---------- BGM 相关 ----------
             const bgmAudio = document.getElementById('bgmAudio');
             const bgmToggle = document.getElementById('bgmToggle');
             const bgmIcon = document.getElementById('bgmIcon');
@@ -1784,7 +1789,7 @@
                 });
             }
 
-            // -------- 剧照弹窗（Swiper Flip 效果） --------
+            // -------- 剧照弹窗（Swiper Cards 效果，动态适配比例） --------
             function openCardModal(roleId) {
                 const role = roleData[roleId];
                 if (!role) return;
@@ -1818,20 +1823,30 @@
                     swiperInstance = null;
                 }
 
+                // 使用 cards 效果（附带轻度旋转和阴影）
                 swiperInstance = new Swiper(swiperContainer, {
-                    effect: 'flip',
-                    flipEffect: {
-                        slideShadows: false,
-                        limitRotation: true,
-                    },
-                    pagination: {
-                        el: '#swiperPagination',
-                        clickable: true,
+                    effect: 'cards',
+                    cardsEffect: {
+                        slideShadows: true,   // 卡片阴影
+                        rotate: true,         // 轻度旋转
+                        perSlideRotate: 3,    // 每张卡片旋转角度
+                        perSlideOffset: 8,    // 每张卡片偏移距离
                     },
                     grabCursor: true,
                     touchEventsTarget: 'container',
                     allowTouchMove: imageList.length > 1,
-                    autoHeight: false,
+                    autoHeight: true,         // 自适应高度（关键！）
+                    pagination: {
+                        el: '#swiperPagination',
+                        clickable: true,
+                    },
+                    // 注释：原 flip 效果配置
+                    // effect: 'flip',
+                    // flipEffect: {
+                    //     slideShadows: false,
+                    //     limitRotation: true,
+                    // },
+                    // pagination: { ... },
                 });
             }
 
