@@ -10,11 +10,13 @@
       "personalityBg": "情绪稳定的隐忍强者，外表克制疏离，心底藏着柔软与坚定信仰。",
       "resultText": "你匹配的角色是《烽火塘田》中的王若兰。<br>作为潜伏在学院的革命内线，她习惯独自扛下所有危险与压力，面对敌人盘问始终冷静自持，从不外露脆弱。明明心怀悲悯、心疼受苦的学生与百姓，却只能把温柔藏在冷静外壳之下，以一己之力守护身边同志，甘愿为心中大义牺牲自我。<br><b>你和她一样，越是身处高压黑暗环境，越能守住底线与初心，习惯默默付出、暗中兜底，是外冷内热、以温柔赴大义的人。</b>",
       "signatureLine": "<b>聚是一团火，散是满天星，<br>我信这份信仰，终能照亮前路。</b>",
-      "image": "./images/wangruolan_avatar.jpg",
+      "image": "./images/avatar/wangruolan_avatar.jpg",
       "cards": [
-        "https://picsum.photos/seed/wangruolan_1/800/600",
-        "https://picsum.photos/seed/wangruolan_2/800/600",
-        "https://picsum.photos/seed/wangruolan_3/800/600"
+        "./images/still/wangruolan/wangruolan_1.png",
+        "./images/still/wangruolan/wangruolan_2.png",
+        "./images/still/wangruolan/wangruolan_3.png",
+        "./images/still/wangruolan/wangruolan_4.png",
+        "./images/still/wangruolan/wangruolan_5.png"
       ],
       "card": "https://picsum.photos/seed/wangruolan_card/800/600"
     },
@@ -25,7 +27,7 @@
       "personalityBg": "历经苦难仍选择向善的治愈者，性格柔软包容，自带极强生命韧性。",
       "resultText": "你匹配的角色是《庚伢子》里的张元满。<br>她是旧社会底层农家妇女，一生饱经贫苦与风霜，却从未丢掉悲悯之心，主动照料无依无靠的孤儿庚伢子，默默接济身边苦难之人。看似温和忍让、从不与人争执，可看见弱小受欺负时，也会鼓起勇气挺身而出。<br><b>如同她一般，你见过世间诸多不易，却依旧愿意释放善意包容他人，苦难磨不平你的温柔，是能治愈身边所有人的存在。</b>",
       "signatureLine": "<b>日子再苦，心里也要留一份温柔，<br>能帮旁人一把，便是福气。</b>",
-      "image": "./images/zhangyuanman_avatar.jpg",
+      "image": "./images/avatar/zhangyuanman_avatar.jpg",
       "cards": [
         "https://picsum.photos/seed/zhangyuanman_1/800/600",
         "https://picsum.photos/seed/zhangyuanman_2/800/600"
@@ -39,12 +41,12 @@
       "personalityBg": "向阳生长的成长型人格，鲜活热烈有傲骨，绝境之中愈发生出力量。",
       "resultText": "你匹配的角色是《胡李镇传说》女主胡娟儿。<br>原本是小镇纯粹明媚的普通少女，深陷连环命案与两大家族的流言漩涡，被全镇人猜忌排挤，还要承受权贵子弟的骚扰打压。但她从未低头妥协，一边坚守对男主的真心，一边独自暗中追查真相，在层层阴谋里褪去天真、快速蜕变。<br><b>你和她一样，待人真诚坦荡、重情专一，面对偏见与恶意自带不屈棱角，哪怕孤身陷入绝境，也不会放弃寻找真相与公道。</b>",
       "signatureLine": "<b>流言再多我也不怕，真相总会大白，<br>我信你，也信公道。</b>",
-      "image": "./images/hujuaner_avatar.jpg",
+      "image": "./images/avatar/hujuaner_avatar.jpg",
       "cards": [
-        "./images/hujuaner_1.webp",
-        "./images/hujuaner_2.webp",
-        "./images/hujuaner_3.png",
-        "./images/hujuaner_4.jpg"
+        "./images/still/hujuaner/hujuaner_1.png",
+        "./images/still/hujuaner/hujuaner_2.png",
+        "./images/still/hujuaner/hujuaner_3.webp",
+        "./images/still/hujuaner/hujuaner_4.webp"
       ],
       "card": "https://picsum.photos/seed/hujuaner_card/800/600"
     },
@@ -55,13 +57,13 @@
       "personalityBg": "干净纯粹的悲情倔强者，珍视至亲羁绊，蒙受冤屈也绝不妥协认命。",
       "resultText": "你匹配的角色是古装悬疑电影《判妖邪》的吴双。<br>她本是只求与兄长安稳度日的普通少女，却遭权贵觊觎陷害，被扣上祸乱世间的妖女污名，受尽全镇百姓唾骂，孤立无援无处自证清白。可即便走到绝境，她也不肯屈从强权，宁愿独自承受所有罪责，也要护住唯一的亲人。<br><b>你骨子里和她高度相似，内心赤诚柔软、极度看重亲情羁绊，一旦遭遇不公与污蔑，便会生出宁折不弯的刚烈，纵使被全世界误解，也不肯违背本心认输。</b>",
       "signatureLine": "<b>别动我哥，千错万错都冲我来，<br>我只求世间还我一份清白。</b>",
-      "image": "./images/wushuang_avatar.jpg",
+      "image": "./images/avatar/wushuang_avatar.jpg",
       "cards": [
-        "./images/wushuang_1.webp",
-        "./images/wushuang_2.jpg",
-        "./images/wushuang_3.jpg",
-        "./images/wushuang_4.webp",
-        "./images/wushuang_5.webp"
+        "./images/still/wushuang/wushuang_1.webp",
+        "./images/still/wushuang/wushuang_2.jpg",
+        "./images/still/wushuang/wushuang_3.jpg",
+        "./images/still/wushuang/wushuang_4.webp",
+        "./images/still/wushuang/wushuang_5.webp"
       ],
       "card": "https://picsum.photos/seed/wushuang_card/800/600"
     },
@@ -72,10 +74,10 @@
       "personalityBg": "松弛自由的山野灵魂，不喜世俗束缚，心思简单通透、自带灵气。",
       "resultText": "你匹配的角色是《The Adventures》的苗族少女美清。<br>生长在无拘无束的山野之间，能歌善舞、心性烂漫，没有世俗算计与城府，厌恶条条框框的束缚，永远向往山野与远方，待人坦荡热忱，活得随性自在。<br><b>你和她一样，讨厌复杂的人情世故，对世界始终保有好奇与温柔，不被他人眼光绑架，偏爱随心而行的生活，像山间清风一般自由治愈，自带干净鲜活的独特灵气。</b>",
       "signatureLine": "<b>山野风无拘无束，人也不必困在条条框框里，<br>随心走便是自在。</b>",
-      "image": "./images/meiqing_avatar.jpg",
+      "image": "./images/avatar/meiqing_avatar.jpg",
       "cards": [
-        "https://picsum.photos/seed/meiqing_1/800/600",
-        "https://picsum.photos/seed/meiqing_2/800/600"
+        "./images/still/meiqing/meiqing_1.png",
+        "./images/still/meiqing/meiqing_2.png"
       ],
       "card": "https://picsum.photos/seed/meiqing_card/800/600"
     },
@@ -86,10 +88,10 @@
       "personalityBg": "内敛深情的温柔旁观者，心思细腻敏感，习惯将爱意与委屈独自消化。",
       "resultText": "你匹配的角色是古风故事《雨霖铃》中的小云。<br>她性情温婉雅致，心思细腻共情力极强，身处身不由己的乱世，始终克制自己的情绪与爱意，从不直白表露心事，所有思念与委屈都独自默默承受。明明满心牵挂在意之人，却愿意为对方的安稳选择隐忍退让，把深情藏在岁月里，安静成全他人。<br><b>你与她特质高度契合，不擅长直白倾诉情绪，极度念旧重情，即便世事身不由己，也始终守住温润柔软的本心。</b>",
       "signatureLine": "<b>如果你过得好，那我的离开就有意义，<br>请务必要好好的。</b>",
-      "image": "./images/xiaoyun_avatar.jpg",
+      "image": "./images/avatar/xiaoyun_avatar.jpg",
       "cards": [
-        "https://picsum.photos/seed/xiaoyun_1/800/600",
-        "https://picsum.photos/seed/xiaoyun_2/800/600"
+        "./images/still/xiaoyun/",
+        "./images/still/xiaoyun/"
       ],
       "card": "https://picsum.photos/seed/xiaoyun_card/800/600"
     }
