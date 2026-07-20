@@ -40,6 +40,9 @@
             --accent-hover: #e8b8ae;
             --accent-secondary: #D6F2D5;
             --modal-overlay: rgba(0, 0, 0, 0.60);
+
+            /* BGM 颜色变量 */
+            --bgm-color: #6a4a7a;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -67,6 +70,7 @@
                 --accent-hover: #b3968a;
                 --accent-secondary: #6f8f6e;
                 --modal-overlay: rgba(0, 0, 0, 0.80);
+                --bgm-color: #b0a0b8;
             }
         }
 
@@ -1113,6 +1117,61 @@
             font-size: 14px;
         }
 
+        /* ============================================================
+           BGM 按钮样式
+           ============================================================ */
+        .bgm-toggle {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            z-index: 10000;
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            cursor: pointer;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s, background 0.2s;
+            color: var(--bgm-color);
+            user-select: none;
+            outline: none;
+            padding: 0;
+        }
+        .bgm-toggle:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.85);
+        }
+        .bgm-toggle .icon.playing {
+            animation: spin 4s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .bgm-toggle .icon.paused {
+            animation: none;
+        }
+        .bgm-toggle .icon.muted {
+            opacity: 0.4;
+            animation: none;
+        }
+
+        @media (max-width: 480px) {
+            .bgm-toggle {
+                top: 1rem;
+                right: 1rem;
+                width: 34px;
+                height: 34px;
+                font-size: 1.0rem;
+            }
+        }
+
         /* ===== 响应式 ===== */
         @media (max-width:480px) {
             .app {
@@ -1179,6 +1238,12 @@
 </head>
 
 <body>
+
+    <!-- ===== BGM 按钮 ===== -->
+    <button class="bgm-toggle" id="bgmToggle" aria-label="背景音乐" title="背景音乐">
+        <span class="icon paused" id="bgmIcon">🎵</span>
+    </button>
+    <audio id="bgmAudio" src="https://img.ycxazzo.top/music/I%27m%20Just%20Your%20Type%20-%20sienna%20Miller%EF%BC%88%E5%B8%8C%E5%A8%9C%EF%BC%89_min.mp3" preload="auto" loop></audio>
 
     <!-- 临时测试按钮 -->
     <button id="devSkipBtn" title="调试：点击打开角色选择器"></button>
@@ -1398,6 +1463,14 @@
             const roadmapModal = $('#roadmapModal');
             const roadmapList = $('#roadmapList');
 
+            // ---------- BGM 相关 DOM 和状态 ----------
+            const bgmAudio = document.getElementById('bgmAudio');
+            const bgmToggle = document.getElementById('bgmToggle');
+            const bgmIcon = document.getElementById('bgmIcon');
+            let bgmPlaying = false;
+            let bgmUserClosed = localStorage.getItem('userCloseBgm') === '1';
+            let bgmAutoPaused = sessionStorage.getItem('bgmAutoPause') === '1';
+
             // ---------- Swiper 实例 ----------
             let swiperInstance = null;
 
@@ -1449,6 +1522,69 @@
                 });
                 return traitScores;
             }
+
+            // ---------- BGM 功能 ----------
+            function updateBgmIcon() {
+                if (bgmUserClosed) {
+                    bgmIcon.textContent = '🔇';
+                    bgmIcon.className = 'icon muted';
+                    return;
+                }
+                if (bgmPlaying) {
+                    bgmIcon.textContent = '🎵';
+                    bgmIcon.className = 'icon playing';
+                } else {
+                    bgmIcon.textContent = '🎵';
+                    bgmIcon.className = 'icon paused';
+                }
+            }
+
+            function tryPlayBgm() {
+                if (bgmUserClosed) return;
+                if (bgmAutoPaused) return; // 方案B：被视频暂停后不自动恢复
+                bgmAudio.play().then(() => {
+                    bgmPlaying = true;
+                    updateBgmIcon();
+                }).catch(() => {});
+            }
+
+            function toggleBgm() {
+                if (bgmUserClosed) {
+                    // 用户点击恢复
+                    bgmUserClosed = false;
+                    localStorage.removeItem('userCloseBgm');
+                    sessionStorage.removeItem('bgmAutoPause');
+                    bgmAutoPaused = false;
+                    tryPlayBgm();
+                    return;
+                }
+                if (bgmPlaying) {
+                    // 用户暂停（视为永久关闭）
+                    bgmAudio.pause();
+                    bgmPlaying = false;
+                    bgmUserClosed = true;
+                    localStorage.setItem('userCloseBgm', '1');
+                    sessionStorage.removeItem('bgmAutoPause');
+                    bgmAutoPaused = false;
+                    updateBgmIcon();
+                } else {
+                    // 用户点击开启
+                    bgmUserClosed = false;
+                    localStorage.removeItem('userCloseBgm');
+                    sessionStorage.removeItem('bgmAutoPause');
+                    bgmAutoPaused = false;
+                    tryPlayBgm();
+                }
+            }
+
+            // 绑定 BGM 按钮事件
+            bgmToggle.addEventListener('click', toggleBgm);
+
+            // 初始化 BGM 图标状态
+            updateBgmIcon();
+
+            // 预留视频互斥逻辑（如果未来页面加入视频，可绑定）
+            // 例如：document.querySelector('video')?.addEventListener('play', ...)
 
             // ---------- 题目渲染 ----------
             function renderQuestion() {
