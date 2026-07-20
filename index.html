@@ -41,7 +41,6 @@
             --accent-secondary: #D6F2D5;
             --modal-overlay: rgba(0, 0, 0, 0.60);
 
-            /* BGM 颜色变量 */
             --bgm-color: #6a4a7a;
         }
 
@@ -708,13 +707,13 @@
             background: rgba(0, 0, 0, 0.5);
         }
 
-        /* ===== 临时测试按钮 ===== */
+        /* ===== 临时测试按钮（移到左上角，避免与音乐按钮冲突） ===== */
         #devSkipBtn {
             position: fixed;
             top: 10px;
-            right: 10px;
-            width: 60px;
-            height: 60px;
+            left: 10px;
+            width: 40px;
+            height: 40px;
             z-index: 9999;
             background: transparent;
             border: none;
@@ -727,13 +726,14 @@
         #devSkipBtn:hover {
             opacity: 0.2;
             background: #ff6b6b;
+            border-radius: 50%;
         }
         @media (max-width:480px) {
             #devSkipBtn {
                 top: 8px;
-                right: 8px;
-                width: 50px;
-                height: 50px;
+                left: 8px;
+                width: 34px;
+                height: 34px;
             }
         }
 
@@ -1245,7 +1245,7 @@
     </button>
     <audio id="bgmAudio" src="https://img.ycxazzo.top/music/I%27m%20Just%20Your%20Type%20-%20sienna%20Miller%EF%BC%88%E5%B8%8C%E5%A8%9C%EF%BC%89_min.mp3" preload="auto" loop></audio>
 
-    <!-- 临时测试按钮 -->
+    <!-- 临时测试按钮（左上角，避免与音乐按钮重叠） -->
     <button id="devSkipBtn" title="调试：点击打开角色选择器"></button>
 
     <!-- Toast 容器 -->
@@ -1541,7 +1541,7 @@
 
             function tryPlayBgm() {
                 if (bgmUserClosed) return;
-                if (bgmAutoPaused) return; // 方案B：被视频暂停后不自动恢复
+                if (bgmAutoPaused) return;
                 bgmAudio.play().then(() => {
                     bgmPlaying = true;
                     updateBgmIcon();
@@ -1550,7 +1550,6 @@
 
             function toggleBgm() {
                 if (bgmUserClosed) {
-                    // 用户点击恢复
                     bgmUserClosed = false;
                     localStorage.removeItem('userCloseBgm');
                     sessionStorage.removeItem('bgmAutoPause');
@@ -1559,7 +1558,6 @@
                     return;
                 }
                 if (bgmPlaying) {
-                    // 用户暂停（视为永久关闭）
                     bgmAudio.pause();
                     bgmPlaying = false;
                     bgmUserClosed = true;
@@ -1568,7 +1566,6 @@
                     bgmAutoPaused = false;
                     updateBgmIcon();
                 } else {
-                    // 用户点击开启
                     bgmUserClosed = false;
                     localStorage.removeItem('userCloseBgm');
                     sessionStorage.removeItem('bgmAutoPause');
@@ -1577,14 +1574,8 @@
                 }
             }
 
-            // 绑定 BGM 按钮事件
             bgmToggle.addEventListener('click', toggleBgm);
-
-            // 初始化 BGM 图标状态
             updateBgmIcon();
-
-            // 预留视频互斥逻辑（如果未来页面加入视频，可绑定）
-            // 例如：document.querySelector('video')?.addEventListener('play', ...)
 
             // ---------- 题目渲染 ----------
             function renderQuestion() {
@@ -1736,7 +1727,6 @@
                 document.body.removeChild(input);
             }
 
-            // -------- Toast 提示 --------
             function showToast(msg) {
                 const toast = document.getElementById('toast');
                 if (!toast) return;
@@ -1845,7 +1835,6 @@
                 });
             }
 
-            // -------- 关闭剧照弹窗 --------
             window.closeModal = function (e) {
                 if (e && e.target !== e.currentTarget) return;
                 modalOverlay.classList.remove('active');
@@ -1892,7 +1881,6 @@
                 }, 300);
             }
 
-            // -------- 强制显示指定角色结果页（用于管理面板和调试） --------
             function showRoleResult(roleId) {
                 const role = roleData[roleId];
                 if (!role) return;
@@ -2014,7 +2002,6 @@
                 window._adminPassword = null;
             };
 
-            // Tab 切换（主 Tab）
             document.querySelectorAll('.admin-tab').forEach(tab => {
                 tab.addEventListener('click', function () {
                     document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
@@ -2034,7 +2021,6 @@
                 });
             });
 
-            // 角色列表
             function renderAdminRoleList() {
                 const container = document.getElementById('adminRoleList');
                 container.innerHTML = '';
@@ -2051,7 +2037,6 @@
                 });
             }
 
-            // 渲染分组子选项卡
             function renderRoadmapGroupTabs() {
                 const tabsContainer = document.getElementById('roadmapGroupTabs');
                 tabsContainer.innerHTML = '';
@@ -2078,7 +2063,6 @@
                 renderAdminRoadmapEditor(roadmapData[currentGroup]);
             }
 
-            // 迭代路线编辑器（接收数组）
             function renderAdminRoadmapEditor(data) {
                 const container = document.getElementById('adminRoadmapList');
                 container.innerHTML = '';
@@ -2164,7 +2148,6 @@
                 }
             }
 
-            // 添加版本
             document.getElementById('addVersionBtn').addEventListener('click', function () {
                 if (!currentGroup || !roadmapData[currentGroup]) {
                     alert('请先选择一个分组');
@@ -2179,7 +2162,6 @@
                 renderAdminRoadmapEditor(targetArray);
             });
 
-            // 保存全部
             document.getElementById('saveRoadmapBtn').addEventListener('click', async function () {
                 const message = document.getElementById('adminMessage');
                 message.textContent = '保存中...';
