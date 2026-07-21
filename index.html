@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
     <title>🎉星途璀璨🎉</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <!-- Swiper 核心（bundle 已包含所有模块，无需单独加载 effect/zoom） -->
+    <!-- Swiper 核心（bundle 包含所有模块） -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <style>
@@ -15,7 +15,7 @@
            ============================================================ */
         :root {
             --bg-body: linear-gradient(145deg, #D6F2D5 0%, #F2CDC4 50%, #ffd2d4 100%);
-            --bg-app: rgba(255, 255, 255, 0.12);
+            --bg-app: rgba(255, 255, 255, 0.70);
             --bg-card: rgba(255, 255, 255, 0.50);
             --bg-card-light: rgba(255, 255, 255, 0.30);
             --bg-modal: #ffffff;
@@ -85,11 +85,12 @@
         }
 
         body {
-            /* 多背景：先图片，再渐变（图片未加载时渐变可见） */
+            background-color: #D6F2D5;
             background-image: url('https://img.ycxazzo.top/background/background.webp'), var(--bg-body);
             background-size: cover, auto;
             background-position: center, 0 0;
             background-repeat: no-repeat, repeat;
+            background-attachment: fixed, scroll;
             font-family: 'Segoe UI', 'PingFang SC', Roboto, system-ui, -apple-system, sans-serif;
             min-height: 100vh;
             display: flex;
@@ -99,6 +100,12 @@
             margin: 0;
             color: var(--text-primary);
             transition: background 0.3s, color 0.3s;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #1a1614;
+            }
         }
 
         .app {
@@ -652,7 +659,6 @@
             position: relative;
         }
 
-        /* Swiper 容器自适应，zoom 容器填满 slide */
         .modal-content .swiper-container {
             width: 100%;
             height: auto;
@@ -1186,6 +1192,61 @@
             }
         }
 
+        /* ===== 柔光投影：提升 #7a5a8a 文字在背景图上的可读性 ===== */
+        .result-badge,
+        .result-drama,
+        .result-hint,
+        .hero-hint,
+        .result-signature,
+        .credits-left span,
+        .credits-right span,
+        .copy-hint,
+        #roadmapTrigger,
+        .visit-counter,
+        .question-number,
+        .progress-text,
+        .option-item .letter,
+        .admin-tab,
+        .roadmap-group-tab,
+        .roadmap-modal-close,
+        .role-picker-close,
+        .admin-panel-close,
+        .result-tags span,
+        .result-bg strong,
+        .result-story strong,
+        .result-name-wrapper .result-hint,
+        .bgm-toggle .icon {
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.7), 0 0 16px rgba(255, 255, 255, 0.4);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .result-badge,
+            .result-drama,
+            .result-hint,
+            .hero-hint,
+            .result-signature,
+            .credits-left span,
+            .credits-right span,
+            .copy-hint,
+            #roadmapTrigger,
+            .visit-counter,
+            .question-number,
+            .progress-text,
+            .option-item .letter,
+            .admin-tab,
+            .roadmap-group-tab,
+            .roadmap-modal-close,
+            .role-picker-close,
+            .admin-panel-close,
+            .result-tags span,
+            .result-bg strong,
+            .result-story strong,
+            .result-name-wrapper .result-hint,
+            .bgm-toggle .icon {
+                text-shadow: 0 0 10px rgba(255, 255, 255, 0.6), 0 0 20px rgba(255, 255, 255, 0.3);
+            }
+        }
+
         /* ===== 响应式 ===== */
         @media (max-width:480px) {
             .app {
@@ -1337,7 +1398,7 @@
             <span class="modal-close" onclick="closeModal()">×</span>
             <div class="swiper-container" id="swiperContainer">
                 <div class="swiper-wrapper" id="swiperWrapper">
-                    <!-- slides 由 JS 动态生成，每个 slide 内包含 swiper-zoom-container -->
+                    <!-- slides 由 JS 动态生成 -->
                 </div>
                 <div class="swiper-pagination" id="swiperPagination"></div>
             </div>
@@ -1411,7 +1472,7 @@
 
     <script>
         // =============================================================
-        // 主程序
+        // 主程序（功能完整，包含 Zoom + 柔光投影）
         // =============================================================
         (async function () {
             'use strict';
@@ -1816,7 +1877,6 @@
                 imageList.forEach((url, idx) => {
                     const slide = document.createElement('div');
                     slide.className = 'swiper-slide';
-                    // 使用 swiper-zoom-container 包裹图片，启用缩放
                     const container = document.createElement('div');
                     container.className = 'swiper-zoom-container';
                     const img = document.createElement('img');
@@ -1836,7 +1896,6 @@
                     swiperInstance = null;
                 }
 
-                // 初始化 Swiper（启用 Cards 效果 + Zoom 模块）
                 swiperInstance = new Swiper(swiperContainer, {
                     effect: 'cards',
                     cardsEffect: {
@@ -1848,7 +1907,7 @@
                     zoom: {
                         maxRatio: 3,
                         minRatio: 1,
-                        toggle: true, // 双击切换缩放
+                        toggle: true,
                     },
                     grabCursor: true,
                     touchEventsTarget: 'container',
