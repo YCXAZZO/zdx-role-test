@@ -6,11 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
     <title>🎉星途璀璨🎉</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <!-- 加载 Swiper 核心库 + 效果模块 -->
+    <!-- Swiper 核心（bundle 已包含所有模块，无需单独加载 effect/zoom） -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <!-- 额外加载 cards 效果模块（Swiper 11 需单独引入） -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/modules/effect-cards.min.js"></script>
     <style>
         /* ============================================================
            CSS 变量（浅色为默认，深色在 media 中覆盖）
@@ -77,7 +75,7 @@
         }
 
         /* ============================================================
-           全局重置与基础
+           全局重置与基础（背景图使用 R2 固定链接，渐变作为后备）
            ============================================================ */
         * {
             margin: 0;
@@ -87,12 +85,16 @@
         }
 
         body {
+            /* 多背景：先图片，再渐变（图片未加载时渐变可见） */
+            background-image: url('https://img.ycxazzo.top/background/background.webp'), var(--bg-body);
+            background-size: cover, auto;
+            background-position: center, 0 0;
+            background-repeat: no-repeat, repeat;
             font-family: 'Segoe UI', 'PingFang SC', Roboto, system-ui, -apple-system, sans-serif;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: var(--bg-body);
             padding: 20px;
             margin: 0;
             color: var(--text-primary);
@@ -614,7 +616,7 @@
             color: var(--text-primary);
         }
 
-        /* ===== 模态框（Swiper 容器）—— 动态适配图片比例 ===== */
+        /* ===== 模态框（Swiper 容器）—— 自适应图片，支持缩放 ===== */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -650,7 +652,7 @@
             position: relative;
         }
 
-        /* 移除固定宽高比，让 Swiper 自适应内容 */
+        /* Swiper 容器自适应，zoom 容器填满 slide */
         .modal-content .swiper-container {
             width: 100%;
             height: auto;
@@ -664,7 +666,14 @@
             align-items: center;
             background: transparent;
         }
-        .modal-content .swiper-slide img {
+        .swiper-zoom-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .swiper-zoom-container img {
             width: 100%;
             height: auto;
             max-height: 80vh;
@@ -1322,13 +1331,13 @@
         </div>
     </div>
 
-    <!-- ===== 模态框（Swiper 容器） ===== -->
+    <!-- ===== 模态框（Swiper 容器，支持 Zoom 缩放） ===== -->
     <div id="modalOverlay" class="modal-overlay hidden" onclick="closeModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="modal-close" onclick="closeModal()">×</span>
             <div class="swiper-container" id="swiperContainer">
                 <div class="swiper-wrapper" id="swiperWrapper">
-                    <!-- slides 由 JS 动态生成 -->
+                    <!-- slides 由 JS 动态生成，每个 slide 内包含 swiper-zoom-container -->
                 </div>
                 <div class="swiper-pagination" id="swiperPagination"></div>
             </div>
@@ -1789,7 +1798,7 @@
                 });
             }
 
-            // -------- 剧照弹窗（Swiper Cards 效果，动态适配比例） --------
+            // -------- 剧照弹窗（Swiper Cards + Zoom 缩放） --------
             function openCardModal(roleId) {
                 const role = roleData[roleId];
                 if (!role) return;
@@ -1807,10 +1816,14 @@
                 imageList.forEach((url, idx) => {
                     const slide = document.createElement('div');
                     slide.className = 'swiper-slide';
+                    // 使用 swiper-zoom-container 包裹图片，启用缩放
+                    const container = document.createElement('div');
+                    container.className = 'swiper-zoom-container';
                     const img = document.createElement('img');
                     img.src = url;
                     img.alt = `${role.roleName} 剧照 ${idx + 1}`;
-                    slide.appendChild(img);
+                    container.appendChild(img);
+                    slide.appendChild(container);
                     swiperWrapper.appendChild(slide);
                 });
 
@@ -1823,30 +1836,28 @@
                     swiperInstance = null;
                 }
 
-                // 使用 cards 效果（附带轻度旋转和阴影）
+                // 初始化 Swiper（启用 Cards 效果 + Zoom 模块）
                 swiperInstance = new Swiper(swiperContainer, {
                     effect: 'cards',
                     cardsEffect: {
-                        slideShadows: true,   // 卡片阴影
-                        rotate: true,         // 轻度旋转
-                        perSlideRotate: 3,    // 每张卡片旋转角度
-                        perSlideOffset: 8,    // 每张卡片偏移距离
+                        slideShadows: true,
+                        rotate: true,
+                        perSlideRotate: 3,
+                        perSlideOffset: 8,
+                    },
+                    zoom: {
+                        maxRatio: 3,
+                        minRatio: 1,
+                        toggle: true, // 双击切换缩放
                     },
                     grabCursor: true,
                     touchEventsTarget: 'container',
                     allowTouchMove: imageList.length > 1,
-                    autoHeight: true,         // 自适应高度（关键！）
+                    autoHeight: true,
                     pagination: {
                         el: '#swiperPagination',
                         clickable: true,
                     },
-                    // 注释：原 flip 效果配置
-                    // effect: 'flip',
-                    // flipEffect: {
-                    //     slideShadows: false,
-                    //     limitRotation: true,
-                    // },
-                    // pagination: { ... },
                 });
             }
 
