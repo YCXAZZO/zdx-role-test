@@ -12,11 +12,11 @@
       "signatureLine": "<b>聚是一团火，散是满天星，<br>我信这份信仰，终能照亮前路。</b>",
       "image": "./images/avatar/wangruolan_avatar.jpg",
       "cards": [
-        "./images/still/wangruolan/wangruolan_1.png",
-        "./images/still/wangruolan/wangruolan_2.png",
-        "./images/still/wangruolan/wangruolan_3.png",
-        "./images/still/wangruolan/wangruolan_4.png",
-        "./images/still/wangruolan/wangruolan_5.png"
+        "./images/still/wangruolan/wangruolan_1.webp",
+        "./images/still/wangruolan/wangruolan_2.webp",
+        "./images/still/wangruolan/wangruolan_3.webp",
+        "./images/still/wangruolan/wangruolan_4.webp",
+        "./images/still/wangruolan/wangruolan_5.webp"
       ],
       "card": "https://picsum.photos/seed/wangruolan_card/800/600"
     },
@@ -29,8 +29,11 @@
       "signatureLine": "<b>日子再苦，心里也要留一份温柔，<br>能帮旁人一把，便是福气。</b>",
       "image": "./images/avatar/zhangyuanman_avatar.jpg",
       "cards": [
-        "https://picsum.photos/seed/zhangyuanman_1/800/600",
-        "https://picsum.photos/seed/zhangyuanman_2/800/600"
+        "./images/still/zhangyuanman/zhangyuanman_1.webp",
+        "./images/still/zhangyuanman/zhangyuanman_2.webp",
+        "./images/still/zhangyuanman/zhangyuanman_3.webp",
+        "./images/still/zhangyuanman/zhangyuanman_4.webp",
+        "./images/still/zhangyuanman/zhangyuanman_5.webp"
       ],
       "card": "https://picsum.photos/seed/zhangyuanman_card/800/600"
     },
@@ -43,10 +46,11 @@
       "signatureLine": "<b>流言再多我也不怕，真相总会大白，<br>我信你，也信公道。</b>",
       "image": "./images/avatar/hujuaner_avatar.jpg",
       "cards": [
-        "./images/still/hujuaner/hujuaner_1.png",
-        "./images/still/hujuaner/hujuaner_2.png",
+        "./images/still/hujuaner/hujuaner_1.webp",
+        "./images/still/hujuaner/hujuaner_2.webp",
         "./images/still/hujuaner/hujuaner_3.webp",
-        "./images/still/hujuaner/hujuaner_4.webp"
+        "./images/still/hujuaner/hujuaner_4.webp",
+        "./images/still/hujuaner/hujuaner_5.webp"
       ],
       "card": "https://picsum.photos/seed/hujuaner_card/800/600"
     },
@@ -60,8 +64,8 @@
       "image": "./images/avatar/wushuang_avatar.jpg",
       "cards": [
         "./images/still/wushuang/wushuang_1.webp",
-        "./images/still/wushuang/wushuang_2.jpg",
-        "./images/still/wushuang/wushuang_3.jpg",
+        "./images/still/wushuang/wushuang_2.webp",
+        "./images/still/wushuang/wushuang_3.webp",
         "./images/still/wushuang/wushuang_4.webp",
         "./images/still/wushuang/wushuang_5.webp"
       ],
@@ -76,8 +80,11 @@
       "signatureLine": "<b>山野风无拘无束，人也不必困在条条框框里，<br>随心走便是自在。</b>",
       "image": "./images/avatar/meiqing_avatar.jpg",
       "cards": [
-        "./images/still/meiqing/meiqing_1.png",
-        "./images/still/meiqing/meiqing_2.png"
+        "./images/still/meiqing/meiqing_1.webp",
+        "./images/still/meiqing/meiqing_2.webp",
+        "./images/still/meiqing/meiqing_3.webp",
+        "./images/still/meiqing/meiqing_4.webp",
+        "./images/still/meiqing/meiqing_5.webp"
       ],
       "card": "https://picsum.photos/seed/meiqing_card/800/600"
     },
@@ -90,8 +97,11 @@
       "signatureLine": "<b>如果你过得好，那我的离开就有意义，<br>请务必要好好的。</b>",
       "image": "./images/avatar/xiaoyun_avatar.jpg",
       "cards": [
-        "./images/still/xiaoyun/",
-        "./images/still/xiaoyun/"
+        "./images/still/xiaoyun/xiaoyun_1.webp",
+        "./images/still/xiaoyun/xiaoyun_2.webp",
+        "./images/still/xiaoyun/xiaoyun_3.webp",
+        "./images/still/xiaoyun/xiaoyun_4.webp",
+        "./images/still/xiaoyun/xiaoyun_5.webp"
       ],
       "card": "https://picsum.photos/seed/xiaoyun_card/800/600"
     }
