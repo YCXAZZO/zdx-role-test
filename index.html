@@ -1860,65 +1860,29 @@
             }
 
             // -------- 剧照弹窗（Swiper Cards + Zoom 缩放） --------
-            function openCardModal(roleId) {
-                const role = roleData[roleId];
-                if (!role) return;
-
-                let imageList = [];
-                if (role.cards && Array.isArray(role.cards) && role.cards.length > 0) {
-                    imageList = role.cards;
-                } else if (role.card) {
-                    imageList = [role.card];
-                } else {
-                    imageList = [`https://picsum.photos/seed/${roleId}_card/800/600`];
-                }
-
-                swiperWrapper.innerHTML = '';
-                imageList.forEach((url, idx) => {
-                    const slide = document.createElement('div');
-                    slide.className = 'swiper-slide';
-                    const container = document.createElement('div');
-                    container.className = 'swiper-zoom-container';
-                    const img = document.createElement('img');
-                    img.src = url;
-                    img.alt = `${role.roleName} 剧照 ${idx + 1}`;
-                    container.appendChild(img);
-                    slide.appendChild(container);
-                    swiperWrapper.appendChild(slide);
-                });
-
-                modalOverlay.classList.remove('hidden');
-                void modalOverlay.offsetWidth;
-                modalOverlay.classList.add('active');
-
-                if (swiperInstance) {
-                    swiperInstance.destroy(true, true);
-                    swiperInstance = null;
-                }
-
-                swiperInstance = new Swiper(swiperContainer, {
-                    effect: 'cards',
-                    cardsEffect: {
-                        slideShadows: true,
-                        rotate: true,
-                        perSlideRotate: 3,
-                        perSlideOffset: 8,
-                    },
-                    zoom: {
-                        maxRatio: 3,
-                        minRatio: 1,
-                        toggle: true,
-                    },
-                    grabCursor: true,
-                    touchEventsTarget: 'container',
-                    allowTouchMove: imageList.length > 1,
-                    autoHeight: true,
-                    pagination: {
-                        el: '#swiperPagination',
-                        clickable: true,
-                    },
-                });
-            }
+            swiperInstance = new Swiper(swiperContainer, {
+                effect: 'coverflow',
+                coverflowEffect: {
+                    rotate: 15,          // 旋转角度（0~60）
+                    stretch: 0,          // 拉伸（0~100）
+                    depth: 60,          // 深度（20~300）
+                    modifier: 1,         // 修饰因子
+                    slideShadows: true,  // 是否显示阴影
+                },
+                zoom: {
+                    maxRatio: 3,
+                    minRatio: 1,
+                    toggle: true,
+                },
+                grabCursor: true,
+                touchEventsTarget: 'container',
+                allowTouchMove: imageList.length > 1,
+                autoHeight: true,
+                pagination: {
+                    el: '#swiperPagination',
+                    clickable: true,
+                },
+            });
 
             window.closeModal = function (e) {
                 if (e && e.target !== e.currentTarget) return;
